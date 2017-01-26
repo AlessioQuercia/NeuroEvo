@@ -17,8 +17,8 @@ public class evo_fit
 		 double minY = 20;	// y minima
 		 double maxY = 80;	// y massima
 		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
-		 double minV = 0;	// velocità minima 20
-		 double maxV = 100;	// velocità massima 100 [20 + 80]
+		 double minV = 20;	// velocità minima 20
+		 double maxV = 80;	// velocità massima 100 [20 + 80]
 //		 double x_obj = minX + 0.4*maxX;
 		 double g = 2.8;
 		 int iter = -1;
@@ -60,17 +60,19 @@ public class evo_fit
 //	    	 	System.out.println(y_obj);
 //	    	 	System.out.println(a);
 //	    	 	System.out.println(v);
-	    	 	d[3] = a;
-	    	 	d[4] = v;
-	    	 	d[5] = _tgt[j][1];	//y_obj
-	    	 	d[6] = _tgt[j][0];	//x_obj
+//	    	 	d[3] = a;
+//	    	 	d[4] = v;
+//	    	 	d[5] = _tgt[j][1];	//y_obj
+//	    	 	d[6] = _tgt[j][0];	//x_obj
 	    	 	//if (v>100) System.out.println("V");
 	    	 	//if (a>90) System.out.println("A");
 	    	 	//System.out.println("ANGOLO:  "+a);
 	    	 	//System.out.println("VELOCITA':   " + v);
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
 //	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));
-	    	 	errorsum  = ( double ) (Math.abs(y_obj - y_tiro));
+	    	 	errorsum  = Math.abs(y_obj - y_tiro);
+	    	 	
+	    	 	//TIRO MIGLIORE
 	    	 	if (errorsum<min_error)
 	    	 	{
 	    	 		iter = j;
@@ -84,6 +86,7 @@ public class evo_fit
 	    	 		arrayBest.add(4, v);
 	    	 		arrayBest.add(5, min_error);
 	    	 	}
+	    	 	
 	    	 	fitness += 1/(errorsum+k);
 //	    	 	System.out.println("LANCIO:  "+j);
 //	    	 	System.out.println("ERRORE:  "+errorsum);
@@ -108,16 +111,16 @@ public class evo_fit
 	    	 	array.add(6, fitness);
 	    	 	mappa.put(j, array);
 	        } 
-	     d[0] = fitness; 
-	     d[1] = errorsum;
-	     if (iter>=0)
-	     {
-	    	 d[1] = min_error;
-	 		 d[3] = _out[iter][0]*maxA;
-	 	 	 d[4] = minV + _out[iter][1]*maxV;
-	 	 	 d[5] = _tgt[iter][1];	//y_obj
-	 	 	 d[6] = _tgt[iter][0];	//x_obj
-	     }
+//	     d[0] = fitness; 
+//	     d[1] = errorsum;
+//	     if (iter>=0)
+//	     {
+//	    	 d[1] = min_error;
+//	 		 d[3] = _out[iter][0]*maxA;
+//	 	 	 d[4] = minV + _out[iter][1]*maxV;
+//	 	 	 d[5] = _tgt[iter][1];	//y_obj
+//	 	 	 d[6] = _tgt[iter][0];	//x_obj
+//	     }
 
  	 	 arrayBest.add(6, fitness);
  	 	 arrayBest.add(7, 0.0);

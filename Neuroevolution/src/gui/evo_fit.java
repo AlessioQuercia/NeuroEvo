@@ -16,9 +16,9 @@ public class evo_fit
 		 double maxX = 60;	// x massima
 		 double minY = 20;	// y minima
 		 double maxY = 80;	// y massima
-		 double maxA = 90;	// angolo massimo 
-		 double minV = 0;	// velocità minima 20
-		 double maxV = 100;	// velocità massima 100 [20 + 80]
+		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
+		 double minV = 20;	// velocità minima 20
+		 double maxV = 80;	// velocità massima 100 [20 + 80]
 //		 double x_obj = minX + 0.4*maxX;
 		 double g = 2.8;
 		 int iter = -1;

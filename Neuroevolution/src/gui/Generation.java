@@ -2036,7 +2036,7 @@ public void itemStateChanged(ItemEvent e) {
 		 String riga_r1 = " Fitness ->"+fmt6d.format(_o1.getOrig_fitness())+"  , Error->"+fmt6d.format(_o1.getError());
 		 String riga_r2 = " Angle ->"+fmt6d.format(_o1.getAngle())+"  , Velocity->"+fmt6d.format(_o1.getVelocity());
 		 String riga_r3 = " Y_Target ->"+fmt6d.format(_o1.getYTarget())+"  , Y_Tiro->"+fmt6d.format(y_tiro);
-		 String riga_r4 = " X_Target ->"+fmt6d.format(x_tgt);
+		 String riga_r4 = " X_Target ->"+fmt6d.format(x_tgt)+ "  , Generation->"+_o1.getGeneration();
 		 //String riga_r4 = " X_Target ->"+fmt6d.format(x_tgt);
 		 
 	  

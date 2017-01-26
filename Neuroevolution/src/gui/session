@@ -7,7 +7,7 @@ data_input       evo_in
 data_target      evo_out
 class_compute_fitness evo_fit
 start_from_genome Y
-genome_file     genome_nohid
+genome_file     genome_4hid
 ;start_from_random_population Y
 ;start_from_old_population Y
 population_file primitive

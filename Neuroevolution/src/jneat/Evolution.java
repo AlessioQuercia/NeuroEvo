@@ -6,7 +6,8 @@
    import java.text.*;
    import jNeatCommon.*;
 
-																public class Evolution extends Neat {
+   public class Evolution extends Neat
+   {
    
    
    

@@ -7,7 +7,8 @@
    import jNeatCommon.*;
 
 /** Is a genetic codification of gene; */
-	public class Gene extends Neat {
+	public class Gene extends Neat 
+	{
    
    /** if a reference to object for identify input/output node and features */
 	  Link lnk;

@@ -2030,7 +2030,7 @@ public void itemStateChanged(ItemEvent e) {
 	  
 		 sx.compute_Coordinate(p3.getWidth()/2, p3.getHeight());
 		 double x_tgt = _o1.getXTarget();
-		 double y_tiro = Math.tan(_o1.getAngle())*x_tgt - ((2.8/(2*Math.pow(_o1.getVelocity(), 2)*Math.pow(Math.cos(_o1.getAngle()), 2)))*Math.pow(x_tgt, 2));
+		 double y_tiro = Math.tan(_o1.getAngle())*x_tgt - ((9.81/(2*Math.pow(_o1.getVelocity(), 2)*Math.pow(Math.cos(_o1.getAngle()), 2)))*Math.pow(x_tgt, 2));
 		 
 		 
 		 String riga_r1 = " Fitness ->"+fmt6d.format(_o1.getOrig_fitness())+"  , Error->"+fmt6d.format(_o1.getError());

@@ -10,15 +10,15 @@ public class evo_fit
 	  
 	  public static HashMap<Integer, ArrayList<Double>>  computeFitness(int _sample, double _out[][], double _tgt[][]) 
 	  {     
-		 double d[] = new double[7];
+		 //double d[] = new double[7];
 		 HashMap<Integer,ArrayList<Double>> mappa= new HashMap<Integer,ArrayList<Double>>();
 		 double minX = 20;	// x minima
 		 double maxX = 80;	// x massima
 		 double minY = 20;	// y minima
 		 double maxY = 80;	// y massima
 		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
-		 double minV = 20;	// velocità minima 20
-		 double maxV = 180;	// velocità massima 100 [20 + 80]
+		 double minV = 50;	// velocità minima 20
+		 double maxV = 50;	// velocità massima 100 [20 + 80]
 //		 double x_obj = minX + 0.4*maxX;
 		 double g = 9.81;
 		 int iter = -1;

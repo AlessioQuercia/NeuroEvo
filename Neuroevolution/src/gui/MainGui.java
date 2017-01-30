@@ -1,4 +1,4 @@
-   package gui;
+package gui;
 
 /*import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
@@ -15,10 +15,6 @@ import javax.swing.*;
 import javax.accessibility.*;
 */
 
-
-
-
-
    import javax.swing.JTabbedPane;
    import javax.swing.ImageIcon;
    import javax.swing.JLabel;
@@ -27,10 +23,9 @@ import javax.accessibility.*;
    import java.awt.*;
    import java.awt.event.*;
    import log.*;
-
-
-
-								import javax.swing.*;								public class MainGui extends JPanel
+   import javax.swing.*;
+   
+   public class MainGui extends JPanel
    {
    
 	  JFrame f1;	 

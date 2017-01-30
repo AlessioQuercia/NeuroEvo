@@ -5,10 +5,10 @@
    import java.util.*;
 
    import jNeatCommon.*;
-																public class jConsoleNeat {
-   
-      	  	   public static void main(java.lang.String[] args) 
-	  {
+   public class jConsoleNeat 
+   {
+	   public static void main(java.lang.String[] args) 
+	   {
 	  
 		 Neat.initbase();
 	  

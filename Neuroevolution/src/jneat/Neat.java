@@ -9,7 +9,8 @@
 
 
 /** Is a superclass for definition of all parameters , threshold and others values. */
-	public class Neat {
+	public class Neat 
+	{
    /** Probability  of mutating a single trait param */
 	  public static double p_trait_param_mut_prob;
    

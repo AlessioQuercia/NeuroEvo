@@ -14,7 +14,8 @@
  *  occured.  (Between them)
  *
  */
-	public class Innovation extends Neat {
+	public class Innovation extends Neat 
+	{
    /**
    * Either NEWNODE or NEWLINK 
    */

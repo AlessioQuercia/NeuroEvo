@@ -8,7 +8,8 @@
    import jNeatCommon.*;
 
 
-																public class Genome extends Neat {
+	public class Genome extends Neat 
+	{
    
    /** Is a reference from this genotype to fenotype */
 	  Network phenotype;

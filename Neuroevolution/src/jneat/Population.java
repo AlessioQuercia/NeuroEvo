@@ -8,7 +8,8 @@
    import jNeatCommon.*;
 
 /** A Population is a group of Organisms including their species */
-	public class Population extends Neat {
+	public class Population extends Neat 
+	{
    /** The organisms in the Population */
 	  public Vector organisms;
    
@@ -223,32 +224,43 @@
 	   public void epoch(int generation) 
 	  {
 	  
-		 Iterator itr_specie;
-		 Iterator itr_organism;
-		 double total = 0.0;
+		 Iterator itr_specie;		//iterator di specie
+		 Iterator itr_organism;		//iterator di organismi
+		 double total = 0.0;		//usato per calcolare la fitness media tra tutti gli Organismi
+		 double overall_average = 0.0;		//la fitness media modificata tra tutti gli Organismi
 	  //double total_expected=0.0;
 		 int orgcount = 0;
+		 
+		  //The fractional parts of expected offspring that can be 
+		  //Used only when they accumulate above 1 for the purposes of counting
+		  //Offspring
 		 int max_expected;
 		 int total_expected; //precision checking
 		 int final_expected;
-		 int half_pop = 0;
-		 double overall_average = 0.0;
 		 int total_organisms = 0;
-		 double tmpd = 0.0;
+
 		 double skim = 0.0;
-		 int tmpi = 0;
-		 int best_species_num = 0;
-		 int stolen_babies = 0;
+
+
+		  //Rights to make babies can be stolen from inferior species
+		  //and given to their superiors, in order to concentrate exploration on
+		  //the best species
+		 int stolen_babies = 0;		//Babies taken from the bad species and given to the champs
 		 int one_fifth_stolen = 0;
 		 int one_tenth_stolen = 0;
 		 int size_of_curr_specie = 0;
 		 int NUM_STOLEN = Neat.p_babies_stolen; //Number of babies to steal
+		 
+		 int half_pop = 0;
+		 int tmpi = 0;
+		 double tmpd = 0.0;
+		 int best_species_num = 0;		//Used in debugging to see why (if) best species dies
 	  // al momento NUM_STOLEN=1
 	  
 		 Species _specie = null;
 		 Species curspecies = null;
 		 Species best_specie = null;
-		 Vector sorted_species = null;
+		 Vector sorted_species = null;		//Species sorted by max fit org in Species
 	  
 	  
 	  // Use Species' ages to modify the objective fitness of organisms

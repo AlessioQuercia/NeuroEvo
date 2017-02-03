@@ -1037,6 +1037,7 @@ public void itemStateChanged(ItemEvent e) {
 				 long seedY = (long)(Math.random()*10000);
 				 ry.setSeed(seedY);
 				 
+				 
 			   for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 
 			   {
 //				   y = Math.random()*maxY;

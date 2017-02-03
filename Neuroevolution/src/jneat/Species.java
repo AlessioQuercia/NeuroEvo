@@ -7,7 +7,8 @@
    import java.text.*;
    import jNeatCommon.*;
 
-																public class Species extends Neat {
+   public class Species extends Neat 
+   {
    /**
    * id(-entification) of this species
    */

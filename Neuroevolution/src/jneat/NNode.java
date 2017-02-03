@@ -9,7 +9,8 @@
  * A NODE is either a NEURON or a SENSOR. If it's a sensor, it can be loaded with a value for output
  * If it's a neuron, it has a list of its incoming input signals Use an activation count to avoid flushing
  */
-	public class NNode extends Neat {
+	public class NNode extends Neat 
+	{
    /** type is either SIGMOID ..or others that can be added */
 	  int ftype;
    
@@ -522,7 +523,8 @@
 	  
 		 xFile.IOseqWrite(s2.toString());
 	  
-	  }	   public void flushbackOLD() 
+	  }	   
+	   public void flushbackOLD() 
 	  {
 		 Iterator itr_link;
 	  
@@ -558,7 +560,8 @@
 			last_activation = 0;
 			last_activation2 = 0;
 		 }
-	  }	   public void resetNNode() 
+	  }	   
+	   public void resetNNode() 
 	  {
 		    Iterator itr_link;
 		  

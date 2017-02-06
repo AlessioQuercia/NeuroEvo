@@ -1031,11 +1031,13 @@ public void itemStateChanged(ItemEvent e) {
 				 DecimalFormat fmt6d = new DecimalFormat(mask6d);
 				 
 				 Random rx = new Random();
-				 long seedX = (long)(Math.random()*100);
-				 rx.setSeed(seedX);
+				 rx.setSeed(100);
+//				 long seedX = (long)(Math.random()*100);
+//				 rx.setSeed(seedX);
 				 Random ry = new Random();
-				 long seedY = (long)(Math.random()*10000);
-				 ry.setSeed(seedY);
+				 ry.setSeed(10000);
+//				 long seedY = (long)(Math.random()*10000);
+//				 ry.setSeed(seedY);
 				 
 				 
 			   for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 
@@ -1057,6 +1059,8 @@ public void itemStateChanged(ItemEvent e) {
 //			   in[1] = inputY[count];
 			   in[0] = rx.nextDouble();
 			   in[1] = ry.nextDouble();
+//			   in[0] = NeatRoutine.randfloat();
+//			   in[1] = NeatRoutine.randfloat();
 			   tgt[count][0] = in[0];
 			   tgt[count][1] = in[1];
 

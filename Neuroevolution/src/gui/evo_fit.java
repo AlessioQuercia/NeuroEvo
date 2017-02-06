@@ -17,8 +17,8 @@ public class evo_fit
 		 double minY = 20;	// y minima
 		 double maxY = 80;	// y massima
 		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
-		 double minV = 50;	// velocità minima 20
-		 double maxV = 80;	// velocità massima 100 [50 + 50]
+		 double minV = 40;	// velocità minima 20
+		 double maxV = 40;	// velocità massima 100 [50 + 50]
 //		 double x_obj = minX + 0.4*maxX;
 		 double g = 9.81;
 		 int iter = -1;
@@ -123,7 +123,7 @@ public class evo_fit
 //	 	 	 d[6] = _tgt[iter][0];	//x_obj
 //	     }
 	     
-	     if (fitness>=200) win = 1.0;
+	     if (fitness>=500) win = 1.0;
  	 	 arrayBest.add(6, fitness);
  	 	 arrayBest.add(7, win);
  	 	 mappa.put(_sample, arrayBest);

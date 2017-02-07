@@ -14,7 +14,7 @@ public class EnvConstant {
 	public static String OS_VERSION = " ";
 
 	// current directory
-	public static String JNEAT_DIR = "cazzo";
+	public static String JNEAT_DIR = " ";
 
 	// current file name for parameter single without dir o other)
 	public static String NAME_PARAMETER = "parametri";

@@ -1038,6 +1038,10 @@ public void itemStateChanged(ItemEvent e) {
 				 ry.setSeed(10000);
 //				 long seedY = (long)(Math.random()*10000);
 //				 ry.setSeed(seedY);
+				 Random rm = new Random();
+				 ry.setSeed(1);
+//				 long seedY = (long)(Math.random()*10000);
+//				 ry.setSeed(seedY);
 				 
 				 
 			   for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 
@@ -1059,10 +1063,12 @@ public void itemStateChanged(ItemEvent e) {
 //			   in[1] = inputY[count];
 			   in[0] = rx.nextDouble();
 			   in[1] = ry.nextDouble();
+			   in[2] = rm.nextDouble();
 //			   in[0] = NeatRoutine.randfloat();
 //			   in[1] = NeatRoutine.randfloat();
 			   tgt[count][0] = in[0];
 			   tgt[count][1] = in[1];
+			   tgt[count][2] = in[2];
 
 //			   System.out.println("------ LANCIO: "+count+" ------");
 //			   System.out.println("INPUT 0:"+in[0]);

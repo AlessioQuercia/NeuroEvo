@@ -4,7 +4,7 @@ public class evo_in
 {
 	   public static int getNumSamples() { return 10; } 
 	   
-	   public static int getNumUnit()    { return 3; } 
+	   public static int getNumUnit()    { return 2; } 
 	 
 	   public static double getInput(double x_obj, double y_obj)
 	   {

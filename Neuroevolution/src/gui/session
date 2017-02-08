@@ -7,14 +7,14 @@ data_input       evo_in
 data_target      evo_out
 class_compute_fitness evo_fit
 start_from_genome Y
-genome_file     genome_3in_4hid_3out
+genome_file     genome_4hid
 ;start_from_random_population Y
 ;start_from_old_population Y
 population_file primitive
 ;maximum_unit    5
 ;recursion       N
 ;probability_of_connection 20
-epoch 10000
+epoch 1000
 activation 0
 ;prefix_genome_random genome.rnd 
 prefix_generation_file generation

@@ -28,13 +28,15 @@ public class evo_fit
 		 double g = 9.81;
 		 int iter = -1;
 		 double min_error = 100000.0;
+		 double error = 0.0;
 	     double errorsum = 0.0; 
 	     double fitness = 0.0;
+	     double fitness2 = 0.0;
 	     double win = 0.0;
 	     double k = 0.01;	//costante per poter calcolare la fitness anche quando l'errore è 0
 	     //d[2] = 0.0;
 	     ArrayList<Double> arrayBest = new ArrayList<Double> ();
-	     for (int i = 0; i<8; i++)
+	     for (int i = 0; i<9; i++)
 	     {
 	    	 arrayBest.add(0.0);
 	     }
@@ -58,13 +60,13 @@ public class evo_fit
 //			     arrayBest.add(0.0);
 	    	 	double x_obj = minX + _tgt[j][0]*maxX;
 	    	 	double y_obj = minY + _tgt[j][1]*maxY;
-	    	 	double m = _tgt[j][2];
+	    	 	//double m = _tgt[j][2];
 //	    	 	double x_obj = _tgt[j][0];
 //	    	 	double y_obj = _tgt[j][1];
 	    	 	double a = _out[j][0]*maxA;
-	    	 	//double v = minV + _out[j][1]*maxV;
-	    	 	double F = minF + _out[j][1]*maxF;
-	    	 	double t = _out[j][2];
+	    	 	double v = minV + _out[j][1]*maxV;
+//	    	 	double F = minF + _out[j][1]*maxF;
+//	    	 	double t = _out[j][2];
 //	    	 	System.out.println(x_obj);
 //	    	 	System.out.println(y_obj);
 //	    	 	System.out.println(a);
@@ -77,17 +79,18 @@ public class evo_fit
 	    	 	//if (a>90) System.out.println("A");
 	    	 	//System.out.println("ANGOLO:  "+a);
 	    	 	//System.out.println("VELOCITA':   " + v);
-	    	 	double acc = F/m;
-	    	 	double v = acc*t;
+//	    	 	double acc = F/m;
+//	    	 	double v = acc*t;
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
 //	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));
-	    	 	errorsum  = Math.abs(y_obj - y_tiro);
+	    	 	error = Math.abs(y_obj - y_tiro);
+	    	 	errorsum  += error;
 	    	 	
 	    	 	//TIRO MIGLIORE
-	    	 	if (errorsum<min_error)
+	    	 	if (error<min_error)
 	    	 	{
 	    	 		iter = j;
-	    	 		min_error = errorsum;
+	    	 		min_error = error;
 	    	 		//System.out.println("CACACA");
 	    	 		arrayBest.add(0, x_obj);
 	    	 		//System.out.println("CiaO");
@@ -97,8 +100,8 @@ public class evo_fit
 	    	 		arrayBest.add(4, v);
 	    	 		arrayBest.add(5, min_error);
 	    	 	}
-	    	 	
-	    	 	fitness += 1/(errorsum+k);
+	    	 	fitness2 += 1/(error+k);
+	    	 	//fitness += 1/(errorsum+k);
 //	    	 	System.out.println("LANCIO:  "+j);
 //	    	 	System.out.println("ERRORE:  "+errorsum);
 //	    	 	System.out.println("FITNESS:  "+fitness);
@@ -118,10 +121,13 @@ public class evo_fit
 	    	 	array.add(2, y_tiro);
 	    	 	array.add(3, a);
 	    	 	array.add(4, v);
-	    	 	array.add(5, errorsum);
+	    	 	array.add(5, error);
 	    	 	array.add(6, fitness);
 	    	 	mappa.put(j, array);
 	        } 
+	     fitness = 100000-Math.pow(errorsum, 2);
+//	     fitness = 1000-errorsum;
+
 //	     d[0] = fitness; 
 //	     d[1] = errorsum;
 //	     if (iter>=0)
@@ -133,9 +139,11 @@ public class evo_fit
 //	 	 	 d[6] = _tgt[iter][0];	//x_obj
 //	     }
 	     
-	     if (fitness>=500) win = 1.0;
+	    //if (fitness>=500) win = 1.0;
  	 	 arrayBest.add(6, fitness);
  	 	 arrayBest.add(7, win);
+ 	 	 arrayBest.add(8, errorsum);
+ 	 	 arrayBest.add(9, fitness2);
  	 	 mappa.put(_sample, arrayBest);
 	     //d[2] = 0.0;
 	     //if (fitness > 20) d[2] = 1;

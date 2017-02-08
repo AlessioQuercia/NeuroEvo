@@ -1031,15 +1031,15 @@ public void itemStateChanged(ItemEvent e) {
 				 DecimalFormat fmt6d = new DecimalFormat(mask6d);
 				 
 				 Random rx = new Random();
-				 rx.setSeed(100);
-//				 long seedX = (long)(Math.random()*100);
-//				 rx.setSeed(seedX);
+//				 rx.setSeed(100);
+				 long seedX = (long)(Math.random()*100);
+				 rx.setSeed(seedX);
 				 Random ry = new Random();
-				 ry.setSeed(10000);
-//				 long seedY = (long)(Math.random()*10000);
-//				 ry.setSeed(seedY);
-				 Random rm = new Random();
-				 ry.setSeed(1);
+//				 ry.setSeed(10000);
+				 long seedY = (long)(Math.random()*10000);
+				 ry.setSeed(seedY);
+//				 Random rm = new Random();
+//				 ry.setSeed(1);
 //				 long seedY = (long)(Math.random()*10000);
 //				 ry.setSeed(seedY);
 				 
@@ -1063,12 +1063,12 @@ public void itemStateChanged(ItemEvent e) {
 //			   in[1] = inputY[count];
 			   in[0] = rx.nextDouble();
 			   in[1] = ry.nextDouble();
-			   in[2] = rm.nextDouble();
+			   //in[2] = rm.nextDouble();
 //			   in[0] = NeatRoutine.randfloat();
 //			   in[1] = NeatRoutine.randfloat();
 			   tgt[count][0] = in[0];
 			   tgt[count][1] = in[1];
-			   tgt[count][2] = in[2];
+			   //tgt[count][2] = in[2];
 
 //			   System.out.println("------ LANCIO: "+count+" ------");
 //			   System.out.println("INPUT 0:"+in[0]);
@@ -2070,10 +2070,12 @@ public void itemStateChanged(ItemEvent e) {
 			 System.out.println("ANGOLO: "+fmt6d.format(array.get(3)));
 			 System.out.println("VELOCITA': "+fmt6d.format(array.get(4)));
 			 System.out.println("ERRORE: "+fmt6d.format(array.get(5)));
-			 System.out.println("FITNESS: "+fmt6d.format(array.get(6)));
+			 //System.out.println("FITNESS: "+fmt6d.format(array.get(6)));
 		 }
 		 System.out.println("GENERAZIONE: "+_o1.getGeneration());
-		 System.out.println("FITNESS FINALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(6)));
+		 System.out.println("ERRORE TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(8)));
+		 System.out.println("FITNESS TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(6)));
+		 System.out.println("FITNESS VECCHIA: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(9)));
 		 System.out.println();
 		
 		 

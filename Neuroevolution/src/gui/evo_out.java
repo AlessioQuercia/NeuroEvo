@@ -2,7 +2,7 @@ package gui;
 
 public class evo_out 
 {
-	   public static int getNumUnit() { return 3; } 
+	   public static int getNumUnit() { return 2; } 
 	   
 	   public static double getTarget(double y_obj) 
 	   { 

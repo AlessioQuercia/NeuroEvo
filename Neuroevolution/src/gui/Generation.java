@@ -1031,17 +1031,17 @@ public void itemStateChanged(ItemEvent e) {
 				 DecimalFormat fmt6d = new DecimalFormat(mask6d);
 				 
 				 Random rx = new Random();
-//				 rx.setSeed(100);
-				 long seedX = (long)(Math.random()*100);
-				 rx.setSeed(seedX);
+				 rx.setSeed(100);
+//				 long seedX = (long)(Math.random()*100);
+//				 rx.setSeed(seedX);
 				 Random ry = new Random();
-//				 ry.setSeed(10000);
-				 long seedY = (long)(Math.random()*10000);
-				 ry.setSeed(seedY);
-//				 Random rm = new Random();
-//				 ry.setSeed(1);
+				 ry.setSeed(10000);
 //				 long seedY = (long)(Math.random()*10000);
 //				 ry.setSeed(seedY);
+//				 Random rm = new Random();
+//				 rm.setSeed(1);
+//				 long seedY = (long)(Math.random()*10000);
+//				 rm.setSeed(seedY);
 				 
 				 
 			   for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 

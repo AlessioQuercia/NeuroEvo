@@ -87,7 +87,7 @@ public class evo_fit
 	    	 	error = Math.abs(y_obj - y_tiro);
 //	    	 	errorsum += Math.pow(error, 2);		//fitness_somma_quadrati
 	    	 	errorsum += error;			//fitness_quadrato_somma
-	    	 	errorsumquad += Math.pow(error, 2);		//fitness_somma_quadrati
+//	    	 	errorsumquad += Math.pow(error, 2);		//fitness_somma_quadrati
 	    	 	
 	    	 	//TIRO MIGLIORE
 	    	 	if (error<min_error)
@@ -128,8 +128,8 @@ public class evo_fit
 	    	 	array.add(6, fitness);
 	    	 	mappa.put(j, array);
 	        } 
-//	     fitness = 100000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
-	     fitness = 100000-errorsumquad;		//fitness_somma_quadrati
+	     fitness = 100000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
+//	     fitness = 100000-errorsumquad;		//fitness_somma_quadrati
 
 //	     d[0] = fitness; 
 //	     d[1] = errorsum;

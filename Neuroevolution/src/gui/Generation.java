@@ -1000,8 +1000,7 @@ public void itemStateChanged(ItemEvent e) {
 //		 for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
 //			 input[i]=Math.random();
 		 
-		 double x = 0.0;
-		 double y = 0.0; 
+
 
 //		 for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 
 //		 {
@@ -1025,8 +1024,8 @@ public void itemStateChanged(ItemEvent e) {
 			   //Class[] params_inp = {int[].class};
 			   //Object[] paramsObj_inp = new Object[] {plist_in};
 
-			   Class[] params_inp = {double.class};
-			   Object[] paramsObj_inp = new Object[] {y};
+//			   Class[] params_inp = {double.class};
+//			   Object[] paramsObj_inp = new Object[] {y};
 				 String mask6d = "  0.00000";
 				 DecimalFormat fmt6d = new DecimalFormat(mask6d);
 				 
@@ -1058,7 +1057,7 @@ public void itemStateChanged(ItemEvent e) {
 //					 double v1 = Double.parseDouble(ObjRet_inp.toString());
 //					 in[j] = v1;
 //				  }
-				   
+			   
 //			   in[0] = inputX[count];
 //			   in[1] = inputY[count];
 			   in[0] = rx.nextDouble();
@@ -1298,8 +1297,8 @@ public void itemStateChanged(ItemEvent e) {
 				  //int plist_tgt[] = new int[2];
 				  //Class [] params_tgt = {int[].class};
 				  //Object[] paramsObj_tgt = new Object[] {plist_tgt};
-				   Class [] params_tgt = {double.class};
-				   Object[] paramsObj_tgt = new Object[] {y};
+//				   Class [] params_tgt = {double.class};
+//				   Object[] paramsObj_tgt = new Object[] {y};
 				   
 		//	   System.out.println(EnvConstant.NUMBER_OF_SAMPLES);
 				  for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 

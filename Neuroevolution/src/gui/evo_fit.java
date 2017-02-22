@@ -16,14 +16,15 @@ public class evo_fit
 		 double maxX = 80;	// x massima
 		 double minY = 20;	// y minima
 		 double maxY = 80;	// y massima
-		 double maxM = 3;	// massa massima
+		 double minM = 0.5;	// massa minima
+		 double maxM = 2.5;	// massa massima
 		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
 		 double minV = 40;	// velocità minima 20
 		 double maxV = 40;	// velocità massima 100 [50 + 50]
-		 double minF = 0;	// forza minima
-		 double maxF = 10;	// forza massima
-		 double minT = 0.2;	// tempo minimo
-		 double maxT = 3.8;	//tempo massimo
+		 double minF = 80;	// forza minima
+		 double maxF = 220;	// forza massima
+		 double minT = 0.5;	// tempo minimo
+		 double maxT = 1.5;	//tempo massimo
 //		 double x_obj = minX + 0.4*maxX;
 		 double g = 9.81;
 		 int iter = -1;
@@ -61,13 +62,13 @@ public class evo_fit
 //			     arrayBest.add(0.0);
 	    	 	double x_obj = minX + _tgt[j][0]*maxX;
 	    	 	double y_obj = minY + _tgt[j][1]*maxY;
-	    	 	//double m = _tgt[j][2];
+	    	 	double m = minM + _tgt[j][2]*maxM;
 //	    	 	double x_obj = _tgt[j][0];
 //	    	 	double y_obj = _tgt[j][1];
 	    	 	double a = _out[j][0]*maxA;
-	    	 	double v = minV + _out[j][1]*maxV;
-//	    	 	double F = minF + _out[j][1]*maxF;
-//	    	 	double t = _out[j][2];
+//	    	 	double v = minV + _out[j][1]*maxV;
+	    	 	double F = minF + _out[j][1]*maxF;
+	    	 	double t = minT + _out[j][2]*maxT;
 //	    	 	System.out.println(x_obj);
 //	    	 	System.out.println(y_obj);
 //	    	 	System.out.println(a);
@@ -80,8 +81,8 @@ public class evo_fit
 	    	 	//if (a>90) System.out.println("A");
 	    	 	//System.out.println("ANGOLO:  "+a);
 	    	 	//System.out.println("VELOCITA':   " + v);
-//	    	 	double acc = F/m;
-//	    	 	double v = acc*t;
+	    	 	double acc = F/m;
+	    	 	double v = acc*t;
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
 //	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));
 	    	 	error = Math.abs(y_obj - y_tiro);
@@ -128,7 +129,7 @@ public class evo_fit
 	    	 	array.add(6, fitness);
 	    	 	mappa.put(j, array);
 	        } 
-	     fitness = 100000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
+	     fitness = 1000000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
 //	     fitness = 100000-errorsumquad;		//fitness_somma_quadrati
 
 //	     d[0] = fitness; 

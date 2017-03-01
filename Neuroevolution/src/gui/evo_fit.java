@@ -21,8 +21,8 @@ public class evo_fit
 		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
 		 double minV = 40;	// velocità minima 20
 		 double maxV = 40;	// velocità massima 100 [50 + 50]
-		 double minF = 75;	// forza minima
-		 double maxF = 225;	// forza massima
+		 double minF = 15;	// forza minima
+		 double maxF = 285;	// forza massima
 		 double minT = 0.5;	// tempo minimo
 		 double maxT = 1.5;	//tempo massimo
 //		 double x_obj = minX + 0.4*maxX;

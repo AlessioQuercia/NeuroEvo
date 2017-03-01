@@ -1036,17 +1036,17 @@ public void itemStateChanged(ItemEvent e) {
 				 Random rm = new Random();
 				 
 				 //***** INPUT RIPETUTI *****//
-//				 rx.setSeed(100);
-//				 ry.setSeed(10000);
-//				 rm.setSeed(10);
+				 rx.setSeed(100);
+				 ry.setSeed(10000);
+				 rm.setSeed(1000);
 				 
-				 //***** INPUT RANDOM *****//
-				 long seedX = (long)(Math.random()*100);	
-				 rx.setSeed(seedX);
-				 long seedY = (long)(Math.random()*10000);
-				 ry.setSeed(seedY);
-				 long seedM = (long)(Math.random()*10);
-				 rm.setSeed(seedM);
+//				 //***** INPUT RANDOM *****//
+//				 long seedX = (long)(Math.random()*100);	
+//				 rx.setSeed(seedX);
+//				 long seedY = (long)(Math.random()*10000);
+//				 ry.setSeed(seedY);
+//				 long seedM = (long)(Math.random()*1000);
+//				 rm.setSeed(seedM);
 				 
 				 
 			   for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 
@@ -2076,6 +2076,10 @@ public void itemStateChanged(ItemEvent e) {
 			 System.out.println("Y_TIRO: "+fmt6d.format(array.get(2)));
 			 System.out.println("ANGOLO: "+fmt6d.format(array.get(3)));
 			 System.out.println("VELOCITA': "+fmt6d.format(array.get(4)));
+			 System.out.println("FORZA: "+fmt6d.format(array.get(7)));
+			 System.out.println("TEMPO: "+fmt6d.format(array.get(8)));
+			 System.out.println("ACCELERAZIONE: "+fmt6d.format(array.get(9)));
+			 System.out.println("MASSA: "+fmt6d.format(array.get(10)));
 			 System.out.println("ERRORE: "+fmt6d.format(array.get(5)));
 			 //System.out.println("FITNESS: "+fmt6d.format(array.get(6)));
 		 }

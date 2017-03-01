@@ -16,13 +16,13 @@ public class evo_fit
 		 double maxX = 80;	// x massima
 		 double minY = 20;	// y minima
 		 double maxY = 80;	// y massima
-		 double minM = 0.5;	// massa minima
-		 double maxM = 2.5;	// massa massima
+		 double minM = 1;	// massa minima
+		 double maxM = 2;	// massa massima
 		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
 		 double minV = 40;	// velocità minima 20
 		 double maxV = 40;	// velocità massima 100 [50 + 50]
-		 double minF = 80;	// forza minima
-		 double maxF = 220;	// forza massima
+		 double minF = 75;	// forza minima
+		 double maxF = 225;	// forza massima
 		 double minT = 0.5;	// tempo minimo
 		 double maxT = 1.5;	//tempo massimo
 //		 double x_obj = minX + 0.4*maxX;
@@ -84,7 +84,7 @@ public class evo_fit
 	    	 	double acc = F/m;
 	    	 	double v = acc*t;
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
-//	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));
+//	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));		//FITNESS VECCHIA
 	    	 	error = Math.abs(y_obj - y_tiro);
 //	    	 	errorsum += Math.pow(error, 2);		//fitness_somma_quadrati
 	    	 	errorsum += error;			//fitness_quadrato_somma
@@ -103,9 +103,13 @@ public class evo_fit
 	    	 		arrayBest.add(3, a);
 	    	 		arrayBest.add(4, v);
 	    	 		arrayBest.add(5, min_error);
+		    	 	arrayBest.add(10, F);
+		    	 	arrayBest.add(11, t);
+		    	 	arrayBest.add(12, acc);
+		    	 	arrayBest.add(13, m);
 	    	 	}
 	    	 	fitness2 += 1/(error+k);
-	    	 	//fitness += 1/(errorsum+k);
+	    	 	//fitness += 1/(errorsum+k);		//FITNESS VECCHIA
 //	    	 	System.out.println("LANCIO:  "+j);
 //	    	 	System.out.println("ERRORE:  "+errorsum);
 //	    	 	System.out.println("FITNESS:  "+fitness);
@@ -127,10 +131,15 @@ public class evo_fit
 	    	 	array.add(4, v);
 	    	 	array.add(5, error);
 	    	 	array.add(6, fitness);
+	    	 	array.add(7, F);
+	    	 	array.add(8, t);
+	    	 	array.add(9, acc);
+	    	 	array.add(10, m);
 	    	 	mappa.put(j, array);
 	        } 
+//	     fitness = 1000000 - Math.pow(errorsum, 3);		//fitness_cubo_somma
 	     fitness = 1000000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
-//	     fitness = 100000-errorsumquad;		//fitness_somma_quadrati
+//	     fitness = 100000 - errorsumquad;		//fitness_somma_quadrati
 
 //	     d[0] = fitness; 
 //	     d[1] = errorsum;

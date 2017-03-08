@@ -28,6 +28,8 @@
    import jGraph.*;
    import java.lang.reflect.*;
    import log.*;
+import newGui.MainFrame;
+import newGui.NewMainGui;
 
 
 
@@ -35,9 +37,8 @@ public class Generation extends JPanel implements ActionListener , ItemListener
    {
    
 	  private JFrame f1;
-   
-   
-   
+
+	  
 	  Container contentPane;
 	  protected HistoryLog   logger;
    
@@ -127,7 +128,8 @@ public class Generation extends JPanel implements ActionListener , ItemListener
    */
 	   public Generation(JFrame _f) 
 	  {
-	  
+
+		   
 		 GridBagLayout gbl;
 		 GridBagConstraints limiti;
 	  
@@ -341,7 +343,7 @@ public class Generation extends JPanel implements ActionListener , ItemListener
 	  
 		 JFrame jp = null;
 		 Generation pn1 = null;
-	  
+	     MainFrame frame = null;
 	  
 		 try 
 		 {
@@ -769,7 +771,6 @@ public void itemStateChanged(ItemEvent e) {
 		 //
 			if ((EnvConstant.TYPE_OF_START  == EnvConstant.START_FROM_GENOME)  && (!EnvConstant.FORCE_RESTART ))
 			{
-			
 			   xFile = new IOseq(EnvRoutine.getJneatFileData(EnvConstant.NAME_GENOMEA));
 			   rc = xFile.IOseqOpenR();
 			   if (!rc)
@@ -1607,7 +1608,7 @@ public void itemStateChanged(ItemEvent e) {
 			}
 		 
 		 // wait an epoch and make a reproduction of the best species
-	
+			
 			pop.epoch(generation);
 			
 			
@@ -1636,14 +1637,16 @@ public void itemStateChanged(ItemEvent e) {
 			   
 			
 				  drawGraph((Organism) EnvConstant.FIRST_ORGANISM_WINNER, riga1, mappa_graph);
+				 // updateNewGui((Organism) EnvConstant.FIRST_ORGANISM_WINNER);
 			
 			   
 			   }
 			
 			   if (!(EnvConstant.CURR_ORGANISM_CHAMPION == null)) 
 			   {
-			
+				   System.out.println("banana");
 				  drawGraph((Organism) EnvConstant.CURR_ORGANISM_CHAMPION, " ", mappa_graph_curr); 
+				 // updateNewGui((Organism) EnvConstant.CURR_ORGANISM_CHAMPION);
 			
 			   }
 			
@@ -2030,6 +2033,7 @@ public void itemStateChanged(ItemEvent e) {
 		 p3_graph.repaint();				
 	  
 	  }
+	   
 	   public void drawGraph(Organism  _o1,String _riga,chartXY _mappa) 
 	  {
 	  
@@ -2063,8 +2067,7 @@ public void itemStateChanged(ItemEvent e) {
 		 v1.add(new code(10,p3.getHeight()+20 ,  riga_r3, 0,CodeConstant.DESCRIPTOR));
 		 v1.add(new code(10,p3.getHeight()+40 ,  riga_r4, 0,CodeConstant.DESCRIPTOR));
 		 //v1.add(new code(10,p3.getHeight()+30 ,  riga_r4, 0,CodeConstant.DESCRIPTOR));
-		 
-		 
+	 
 		 
 		 Map<Integer,ArrayList<Double>> mappa = _o1.getMap();
 		 for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)

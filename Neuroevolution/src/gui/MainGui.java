@@ -23,13 +23,16 @@ import javax.accessibility.*;
    import java.awt.*;
    import java.awt.event.*;
    import log.*;
-   import javax.swing.*;
+import newGui.MainFrame;
+import newGui.NewMainGui;
+
+import javax.swing.*;
    
    public class MainGui extends JPanel
    {
    
-	  JFrame f1;	 
-   
+	  JFrame f1;
+      
 	  private Parameter   a_parameter;
 	  private Session     a_session;
 	  private Generation  a_generation;
@@ -153,16 +156,8 @@ import javax.accessibility.*;
 
 
 		 contentPane.add(paneSplit1,BorderLayout.CENTER);
+	  }
+	   
+protected HistoryLog logger;
 
-
-
-
-
-
-
-
-
-
-		 
-	  
-	  }																																																																protected HistoryLog logger;}
+	  }

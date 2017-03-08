@@ -22,7 +22,7 @@ public class evo_fit
 		 double minV = 40;	// velocità minima 20
 		 double maxV = 40;	// velocità massima 100 [50 + 50]
 		 double minF = 15;	// forza minima
-		 double maxF = 285;	// forza massima
+		 double maxF = 60;	// forza massima
 		 double minT = 0.5;	// tempo minimo
 		 double maxT = 1.5;	//tempo massimo
 //		 double x_obj = minX + 0.4*maxX;
@@ -38,7 +38,7 @@ public class evo_fit
 	     double k = 0.01;	//costante per poter calcolare la fitness anche quando l'errore è 0
 	     //d[2] = 0.0;
 	     ArrayList<Double> arrayBest = new ArrayList<Double> ();
-	     for (int i = 0; i<9; i++)
+	     for (int i = 0; i<=14; i++)
 	     {
 	    	 arrayBest.add(0.0);
 	     }
@@ -46,12 +46,16 @@ public class evo_fit
 //	     System.out.println(arrayBest.size());
 	     //mappa.put(10, 0.0);
 	     //System.out.println("SAMPLE :   "+_sample);
-
+	     
+	     int bestThrowIndex = 0;
+	     
 	     for ( int j = 0; j < _sample; j++) 
 	        { 
 //	    	 System.out.println("X_TARGET:    "+_tgt[j][0]);
 //	    	 System.out.println("Y_TARGET:    "+_tgt[j][1]);
 		     ArrayList<Double> array = new ArrayList<Double> ();
+		     for (int i=0; i<=10; i++)
+		    	 array.add(0.0);
 		     
 //		     array.add(0.0);
 //		     for (int i = 0; i<7; i++)
@@ -94,19 +98,18 @@ public class evo_fit
 	    	 	if (error<min_error)
 	    	 	{
 	    	 		iter = j;
+	    	 		bestThrowIndex = j;
 	    	 		min_error = error;
-	    	 		//System.out.println("CACACA");
-	    	 		arrayBest.add(0, x_obj);
-	    	 		//System.out.println("CiaO");
-	    	 		arrayBest.add(1, y_obj);
-	    	 		arrayBest.add(2, y_tiro);
-	    	 		arrayBest.add(3, a);
-	    	 		arrayBest.add(4, v);
-	    	 		arrayBest.add(5, min_error);
-		    	 	arrayBest.add(10, F);
-		    	 	arrayBest.add(11, t);
-		    	 	arrayBest.add(12, acc);
-		    	 	arrayBest.add(13, m);
+	    	 		arrayBest.set(0, x_obj);
+	    	 		arrayBest.set(1, y_obj);
+	    	 		arrayBest.set(2, y_tiro);
+	    	 		arrayBest.set(3, a);
+	    	 		arrayBest.set(4, v);
+	    	 		arrayBest.set(5, min_error);
+		    	 	arrayBest.set(10, F);
+		    	 	arrayBest.set(11, t);
+		    	 	arrayBest.set(12, acc);
+		    	 	arrayBest.set(13, m);
 	    	 	}
 	    	 	fitness2 += 1/(error+k);
 	    	 	//fitness += 1/(errorsum+k);		//FITNESS VECCHIA
@@ -124,17 +127,17 @@ public class evo_fit
 //	    	 	System.out.println("Y_TIRO:  "+y_tiro);
 //	    	 	System.out.println("Y_OBJ:   "+_tgt[j]);
 //	    	 	System.out.println("FITNESS:   "+fitness);
-	    	 	array.add(0, x_obj);
-	    	 	array.add(1, y_obj);
-	    	 	array.add(2, y_tiro);
-	    	 	array.add(3, a);
-	    	 	array.add(4, v);
-	    	 	array.add(5, error);
-	    	 	array.add(6, fitness);
-	    	 	array.add(7, F);
-	    	 	array.add(8, t);
-	    	 	array.add(9, acc);
-	    	 	array.add(10, m);
+	    	 	array.set(0, x_obj);
+	    	 	array.set(1, y_obj);
+	    	 	array.set(2, y_tiro);
+	    	 	array.set(3, a);
+	    	 	array.set(4, v);
+	    	 	array.set(5, error);
+	    	 	array.set(6, fitness);
+	    	 	array.set(7, F);
+	    	 	array.set(8, t);
+	    	 	array.set(9, acc);
+	    	 	array.set(10, m);
 	    	 	mappa.put(j, array);
 	        } 
 //	     fitness = 1000000 - Math.pow(errorsum, 3);		//fitness_cubo_somma
@@ -153,13 +156,15 @@ public class evo_fit
 //	     }
 	     
 	    //if (fitness>=500) win = 1.0;
- 	 	 arrayBest.add(6, fitness);
- 	 	 arrayBest.add(7, win);
- 	 	 arrayBest.add(8, errorsum);
- 	 	 arrayBest.add(9, fitness2);
+ 	 	 arrayBest.set(6, fitness);
+ 	 	 arrayBest.set(7, win);
+ 	 	 arrayBest.set(8, errorsum);
+ 	 	 arrayBest.set(9, fitness2);
+ 	 	 arrayBest.set(14, (double)bestThrowIndex);
  	 	 mappa.put(_sample, arrayBest);
 	     //d[2] = 0.0;
 	     //if (fitness > 20) d[2] = 1;
+
 	     return mappa; 
-	  } 
+	  }
 }

@@ -20,7 +20,7 @@
    import log.*;
 
 
-																public class Parameter extends JPanel implements ActionListener, ListSelectionListener 
+public class Parameter extends JPanel implements ActionListener, ListSelectionListener 
    {
    
 	  JFrame f1;

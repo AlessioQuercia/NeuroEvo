@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import myGui.myGuiConstants;
+import newGui.MyConstants;
+
 public class evo_fit 
 {
 	  public static double getMaxFitness() { return 1000; }  //ovvero quando l'errore è 0,1
@@ -38,7 +41,7 @@ public class evo_fit
 	     double k = 0.01;	//costante per poter calcolare la fitness anche quando l'errore è 0
 	     //d[2] = 0.0;
 	     ArrayList<Double> arrayBest = new ArrayList<Double> ();
-	     for (int i = 0; i<=14; i++)
+	     for (int i = 0; i<MyConstants.INFO_RETE_SIZE; i++)
 	     {
 	    	 arrayBest.add(0.0);
 	     }
@@ -54,7 +57,7 @@ public class evo_fit
 //	    	 System.out.println("X_TARGET:    "+_tgt[j][0]);
 //	    	 System.out.println("Y_TARGET:    "+_tgt[j][1]);
 		     ArrayList<Double> array = new ArrayList<Double> ();
-		     for (int i=0; i<=10; i++)
+		     for (int i=0; i<MyConstants.INFO_LANCIO_SIZE; i++)
 		    	 array.add(0.0);
 		     
 //		     array.add(0.0);
@@ -100,16 +103,17 @@ public class evo_fit
 	    	 		iter = j;
 	    	 		bestThrowIndex = j;
 	    	 		min_error = error;
-	    	 		arrayBest.set(0, x_obj);
-	    	 		arrayBest.set(1, y_obj);
-	    	 		arrayBest.set(2, y_tiro);
-	    	 		arrayBest.set(3, a);
-	    	 		arrayBest.set(4, v);
-	    	 		arrayBest.set(5, min_error);
-		    	 	arrayBest.set(10, F);
-		    	 	arrayBest.set(11, t);
-		    	 	arrayBest.set(12, acc);
-		    	 	arrayBest.set(13, m);
+	    	 		arrayBest.set(MyConstants.X_TARGET_INDEX, x_obj);
+	    	 		arrayBest.set(MyConstants.Y_TARGET_INDEX, y_obj);
+	    	 		arrayBest.set(MyConstants.Y_LANCIO_INDEX, y_tiro);
+	    	 		arrayBest.set(MyConstants.ANGOLO_INDEX, a);
+	    	 		arrayBest.set(MyConstants.VELOCITA_INDEX, v);
+	    	 		arrayBest.set(MyConstants.ERRORE_INDEX, min_error);
+//		    	 	arrayBest.set(MyConstants.FITNESS_INDEX, fitness);
+		    	 	arrayBest.set(MyConstants.FORZA_INDEX, F);
+		    	 	arrayBest.set(MyConstants.TEMPO_INDEX, t);
+		    	 	arrayBest.set(MyConstants.ACCELERAZIONE_INDEX, acc);
+		    	 	arrayBest.set(MyConstants.MASSA_INDEX, m);
 	    	 	}
 	    	 	fitness2 += 1/(error+k);
 	    	 	//fitness += 1/(errorsum+k);		//FITNESS VECCHIA
@@ -127,17 +131,17 @@ public class evo_fit
 //	    	 	System.out.println("Y_TIRO:  "+y_tiro);
 //	    	 	System.out.println("Y_OBJ:   "+_tgt[j]);
 //	    	 	System.out.println("FITNESS:   "+fitness);
-	    	 	array.set(0, x_obj);
-	    	 	array.set(1, y_obj);
-	    	 	array.set(2, y_tiro);
-	    	 	array.set(3, a);
-	    	 	array.set(4, v);
-	    	 	array.set(5, error);
-	    	 	array.set(6, fitness);
-	    	 	array.set(7, F);
-	    	 	array.set(8, t);
-	    	 	array.set(9, acc);
-	    	 	array.set(10, m);
+    	 		array.set(MyConstants.X_TARGET_INDEX, x_obj);
+    	 		array.set(MyConstants.Y_TARGET_INDEX, y_obj);
+    	 		array.set(MyConstants.Y_LANCIO_INDEX, y_tiro);
+    	 		array.set(MyConstants.ANGOLO_INDEX, a);
+    	 		array.set(MyConstants.VELOCITA_INDEX, v);
+    	 		array.set(MyConstants.ERRORE_INDEX, error);
+//	    	 	array.set(MyConstants.FITNESS_INDEX, fitness);
+	    	 	array.set(MyConstants.FORZA_INDEX, F);
+	    	 	array.set(MyConstants.TEMPO_INDEX, t);
+	    	 	array.set(MyConstants.ACCELERAZIONE_INDEX, acc);
+	    	 	array.set(MyConstants.MASSA_INDEX, m);
 	    	 	mappa.put(j, array);
 	        } 
 //	     fitness = 1000000 - Math.pow(errorsum, 3);		//fitness_cubo_somma
@@ -156,11 +160,12 @@ public class evo_fit
 //	     }
 	     
 	    //if (fitness>=500) win = 1.0;
- 	 	 arrayBest.set(6, fitness);
- 	 	 arrayBest.set(7, win);
- 	 	 arrayBest.set(8, errorsum);
- 	 	 arrayBest.set(9, fitness2);
- 	 	 arrayBest.set(14, (double)bestThrowIndex);
+ 	 	 arrayBest.set(MyConstants.FITNESS_TOTALE_INDEX, fitness);
+// 	 	 arrayBest.set(7, win);
+ 	 	 arrayBest.set(MyConstants.ERRORE_TOTALE_INDEX, errorsum);
+ 	 	 arrayBest.set(MyConstants.FITNESS_VECCHIA_INDEX, fitness2);
+ 	 	 arrayBest.set(MyConstants.LANCIO_MIGLIORE_INDEX, (double)bestThrowIndex);
+ 	 	 arrayBest.set(MyConstants.WIN_INDEX, win);
  	 	 mappa.put(_sample, arrayBest);
 	     //d[2] = 0.0;
 	     //if (fitness > 20) d[2] = 1;

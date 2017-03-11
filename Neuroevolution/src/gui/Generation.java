@@ -29,6 +29,7 @@
    import java.lang.reflect.*;
    import log.*;
 import newGui.MainFrame;
+import newGui.MyConstants;
 import newGui.NewMainGui;
 
 
@@ -1397,13 +1398,13 @@ public void itemStateChanged(ItemEvent e) {
 //			   x_target = Array.getDouble(ObjRet_fit, 6);
 			   HashMap<Integer,ArrayList<Double>> mappa = (HashMap<Integer, ArrayList<Double>>) ObjRet_fit;
 			   ArrayList<Double> arrayBest = mappa.get(EnvConstant.NUMBER_OF_SAMPLES);
-			   fit_dyn = arrayBest.get(6);
-			   err_dyn = arrayBest.get(5);
-			   win_dyn = arrayBest.get(7);
-			   angle = arrayBest.get(3);
-			   velocity = arrayBest.get(4);
-			   y_target = arrayBest.get(1);
-			   x_target = arrayBest.get(0);
+			   fit_dyn = arrayBest.get(MyConstants.FITNESS_TOTALE_INDEX);
+			   err_dyn = arrayBest.get(MyConstants.ERRORE_INDEX);
+			   win_dyn = arrayBest.get(MyConstants.WIN_INDEX);
+			   angle = arrayBest.get(MyConstants.ANGOLO_INDEX);
+			   velocity = arrayBest.get(MyConstants.VELOCITA_INDEX);
+			   y_target = arrayBest.get(MyConstants.Y_TARGET_INDEX);
+			   x_target = arrayBest.get(MyConstants.X_TARGET_INDEX);
 			   map = mappa;
 			//			   System.out.print("\n ce so passo!");
 			
@@ -2072,24 +2073,24 @@ public void itemStateChanged(ItemEvent e) {
 		 Map<Integer,ArrayList<Double>> mappa = _o1.getMap();
 		 for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
 		 {
-			 System.out.println("------ LANCIO: "+i +" ------");
+			 System.out.println("------ LANCIO: "+ (i+1) +" ------");
 			 ArrayList<Double> array = mappa.get(i);
-			 System.out.println("X_OBJ: "+fmt6d.format(array.get(0)));
-			 System.out.println("Y_OBJ: "+fmt6d.format(array.get(1)));
-			 System.out.println("Y_TIRO: "+fmt6d.format(array.get(2)));
-			 System.out.println("ANGOLO: "+fmt6d.format(array.get(3)));
-			 System.out.println("VELOCITA': "+fmt6d.format(array.get(4)));
-			 System.out.println("FORZA: "+fmt6d.format(array.get(7)));
-			 System.out.println("TEMPO: "+fmt6d.format(array.get(8)));
-			 System.out.println("ACCELERAZIONE: "+fmt6d.format(array.get(9)));
-			 System.out.println("MASSA: "+fmt6d.format(array.get(10)));
-			 System.out.println("ERRORE: "+fmt6d.format(array.get(5)));
+			 System.out.println("X_OBJ: "+fmt6d.format(array.get(MyConstants.X_TARGET_INDEX)));
+			 System.out.println("Y_OBJ: "+fmt6d.format(array.get(MyConstants.Y_TARGET_INDEX)));
+			 System.out.println("Y_TIRO: "+fmt6d.format(array.get(MyConstants.Y_LANCIO_INDEX)));
+			 System.out.println("ANGOLO: "+fmt6d.format(array.get(MyConstants.ANGOLO_INDEX)));
+			 System.out.println("VELOCITA': "+fmt6d.format(array.get(MyConstants.VELOCITA_INDEX)));
+			 System.out.println("FORZA: "+fmt6d.format(array.get(MyConstants.FORZA_INDEX)));
+			 System.out.println("TEMPO: "+fmt6d.format(array.get(MyConstants.TEMPO_INDEX)));
+			 System.out.println("ACCELERAZIONE: "+fmt6d.format(array.get(MyConstants.ACCELERAZIONE_INDEX)));
+			 System.out.println("MASSA: "+fmt6d.format(array.get(MyConstants.MASSA_INDEX)));
+			 System.out.println("ERRORE: "+fmt6d.format(array.get(MyConstants.ERRORE_INDEX)));
 			 //System.out.println("FITNESS: "+fmt6d.format(array.get(6)));
 		 }
 		 System.out.println("GENERAZIONE: "+_o1.getGeneration());
-		 System.out.println("ERRORE TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(8)));
-		 System.out.println("FITNESS TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(6)));
-		 System.out.println("FITNESS VECCHIA: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(9)));
+		 System.out.println("ERRORE TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.ERRORE_TOTALE_INDEX)));
+		 System.out.println("FITNESS TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.FITNESS_TOTALE_INDEX)));
+		 System.out.println("FITNESS VECCHIA: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.FITNESS_VECCHIA_INDEX)));
 		 System.out.println();
 		
 		 

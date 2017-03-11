@@ -27,6 +27,7 @@ public class OptionsPanel extends JPanel
 	private JComboBox throwList;
 
 	private JButton startBtn;
+	private JButton autodrawBtn;
 
 	public OptionsPanel(JFrame frame) 
 	{
@@ -73,7 +74,7 @@ public class OptionsPanel extends JPanel
 //		list.addItem("1.5");
 //		list.setSelectedIndex(4);
 		
-		JButton addBtn = new JButton("Auto-draw: ON");
+		autodrawBtn = new JButton("Auto-draw: OFF");
 		
 		startBtn = new JButton("Start");
 		
@@ -111,7 +112,7 @@ public class OptionsPanel extends JPanel
 		gc.anchor = GridBagConstraints.LINE_START;
 		gc.gridx = 1;
 		gc.gridy = 2;
-		add(addBtn, gc);
+		add(autodrawBtn, gc);
 		
 		gc.anchor = GridBagConstraints.LINE_START;
 		gc.gridx = 0;
@@ -146,7 +147,13 @@ public class OptionsPanel extends JPanel
 		return throwList;
 	}
 	
-	public JButton getStartBtn() {
+	public JButton getStartBtn() 
+	{
 		return startBtn;
+	}
+	
+	public JButton getAutodrawBtn()
+	{
+		return autodrawBtn;
 	}
 }

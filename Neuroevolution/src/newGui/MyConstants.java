@@ -23,15 +23,23 @@ public class MyConstants
 	public static int MASSA_INDEX = 10;
 	
 	/////INDICI DELLE INFORMAZIONI SULLA RETE
-	public static int ERRORE_TOTALE_INDEX = 8;
-	public static int FITNESS_TOTALE_INDEX = 6;
-	public static int FITNESS_VECCHIA_INDEX = 9;
+	public static int ERRORE_TOTALE_INDEX = 11;
+	public static int FITNESS_TOTALE_INDEX = 12;
+	public static int FITNESS_VECCHIA_INDEX = 13;
+	public static int LANCIO_MIGLIORE_INDEX = 14;
+	public static int WIN_INDEX = 15;
+	
+	/////NUMERO INDICI
+	public static int INFO_LANCIO_SIZE = 11;
+	public static int INFO_RETE_SIZE = 16;
 	
 	
 	/////INFORMAZIONI PER START
+	public static String DATA_DIR = "data\\";
+	public static String RESULTS_DIR = "results\\";
 	public static String PARAMETRI_NOMEFILE = "parametri";
-	public static String GENOMA_NOMEFILE = "data\\genome_3in_4hid_3out";
-	public static String POP_NOMEFILE = "data\\primitive";
+	public static String GENOMA_NOMEFILE = DATA_DIR +"genome_3in_4hid_3out";
+	public static String POP_NOMEFILE = DATA_DIR + "primitive";
 	
 	////GESTIONE UPDATE E RENDER
 	public static long MILLISECOND = 1000L;

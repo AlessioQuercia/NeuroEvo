@@ -212,7 +212,7 @@ private boolean autodraw;
 	   
 	   public void stopProcessAsync()
 	  {
-		 lookupThread.stop();
+		 lookupThread.interrupt();
 	  } 
 	   
 	   public void startProcess() 
@@ -718,88 +718,168 @@ private boolean autodraw;
 //						 double v1 = Double.parseDouble(ObjRet_inp.toString());
 //						 in[j] = v1;
 //					  }
-				   
-//				   in[0] = inputX[count];
-//				   in[1] = inputY[count];
-				   in[0] = rx.nextDouble();
-				   in[1] = ry.nextDouble();
-				   in[2] = rm.nextDouble();
-				   //in[2] = rm.nextDouble();
-//				   in[0] = NeatRoutine.randfloat();
-//				   in[1] = NeatRoutine.randfloat();
-				   tgt[count][0] = in[0];
-				   tgt[count][1] = in[1];
-				   tgt[count][2] = in[2];
-				   //tgt[count][2] = in[2];
-
-//				   System.out.println("------ LANCIO: "+count+" ------");
-//				   System.out.println("INPUT 0:"+in[0]);
-//				   System.out.println("INPUT 1:"+in[1]);
-				   // load sensor   
-					  _net.load_sensors(in);
-				   /*
-				   // activate net	  
-				   success = _net.activate();
-				   
-				   // next activation while last level is reached !
-				   // use depth to ensure relaxation
-				   
-				   for (int relax = 0; relax <= net_depth; relax++)
-					success = _net.activate();
-				   */
-				   
-					  if (EnvConstant.ACTIVATION_PERIOD == EnvConstant.MANUAL)
-					  {
-						 for (int relax = 0; relax < EnvConstant.ACTIVATION_TIMES; relax++)
-						 {
-							success = _net.activate();
-						 }
-					  }
-					  else
-					  {   	            
-					  // first activation from sensor to next layer....
-//						  System.out.println("LANCIO "+count);
-						 success = _net.activate();
-						 
-					  // next activation while last level is reached !
-					  // use depth to ensure relaxation
-						 for (int relax = 0; relax <= net_depth; relax++)
-						 {
-							success = _net.activate();
-						 }
-					  }
-				   
-				   
-				   
-				   // for each sample save each output	
 					   
-//					   System.out.println("INPUT X: " +inputX[count]);
-//					   System.out.println("INPUT Y: "+inputY[count]);
-//					  for( int j=0; j < EnvConstant.NR_UNIT_OUTPUT; j++){
-//						  out[count][j] = ((NNode) _net.getOutputs().elementAt(j)).getActivation();
-////						  System.out.println(fmt6d.format(out[count][j]));
-////						  System.out.println();
+
+					   ///IMPLEMENTAZIONE DECISIONE DI LANCIO   
+					   
+					   double delta_t = 0.04;
+					   double current_time = 0;
+					   double massa = 2;	// 2kg
+					   double v = 0;
+					   double minF = 15;	// forza minima
+					   double maxF = 60;	// forza massima
+					   double maxA = 1.5708;
+					   double minV = 0;
+					   double maxV = 75;
+					   
+					   in[0] = rx.nextDouble();
+					   in[1] = ry.nextDouble();
+					   in[2] = v;
+					   
+					   tgt[count][0] = in[0];
+					   tgt[count][1] = in[1];
+					   tgt[count][2] = in[2];
+					   
+					   for (int i = 0; i<50; i++)
+					   {
+						   current_time += delta_t;
+						   
+						   // load sensor   
+						   _net.load_sensors(in);
+						   
+						   if (EnvConstant.ACTIVATION_PERIOD == EnvConstant.MANUAL)
+						   {
+							   for (int relax = 0; relax < EnvConstant.ACTIVATION_TIMES; relax++)
+							   {
+								   success = _net.activate();
+							   }
+						   }
+						   else
+						   {   	            
+							   //first activation from sensor to next layer....
+							 success = _net.activate();
+							 
+						  // next activation while last level is reached !
+						  // use depth to ensure relaxation
+							 for (int relax = 0; relax <= net_depth; relax++)
+							 {
+								 success = _net.activate();
+							 }
+						   }
+						   
+						   //output
+						   for( int j=0; j < EnvConstant.NR_UNIT_OUTPUT; j++)
+						   {
+							   out[count][j] = ((NNode) _net.getOutputs().elementAt(j)).getActivation();
+						   }
+						   
+						   // clear net		 
+						   _net.flush();
+						   
+						   double a = out[count][0]*maxA;
+						   double F = minF + out[count][1]*maxF;
+						   double lascia = out[count][2];
+						   
+						   double acc = F/massa;
+						   double delta_v = acc*delta_t;
+						   
+						   v += delta_v;
+						   
+						   double V = (v - minV)/maxV;
+						   
+						   in[2] = V;
+						   tgt[count][2] = in[2];
+						   
+						   if (lascia >= 0.5) 
+						   {
+							   break;
+						   }
+					   }
+					   
+					   
+			 ///IMPLEMENTAZIONE VECCHIA  				   
+//					   
+////				   in[0] = inputX[count];
+////				   in[1] = inputY[count];
+//				   in[0] = rx.nextDouble();
+//				   in[1] = ry.nextDouble();
+//				   in[2] = rm.nextDouble();
+//				   //in[2] = rm.nextDouble();
+////				   in[0] = NeatRoutine.randfloat();
+////				   in[1] = NeatRoutine.randfloat();
+//				   tgt[count][0] = in[0];
+//				   tgt[count][1] = in[1];
+//				   tgt[count][2] = in[2];
+//				   //tgt[count][2] = in[2];
+//
+////				   System.out.println("------ LANCIO: "+count+" ------");
+////				   System.out.println("INPUT 0:"+in[0]);
+////				   System.out.println("INPUT 1:"+in[1]);
+//				   // load sensor   
+//					  _net.load_sensors(in);
+//				   /*
+//				   // activate net	  
+//				   success = _net.activate();
+//				   
+//				   // next activation while last level is reached !
+//				   // use depth to ensure relaxation
+//				   
+//				   for (int relax = 0; relax <= net_depth; relax++)
+//					success = _net.activate();
+//				   */
+//				   
+//					  if (EnvConstant.ACTIVATION_PERIOD == EnvConstant.MANUAL)
+//					  {
+//						 for (int relax = 0; relax < EnvConstant.ACTIVATION_TIMES; relax++)
+//						 {
+//							success = _net.activate();
+//						 }
 //					  }
-		
-				   // for each sample save each output	
-//					  System.out.println("ESEMPIO NUMERO: "+count);
-					  for( int j=0; j < EnvConstant.NR_UNIT_OUTPUT; j++)
-					  {
-						 out[count][j] = ((NNode) _net.getOutputs().elementAt(j)).getActivation();
-//						 System.out.println(out[count][j]);
-					  }
-//					  double o1 = ((NNode) _net.getOutputs().elementAt(0)).getActivation();
-//					  double o2 = ((NNode) _net.getOutputs().elementAt(1)).getActivation();
-//					  out[count][0] = o1;
-//					  out[count][1] = o2;
-//				  System.out.println(fmt6d.format(o1));
-//				  System.out.println(fmt6d.format(o2));
-//				  System.out.println();
-						 
-					  
-				   
-				   // clear net		 
-					  _net.flush();
+//					  else
+//					  {   	            
+//					  // first activation from sensor to next layer....
+////						  System.out.println("LANCIO "+count);
+//						 success = _net.activate();
+//						 
+//					  // next activation while last level is reached !
+//					  // use depth to ensure relaxation
+//						 for (int relax = 0; relax <= net_depth; relax++)
+//						 {
+//							success = _net.activate();
+//						 }
+//					  }
+//				   
+//				   
+//				   
+//				   // for each sample save each output	
+//					   
+////					   System.out.println("INPUT X: " +inputX[count]);
+////					   System.out.println("INPUT Y: "+inputY[count]);
+////					  for( int j=0; j < EnvConstant.NR_UNIT_OUTPUT; j++){
+////						  out[count][j] = ((NNode) _net.getOutputs().elementAt(j)).getActivation();
+//////						  System.out.println(fmt6d.format(out[count][j]));
+//////						  System.out.println();
+////					  }
+//		
+//				   // for each sample save each output	
+////					  System.out.println("ESEMPIO NUMERO: "+count);
+//					  for( int j=0; j < EnvConstant.NR_UNIT_OUTPUT; j++)
+//					  {
+//						 out[count][j] = ((NNode) _net.getOutputs().elementAt(j)).getActivation();
+////						 System.out.println(out[count][j]);
+//					  }
+////					  double o1 = ((NNode) _net.getOutputs().elementAt(0)).getActivation();
+////					  double o2 = ((NNode) _net.getOutputs().elementAt(1)).getActivation();
+////					  out[count][0] = o1;
+////					  out[count][1] = o2;
+////				  System.out.println(fmt6d.format(o1));
+////				  System.out.println(fmt6d.format(o2));
+////				  System.out.println();
+//						 
+//					  
+//				   
+//				   // clear net		 
+//					  _net.flush();
 				   }
 				} 
 				
@@ -1013,7 +1093,7 @@ private boolean autodraw;
 //				 System.out.println("stop");
 				 start = false;
 //				 autodraw = true;
-				 EnvConstant.FORCE_RESTART = false;
+//				 EnvConstant.FORCE_RESTART = false;
 				 stopProcessAsync();
 				 
 				 getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
@@ -1250,7 +1330,7 @@ private boolean autodraw;
 	        		"ERRORE TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.ERRORE_TOTALE_INDEX)) + "\n" + 
 	        		"FITNESS TOTALE: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.FITNESS_TOTALE_INDEX)) + "\n" + 
 	        		"FITNESS VECCHIA: "+fmt6d.format(mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.FITNESS_VECCHIA_INDEX)) + "\n" +
-	        		"LANCIO MIGLIROE: "+ (mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue()) + "\n";
+	        		"LANCIO MIGLIORE: "+ (mappa.get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue()) + "\n";
 	        
 	        String infoFile = infoRete + infoLanci;
 	        

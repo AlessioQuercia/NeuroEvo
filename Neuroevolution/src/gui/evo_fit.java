@@ -3,6 +3,7 @@ package gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import myGui.myGuiConstants;
 import newGui.MyConstants;
@@ -22,8 +23,8 @@ public class evo_fit
 		 double minM = 1;	// massa minima
 		 double maxM = 2;	// massa massima
 		 double maxA = 1.5708;	// angolo massimo in radianti (corrisponde a 90 gradi)
-		 double minV = 40;	// velocità minima 20
-		 double maxV = 40;	// velocità massima 100 [50 + 50]
+//		 double minV = 40;	// velocità minima 20
+//		 double maxV = 40;	// velocità massima 100 [50 + 50]
 		 double minF = 15;	// forza minima
 		 double maxF = 60;	// forza massima
 		 double minT = 0.5;	// tempo minimo
@@ -52,6 +53,9 @@ public class evo_fit
 	     
 	     int bestThrowIndex = 0;
 	     
+	     double minV = 0;
+	     double maxV = 75;
+	     
 	     for ( int j = 0; j < _sample; j++) 
 	        { 
 //	    	 System.out.println("X_TARGET:    "+_tgt[j][0]);
@@ -60,36 +64,53 @@ public class evo_fit
 		     for (int i=0; i<MyConstants.INFO_LANCIO_SIZE; i++)
 		    	 array.add(0.0);
 		     
-//		     array.add(0.0);
-//		     for (int i = 0; i<7; i++)
-//		     {
-//		    	 array.add(0.0);
-//		    	 arrayBest.add(0.0);
-//		     }
-//			     arrayBest.add(0.0);
-	    	 	double x_obj = minX + _tgt[j][0]*maxX;
-	    	 	double y_obj = minY + _tgt[j][1]*maxY;
-	    	 	double m = minM + _tgt[j][2]*maxM;
-//	    	 	double x_obj = _tgt[j][0];
-//	    	 	double y_obj = _tgt[j][1];
+		     
+			    ///IMPLEMENTAZIONE DECISIONE DI LANCIO   
+		     	double m = 2;
+				double x_obj = minX + _tgt[j][0]*maxX;
+				double y_obj = minY + _tgt[j][1]*maxY;
+				double v = minV + _tgt[j][2]*maxV;
+				
 	    	 	double a = _out[j][0]*maxA;
-//	    	 	double v = minV + _out[j][1]*maxV;
 	    	 	double F = minF + _out[j][1]*maxF;
-	    	 	double t = minT + _out[j][2]*maxT;
-//	    	 	System.out.println(x_obj);
-//	    	 	System.out.println(y_obj);
-//	    	 	System.out.println(a);
-//	    	 	System.out.println(v);
-//	    	 	d[3] = a;
-//	    	 	d[4] = v;
-//	    	 	d[5] = _tgt[j][1];	//y_obj
-//	    	 	d[6] = _tgt[j][0];	//x_obj
-	    	 	//if (v>100) System.out.println("V");
-	    	 	//if (a>90) System.out.println("A");
-	    	 	//System.out.println("ANGOLO:  "+a);
-	    	 	//System.out.println("VELOCITA':   " + v);
+	    	 	double lascia = _out[j][2];
+	    	 	
 	    	 	double acc = F/m;
-	    	 	double v = acc*t;
+	    	 	double t = v/acc;
+
+	    	 	
+//IMPLEMENTAZIONE VECCHIA		     
+////		     array.add(0.0);
+////		     for (int i = 0; i<7; i++)
+////		     {
+////		    	 array.add(0.0);
+////		    	 arrayBest.add(0.0);
+////		     }
+////			     arrayBest.add(0.0);
+//	    	 	double x_obj = minX + _tgt[j][0]*maxX;
+//	    	 	double y_obj = minY + _tgt[j][1]*maxY;
+//	    	 	double m = minM + _tgt[j][2]*maxM;
+////	    	 	double x_obj = _tgt[j][0];
+////	    	 	double y_obj = _tgt[j][1];
+//	    	 	double a = _out[j][0]*maxA;
+////	    	 	double v = minV + _out[j][1]*maxV;
+//	    	 	double F = minF + _out[j][1]*maxF;
+//	    	 	double t = minT + _out[j][2]*maxT;
+////	    	 	System.out.println(x_obj);
+////	    	 	System.out.println(y_obj);
+////	    	 	System.out.println(a);
+////	    	 	System.out.println(v);
+////	    	 	d[3] = a;
+////	    	 	d[4] = v;
+////	    	 	d[5] = _tgt[j][1];	//y_obj
+////	    	 	d[6] = _tgt[j][0];	//x_obj
+//	    	 	//if (v>100) System.out.println("V");
+//	    	 	//if (a>90) System.out.println("A");
+//	    	 	//System.out.println("ANGOLO:  "+a);
+//	    	 	//System.out.println("VELOCITA':   " + v);
+//	    	 	double acc = F/m;
+//	    	 	double v = acc*t;
+	    	 	
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
 //	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));		//FITNESS VECCHIA
 	    	 	error = Math.abs(y_obj - y_tiro);

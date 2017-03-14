@@ -197,7 +197,8 @@ public class NewMainGui extends JPanel implements Runnable
 	            double X_tgt = simulation.getRightPanel().proportionX(info.get(MyConstants.X_TARGET_INDEX));
 	            double Y_tgt = simulation.getRightPanel().proportionY(info.get(MyConstants.Y_TARGET_INDEX));
 				
-				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt, 5, 5);
+				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt, 
+						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt, 5, 5);
 				
 //				else
 //				{

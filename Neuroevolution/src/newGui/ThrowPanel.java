@@ -120,13 +120,13 @@ public class ThrowPanel extends JPanel
 	
 	public double proportionX(double x)
 	{
-        double X = x*(getWidth()-MyConstants.BORDER_X)/100;	///PROPORZIONI X
+        double X = x*(getWidth()-MyConstants.BORDER_X)/MyConstants.ASSE_X;	///PROPORZIONI X
         return X;
 	}
 	
 	public double proportionY(double y)
 	{
-        double Y = y*(getHeight()-MyConstants.BORDER_Y)/100;	///PROPORZIONI Y
+        double Y = y*(getHeight()-MyConstants.BORDER_Y)/MyConstants.ASSE_Y;	///PROPORZIONI Y
         return Y;
 	}
 	

@@ -24,7 +24,7 @@ import javax.accessibility.*;
    import java.awt.event.*;
    import log.*;
 import newGui.MainFrame;
-import newGui.NewMainGui;
+import newGui.MainPanel;
 
 import javax.swing.*;
    

@@ -30,7 +30,7 @@
    import log.*;
 import newGui.MainFrame;
 import newGui.MyConstants;
-import newGui.NewMainGui;
+import newGui.MainPanel;
 
 
 
@@ -1664,7 +1664,6 @@ public void itemStateChanged(ItemEvent e) {
 
 
 		    drawCurve(riga1, pop.getHighest_fitness(), generation,  pop.getSpecies().size(),  _neat.p_pop_size);
-
 			 
 			if (win)
 			   riga1 = "Time : " + generation + " found WINNER ! ";

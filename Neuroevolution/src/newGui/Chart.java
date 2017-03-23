@@ -171,8 +171,8 @@ public class Chart extends JPanel
 	{
 		prevX = currX;
 		prevY = currY;
-		currX = x;
-		currY = y;
+		currX = (int)proportionX(x);
+		currY = (int)proportionY(y);
 		
 //		g2d.fillOval(x_axis + ChartConstants.BORDER_X + currX, getHeight() - y_axis - ChartConstants.BORDER_Y - currY, 3, 3);
 //		g2d.drawLine(x_axis + ChartConstants.BORDER_X + prevX, getHeight() - y_axis - ChartConstants.BORDER_Y - prevY
@@ -199,10 +199,10 @@ public class Chart extends JPanel
 		drawNumbers(g2d);
 		drawDesc(g2d);
 		
-//		for (int i = 0, j = 0; i<400; i++, j+=100)
-//		{
-//			drawCurve(g2d, (int)proportionX(i), (int)proportionY(maxY));
-//		}
+		for (int i = 0, j = 0; i<400; i++, j+=100)
+		{
+			drawCurve(g2d, i, j);
+		}
 	}
 	
 	public double proportionX(double x)

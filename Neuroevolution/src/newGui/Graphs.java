@@ -2,6 +2,7 @@ package newGui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -22,7 +23,7 @@ public class Graphs extends JPanel
 	private JFrame f;
 	
 	private Chart chart;
-	
+
 	public Graphs(JFrame f) 
 	{
 		this.f = f;
@@ -52,4 +53,11 @@ public class Graphs extends JPanel
 		gc.gridy = 0;
     	add(chart, gc);
 	}
+	
+	
+	public Chart getChart() 
+	{
+		return chart;
+	}
+	
 }

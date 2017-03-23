@@ -524,6 +524,8 @@ private boolean debug;
 			
 			System.out.println("FITNESS PIU' ALTA: " + pop.getHighest_fitness());
 		    System.out.println("FITNESS MEDIA: " + pop.getMean_fitness());
+		    
+			graphs.updateGraphPanel(pop);
 			
 			if (!EnvConstant.REPORT_SPECIES_TESTA.equalsIgnoreCase("")) 
 			{
@@ -565,7 +567,6 @@ private boolean debug;
 				   {
 					   simulation.storeBestNet(o);
 					   simulation.updateSimulationPanel(o);
-					   graphs.updateGraphPanel(pop);
 				   }
 				   
 				   if (o.getGeneration() == 1) debug = true;

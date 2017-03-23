@@ -957,7 +957,7 @@ public void itemStateChanged(ItemEvent e) {
 		 //double tgt[][] = null;
 		 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 		 double tgt[][] = null;
-		 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT];
+		 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT+1];
 		 
 	  
 		 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);

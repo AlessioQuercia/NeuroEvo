@@ -79,6 +79,8 @@ public class Simulation extends JPanel implements ActionListener
 private boolean start;
 
 private boolean autodraw; 
+
+private boolean debug;
 	
 	public Simulation(JFrame frame) 
 	{
@@ -342,7 +344,7 @@ private boolean autodraw;
 			   if (!EnvConstant.FORCE_RESTART )
 				  u_pop = new Population(u_genome, u_neat.p_pop_size);
 			
-			   u_pop.verify();
+//			   u_pop.verify();
 			   
 			   EnvConstant.NUMBER_OF_EPOCH = 1000;
 			   
@@ -501,30 +503,38 @@ private boolean autodraw;
 //			   textPane2.setCaretPosition(doc2.getLength());
 			
 			
-			   if (!(EnvConstant.FIRST_ORGANISM_WINNER == null)) 
-			   {
-				  int idx = ((Organism) EnvConstant.FIRST_ORGANISM_WINNER).genome.genome_id;
-			   
-				  if (win)
-					 riga1 = "Time : " + generation + " genome (id=" + idx + ") is Current CHAMPION - WINNER "; 
-				  else
-					 riga1 = "Time : " + generation + " genome (id=" + idx + ") is Current CHAMPION "; 
-			   
-			
-//				  drawGraph((Organism) EnvConstant.FIRST_ORGANISM_WINNER, riga1, mappa_graph);
-				  storeBestNet((Organism) EnvConstant.FIRST_ORGANISM_WINNER);
-				  updateNewGui((Organism) EnvConstant.FIRST_ORGANISM_WINNER);
-				  
-			
-			   
-			   }
+//			   if (!(EnvConstant.FIRST_ORGANISM_WINNER == null)) 
+//			   {
+//				  int idx = ((Organism) EnvConstant.FIRST_ORGANISM_WINNER).genome.genome_id;
+//			   
+//				  if (win)
+//					 riga1 = "Time : " + generation + " genome (id=" + idx + ") is Current CHAMPION - WINNER "; 
+//				  else
+//					 riga1 = "Time : " + generation + " genome (id=" + idx + ") is Current CHAMPION "; 
+//			   
+//			
+////				  drawGraph((Organism) EnvConstant.FIRST_ORGANISM_WINNER, riga1, mappa_graph);
+//				  storeBestNet((Organism) EnvConstant.FIRST_ORGANISM_WINNER);
+//				  updateNewGui((Organism) EnvConstant.FIRST_ORGANISM_WINNER);
+//				  
+//			
+//			   
+//			   }
 			
 			   if (!(EnvConstant.CURR_ORGANISM_CHAMPION == null)) 
 			   {
 			
 //				  drawGraph((Organism) EnvConstant.CURR_ORGANISM_CHAMPION, " ", mappa_graph_curr); 
-				   storeBestNet((Organism) EnvConstant.CURR_ORGANISM_CHAMPION);
-				   updateNewGui((Organism) EnvConstant.CURR_ORGANISM_CHAMPION);
+				   Organism o = (Organism) EnvConstant.CURR_ORGANISM_CHAMPION;
+//				   System.out.println(o.getGeneration());
+
+				   if (debug)
+				   {
+					   storeBestNet(o);
+					   updateNewGui(o);
+				   }
+				   
+				   if (o.getGeneration() == 1) debug = true;
 			
 			   }
 			
@@ -610,7 +620,7 @@ private boolean autodraw;
 			 //double tgt[][] = null;
 			 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 			 double tgt[][] = null;
-			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT];
+			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT+1];
 			 
 		  
 			 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);
@@ -724,7 +734,13 @@ private boolean autodraw;
 					   
 					   double delta_t = 0.04;
 					   double current_time = 0;
-					   double massa = 2;	// 2kg
+					   double minX = 20;
+					   double maxX = 80;
+					   double minY = 20;
+					   double maxY = 80;
+					   double minM = 1;
+					   double maxM = 2;
+					   double massa = minM + rm.nextDouble()*maxM;	// 2kg
 					   double v = 0;
 					   double minF = 15;	// forza minima
 					   double maxF = 60;	// forza massima
@@ -739,6 +755,7 @@ private boolean autodraw;
 					   tgt[count][0] = in[0];
 					   tgt[count][1] = in[1];
 					   tgt[count][2] = in[2];
+					   tgt[count][3] = massa;
 					   
 					   for (int i = 0; i<50; i++)
 					   {
@@ -789,6 +806,16 @@ private boolean autodraw;
 						   
 						   in[2] = V;
 						   tgt[count][2] = in[2];
+						   
+//						   double x_tgt = minX + tgt[count][0]*maxX;
+//						   double y_tgt = minY + tgt[count][1]*maxY;
+//						   
+//						   x_tgt++;
+//						   
+//						   double X = (x_tgt - minX)/maxX;
+//						   
+//						   in[0] = X;
+//						   tgt[count][0] = in[0];
 						   
 						   if (lascia >= 0.5) 
 						   {
@@ -1230,10 +1257,10 @@ private boolean autodraw;
 			String lancioA = lancio;
 			try 
 			{
-				File file = new File(MyConstants.RESULTS_DIR + nomefile);
-
-		        FileReader fr = new FileReader(file);
-		        BufferedReader br = new BufferedReader(fr);
+//				File file = new File(MyConstants.RESULTS_DIR + nomefile);
+			
+		        FileReader fr = new FileReader(MyConstants.RESULTS_DIR + nomefile);
+	        	BufferedReader br = new BufferedReader(fr);
 		        
 		        String currentLine;
 		        currentLine = br.readLine();
@@ -1268,7 +1295,7 @@ private boolean autodraw;
 						String tempo [] = br.readLine().split(" ");
 						String accelerazione [] = br.readLine().split(" ");
 						String massa [] = br.readLine().split(" ");
-
+	
 						
 						double x_tgt = Double.parseDouble(x_target[x_target.length-1]);
 						double y_tgt = Double.parseDouble(y_target[y_target.length-1]);
@@ -1294,12 +1321,12 @@ private boolean autodraw;
 					}
 					
 		        }
-		        br.close();	
+		        br.close();
 			} 
 			catch (IOException e) 
-	        {
+		    {
 				e.printStackTrace();
-			}
+		    }
 			
 			return array;
 		}

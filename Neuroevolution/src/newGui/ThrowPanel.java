@@ -146,7 +146,7 @@ public class ThrowPanel extends JPanel
 			
 			drawTarget(g2d);
 			
-			drawPeso(g2d);
+			drawWeight(g2d);
 		}
 	}
 
@@ -162,7 +162,7 @@ public class ThrowPanel extends JPanel
 		g2d.fill(target);	
 	}
 	
-	private void drawPeso(Graphics2D g2d) 
+	private void drawWeight(Graphics2D g2d) 
 	{
 		g2d.setColor(Color.BLACK);
 		g2d.fill(peso);

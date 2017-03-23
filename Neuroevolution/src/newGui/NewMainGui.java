@@ -59,6 +59,7 @@ public class NewMainGui extends JPanel implements Runnable
 	
 	private Simulation simulation;
 	private Graphs graphs;
+	private Net net;
 	private JTabbedPane tabbedPanel;
 
 	  
@@ -100,9 +101,12 @@ public class NewMainGui extends JPanel implements Runnable
         
         graphs = new Graphs(frame);
         
+        net = new Net(frame);
+        
 		tabbedPanel = new JTabbedPane();
 		tabbedPanel.addTab("Simulation", simulation);
 		tabbedPanel.addTab("Graphs", graphs);
+		tabbedPanel.addTab("Net", net);
 		tabbedPanel.setSelectedIndex(0);
 		
         // Add Swing components to content pane
@@ -137,8 +141,6 @@ public class NewMainGui extends JPanel implements Runnable
 		double x_tgt = 0;
 		double y_tgt = 0;
 		
-		double prov = 50;
-		Ellipse2D prova = new Ellipse2D.Double(MyConstants.BORDER_X+prov,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-prov, 5, 5);
 //		Peso peso = new Peso(50, 50, 0);
 		
 		while (isRunning)
@@ -194,11 +196,12 @@ public class NewMainGui extends JPanel implements Runnable
 					y_tgt = info.get(MyConstants.Y_TARGET_INDEX);
 				}
 				
-	            double X_tgt = simulation.getRightPanel().proportionX(info.get(MyConstants.X_TARGET_INDEX));
-	            double Y_tgt = simulation.getRightPanel().proportionY(info.get(MyConstants.Y_TARGET_INDEX));
+	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
+	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
 				
 				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt, 
 						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt, 5, 5);
+//					else test = x_tgt - 50;
 				
 //				else
 //				{
@@ -232,7 +235,7 @@ public class NewMainGui extends JPanel implements Runnable
 //					}
 	            }
 	            
-				if (x > 100 || y > 100) 
+				if (x > MyConstants.ASSE_X || y > MyConstants.ASSE_Y) 
 				{
 					x=0;
 				}

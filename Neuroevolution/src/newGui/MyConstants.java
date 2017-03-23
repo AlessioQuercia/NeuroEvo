@@ -50,5 +50,5 @@ public class MyConstants
 	public static int BORDER_X = 20;
 	public static int BORDER_Y = 20;
 	public static int ASSE_X = 100;
-	public static int ASSE_Y = 100;
+	public static int ASSE_Y = 100;	
 }

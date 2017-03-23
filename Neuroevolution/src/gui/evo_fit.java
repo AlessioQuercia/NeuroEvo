@@ -66,7 +66,7 @@ public class evo_fit
 		     
 		     
 			    ///IMPLEMENTAZIONE DECISIONE DI LANCIO   
-		     	double m = 2;
+		     	double m = _tgt[j][3];
 				double x_obj = minX + _tgt[j][0]*maxX;
 				double y_obj = minY + _tgt[j][1]*maxY;
 				double v = minV + _tgt[j][2]*maxV;
@@ -166,7 +166,7 @@ public class evo_fit
 	    	 	mappa.put(j, array);
 	        } 
 //	     fitness = 1000000 - Math.pow(errorsum, 3);		//fitness_cubo_somma
-	     fitness = 1000000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
+	     fitness = 100000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
 //	     fitness = 100000 - errorsumquad;		//fitness_somma_quadrati
 
 //	     d[0] = fitness; 

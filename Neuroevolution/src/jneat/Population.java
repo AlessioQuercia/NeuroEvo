@@ -294,6 +294,8 @@
 		 total_organisms = organisms.size();
 		 overall_average = total / total_organisms;
 		 setMean_fitness(overall_average);
+		 Organism o = (Organism)organisms.get(0);
+		 setFinal_gen(o.getGeneration());
 	  
 	  //Now compute expected number of offspring for each individual organism
 	  //

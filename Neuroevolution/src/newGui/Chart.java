@@ -8,10 +8,14 @@ import java.awt.GridBagLayout;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.joml.Vector2d;
 
 public class Chart extends JPanel
 {
@@ -29,22 +33,26 @@ public class Chart extends JPanel
 	private double maxX;
 	private double maxY;
 	
-	private int prevX;
-	private int prevY;
-	private int currX;
-	private int currY;
+//	private double prevX;
+//	private double prevY;
+//	private double currX;
+//	private double currY;
 	
 	private int hyphens_x;
 	private int hyphens_y;
+	
+	private ArrayList<ArrayList<Vector2d>> lines = new ArrayList<ArrayList<Vector2d>> ();;
 	
 	public Chart(JFrame frame) 
 	{
 		this.frame = frame;
 		
-		prevX = 0;
-		prevY = 0;
-		currX = 0;
-		currY = 0;
+//		lines 
+		
+//		prevX = 0;
+//		prevY = 0;
+//		currX = 0;
+//		currY = 0;
     	
 		setMaxX(1000);
 		setMaxY(100000);
@@ -64,10 +72,10 @@ public class Chart extends JPanel
 	{
 		this.frame = frame;
 		
-		prevX = 0;
-		prevY = 0;
-		currX = 0;
-		currY = 0;
+//		prevX = 0;
+//		prevY = 0;
+//		currX = 0;
+//		currY = 0;
     	
 		setMaxX(maxX);
 		setMaxY(maxY);
@@ -90,7 +98,7 @@ public class Chart extends JPanel
 		setX_axis(55);
 		setY_axis(30);
 		
-    	GridBagConstraints gc = new GridBagConstraints();
+//    	GridBagConstraints gc = new GridBagConstraints();
     	
 //		gc.anchor = GridBagConstraints.FIRST_LINE_START;
 ////		gc.fill = GridBagConstraints.BOTH;
@@ -167,12 +175,12 @@ public class Chart extends JPanel
         g2d.setTransform(orig);
 	}
 	
-	public void drawCurve(Graphics2D g2d, int x, int y)
+	public void drawCurve(Graphics2D g2d, double x, double y)
 	{
-		prevX = currX;
-		prevY = currY;
-		currX = (int)proportionX(x);
-		currY = (int)proportionY(y);
+		double prevX = 0;
+		double prevY = 0;
+		double currX = proportionX(x);
+		double currY = proportionY(y);
 		
 //		g2d.fillOval(x_axis + ChartConstants.BORDER_X + currX, getHeight() - y_axis - ChartConstants.BORDER_Y - currY, 3, 3);
 //		g2d.drawLine(x_axis + ChartConstants.BORDER_X + prevX, getHeight() - y_axis - ChartConstants.BORDER_Y - prevY
@@ -183,6 +191,25 @@ public class Chart extends JPanel
 		g2d.setStroke(new BasicStroke(2));
 		g2d.draw(line);
 		g2d.setStroke(s);
+	}
+	
+	public void drawCurve(Graphics2D g2d, ArrayList<Vector2d> line)
+	{
+		double prevX = 0;
+		double prevY = 0;
+		double currX = 0;
+		double currY = 0;
+		for (Vector2d punto : line)
+		{
+			prevX = currX;
+			prevY = currY;
+			currX = proportionX(punto.x);
+			currY = proportionY(punto.y);
+			
+			Line2D segment = new Line2D.Double(x_axis + ChartConstants.BORDER_X + prevX + 1, getHeight() - y_axis - ChartConstants.BORDER_Y - prevY - 1
+					, x_axis + ChartConstants.BORDER_X + currX + 1, getHeight() - y_axis - ChartConstants.BORDER_Y - currY - 1);
+			g2d.draw(segment);
+		}
 	}
 	
 	public void addDescription()
@@ -199,10 +226,16 @@ public class Chart extends JPanel
 		drawNumbers(g2d);
 		drawDesc(g2d);
 		
-		for (int i = 0, j = 0; i<400; i++, j+=100)
+		//TODO DISEGNA TUTTI I PUNTI COLLEGATI
+		if (lines.size() > 0)
 		{
-			drawCurve(g2d, i, j);
+			for (ArrayList<Vector2d> line : lines)
+			{
+				drawCurve(g2d, line);
+			}
+				
 		}
+		
 	}
 	
 	public double proportionX(double x)
@@ -277,5 +310,20 @@ public class Chart extends JPanel
 	public void setHyphens_y(int hyphens_y)
 	{
 		this.hyphens_y = hyphens_y;
+	}
+
+	public ArrayList<ArrayList<Vector2d>> getLines() 
+	{
+		return lines;
+	}
+
+	public void addVector(int array_index, Vector2d vector) 
+	{
+		lines.get(array_index).add(vector);
+	}
+
+	public void addLine() 
+	{
+		lines.add(new ArrayList<Vector2d> ());
 	}
 }

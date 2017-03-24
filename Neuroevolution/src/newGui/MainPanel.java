@@ -522,8 +522,8 @@ private boolean debug;
 		 // wait an epoch and make a reproduction of the best species
 			pop.epoch(generation);
 			
-			System.out.println("FITNESS PIU' ALTA: " + pop.getHighest_fitness());
-		    System.out.println("FITNESS MEDIA: " + pop.getMean_fitness());
+//			System.out.println("FITNESS PIU' ALTA: " + pop.getHighest_fitness());
+//		    System.out.println("FITNESS MEDIA: " + pop.getMean_fitness());
 		    
 			graphs.updateGraphPanel(pop);
 			

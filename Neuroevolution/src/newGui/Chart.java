@@ -1,6 +1,7 @@
 package newGui;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -41,7 +42,11 @@ public class Chart extends JPanel
 	private int hyphens_x;
 	private int hyphens_y;
 	
+	private boolean grid;
+	
 	private ArrayList<ArrayList<Vector2d>> lines = new ArrayList<ArrayList<Vector2d>> ();;
+	private ArrayList<String> names = new ArrayList<String> ();
+	private ArrayList<Color> colors = new ArrayList<Color> ();
 	
 	public Chart(JFrame frame) 
 	{
@@ -53,6 +58,8 @@ public class Chart extends JPanel
 //		prevY = 0;
 //		currX = 0;
 //		currY = 0;
+		
+		grid = false;
     	
 		setMaxX(1000);
 		setMaxY(100000);
@@ -131,6 +138,11 @@ public class Chart extends JPanel
 		double stepX = larghezza/hyphens_x;
 		double numeroX = getMaxX()/hyphens_x;
 		
+		//ASSE Y
+		double altezza = (getHeight()-ChartConstants.BORDER_Y - y_axis) - (ChartConstants.BORDER_Y);
+		double stepY = altezza/hyphens_y;
+		double numeroY = getMaxY()/hyphens_y;
+		
 		// DISEGNA LUNGO L'ASSE X
 		int pos = 0;
 		for (double i = x_axis, j = 0; i<larghezza+stepX; i+=stepX, j+=numeroX)
@@ -141,13 +153,17 @@ public class Chart extends JPanel
 			Line2D line = new Line2D.Double(ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y,
 					ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y + ChartConstants.HYPHEN_WIDTH);
 			g2d.draw(line);	// DISEGNA I TRATTINI
+			if (grid)	// DISEGNA LA GRIGLIA
+			{
+				Line2D horizontalGrid = new Line2D.Double(ChartConstants.BORDER_X + stepX + i, getHeight() - y_axis - ChartConstants.BORDER_Y,
+						ChartConstants.BORDER_X + stepX + i, getHeight() - y_axis - ChartConstants.BORDER_Y - altezza);
+				Color c = g2d.getColor();
+				g2d.setColor(Color.gray);
+				g2d.draw(horizontalGrid);
+				g2d.setColor(c);
+			}
 			g2d.drawString("" + (int)j, ChartConstants.BORDER_X + (int)i - pos, getHeight() - y_axis);	// DISEGNA I NUMERI
 		}
-		
-		//ASSE Y
-		double altezza = (getHeight()-ChartConstants.BORDER_Y - y_axis) - (ChartConstants.BORDER_Y);
-		double stepY = altezza/hyphens_y;
-		double numeroY = getMaxY()/hyphens_y;
 		
 		// DISEGNA LUNGO L'ASSE Y
 		int x = 0;
@@ -159,6 +175,15 @@ public class Chart extends JPanel
 			Line2D line = new Line2D.Double(x_axis + ChartConstants.BORDER_X, getHeight() - ChartConstants.BORDER_Y - i,
 					 x_axis + ChartConstants.BORDER_X - ChartConstants.HYPHEN_WIDTH, getHeight() - ChartConstants.BORDER_Y - i);
 			g2d.draw(line);	// DISEGNA I TRATTINI
+			if (grid)	// DISEGNA LA GRIGLIA
+			{
+				Line2D verticalGrid = new Line2D.Double(x_axis + ChartConstants.BORDER_X, getHeight() - ChartConstants.BORDER_Y - i - stepY,
+						 x_axis + ChartConstants.BORDER_X + larghezza, getHeight() - ChartConstants.BORDER_Y - i - stepY);
+				Color c = g2d.getColor();
+				g2d.setColor(Color.gray);
+				g2d.draw(verticalGrid);
+				g2d.setColor(c);
+			}
 			g2d.drawString("" + (int)j, x + 3, getHeight() - ChartConstants.BORDER_Y - (int)i + 5);	// DISEGNA I NUMERI
 		}
 	}
@@ -208,7 +233,13 @@ public class Chart extends JPanel
 			
 			Line2D segment = new Line2D.Double(x_axis + ChartConstants.BORDER_X + prevX + 1, getHeight() - y_axis - ChartConstants.BORDER_Y - prevY - 1
 					, x_axis + ChartConstants.BORDER_X + currX + 1, getHeight() - y_axis - ChartConstants.BORDER_Y - currY - 1);
+//			Stroke s = g2d.getStroke();
+			Color c = g2d.getColor();
+//			g2d.setStroke(new BasicStroke(2));
+			g2d.setColor(colors.get(lines.indexOf(line)));
 			g2d.draw(segment);
+//			g2d.setStroke(s);
+			g2d.setColor(c);
 		}
 	}
 	
@@ -225,6 +256,9 @@ public class Chart extends JPanel
 		drawAxis(g2d);
 		drawNumbers(g2d);
 		drawDesc(g2d);
+		
+//		if (grid) 
+//			drawGrid(g2d);
 		
 		//TODO DISEGNA TUTTI I PUNTI COLLEGATI
 		if (lines.size() > 0)
@@ -322,8 +356,20 @@ public class Chart extends JPanel
 		lines.get(array_index).add(vector);
 	}
 
-	public void addLine() 
+	public void addLine(String lineName, Color lineColor) 
 	{
 		lines.add(new ArrayList<Vector2d> ());
+		names.add(lineName);
+		colors.add(lineColor);
+	}
+	
+	public void setGrid(boolean grid)
+	{
+		this.grid = grid;
+	}
+	
+	public boolean getGrid()
+	{
+		return grid;
 	}
 }

@@ -49,6 +49,8 @@
    
    /** If  too high, leads to delta coding process. */
 	  int highest_last_changed;
+
+	  private double mean_cloned_fitness;
    
 	   public Vector getOrganisms() {
 		 return organisms;
@@ -663,11 +665,25 @@
 		 itr_specie = sorted_species.iterator();
 	  // System.out.print("\n verifica");
 	  //System.out.print("\n this species has "+sorted_species.size()+" elements");
+		 int cloned = 0;
+		 double total_cloned_fitness = 0;
+		 boolean clone = false;
 		 while (itr_specie.hasNext()) 
 		 {
 			_specie = ((Species) itr_specie.next());
+			if (_specie.getExpected_offspring() > 5) 
+			{
+				clone = true;
+				total_cloned_fitness += _specie.getMax_fitness();
+				cloned++;
+//				System.out.println(_specie.getMax_fitness());	// ORGANISMI CLONATI (il migliore di ogni specie)
+			}
 			rc = _specie.reproduce(generation, this, sorted_species);
 		 }
+		 
+		double mean_cloned_fit = total_cloned_fitness/cloned;
+//		if (!clone) mean_cloned_fit = 0;
+		setMean_cloned_fitness(mean_cloned_fit);
 	  
 	  //   	System.out.print("\n Reproduction completed");
 	  
@@ -840,7 +856,17 @@
 	  
 	  }
    
-	   public void print_to_file_by_species(String xNameFile) {
+	   public void setMean_cloned_fitness(double mean_cloned_fitness) 
+	   {
+		   this.mean_cloned_fitness = mean_cloned_fitness;
+	   }
+	   
+	   public double getMean_cloned_fitness() 
+	   {
+		   return mean_cloned_fitness;
+	   }
+
+	public void print_to_file_by_species(String xNameFile) {
 	  //
 	  // write to file genome in native format (for re-read)
 	  //

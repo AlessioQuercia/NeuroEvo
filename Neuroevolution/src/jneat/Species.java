@@ -491,7 +491,6 @@
 		 //  System.out.print("\n verifica select....");
 			if (thechamp.super_champ_offspring > 0) 
 			{
-			
 			//		 	System.out.print("\n analysis of champion #"+count);
 			// save in mom current champ;
 			   mom = thechamp;
@@ -529,6 +528,8 @@
 			//If we have a Species champion, just clone it 
 			else if ((!champ_done) && (expected_offspring > 5)) 
 			{
+//				System.out.println(expected_offspring + " " + generation);
+				
 			   mom = thechamp; //Mom is the champ
 			   new_genome = mom.genome.duplicate(count);
 			   baby = new Organism(0.0, new_genome, generation); //Baby is just like mommy

@@ -1,6 +1,7 @@
 package newGui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -43,9 +44,11 @@ public class Graphs extends JPanel
 		
     	GridBagConstraints gc = new GridBagConstraints();
     	
-		chart = new Chart(f, 100, 100000, "Generation", "Fitness", 10, 5);
-		chart.addLine();	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS PIU' ALTA
-		chart.addLine();	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA
+		chart = new Chart(f, 200, 100000, "Generation", "Fitness", 10, 5);
+		chart.addLine("Mean fitness", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA
+		chart.addLine("Mean cloned fitness", Color.GREEN);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA DEI CLONATI
+		chart.addLine("Highest fitness", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS PIU' ALTA
+		chart.setGrid(true);
 	 
 //		chart.setGrid(true);
     	
@@ -70,10 +73,13 @@ public class Graphs extends JPanel
 	{
 		double highest_fitness = pop.getHighest_fitness();
 		double mean_fitness = pop.getMean_fitness();
+		double mean_cloned_fitness = pop.getMean_cloned_fitness();
 		double generation = pop.getFinal_gen();
 		
-		chart.addVector(0, new Vector2d(generation, highest_fitness));
-		chart.addVector(1, new Vector2d(generation, mean_fitness));
+
+		chart.addVector(0, new Vector2d(generation, mean_fitness));
+		chart.addVector(1, new Vector2d(generation, mean_cloned_fitness));
+		chart.addVector(2, new Vector2d(generation, highest_fitness));
 	}
 	
 }

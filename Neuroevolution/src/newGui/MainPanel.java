@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -142,6 +145,7 @@ private boolean debug;
 		if(mainThread == null)
 		{
 			mainThread = new Thread(this, "mainThread");
+			mainThread.setPriority(Thread.MAX_PRIORITY);
 			mainThread.start();
 		}
 	}
@@ -158,11 +162,13 @@ private boolean debug;
 		while (isRunning)
 		{
 			long startTime = System.currentTimeMillis();
+			graphs.repaint();
+//			graphs.getFitnessChart().repaint();
+//			graphs.getErrorChart().repaint();
 			
 			if (simulation.getStart() && simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
 			{
 				simulation.getRightPanel().repaint();
-				graphs.getChart().repaint();
 				
 				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
 				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
@@ -386,6 +392,7 @@ private boolean debug;
 				  EnvConstant.SUPER_WINNER_ = false;
 				  boolean esito = epoch(u_neat, u_pop, gen, curr_name_pop_specie);
 				  simulation.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
+				  graphs.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
 //				  System.out.println(" running generation ->"+gen);
 				  if (EnvConstant.STOP_EPOCH)
 					 break;
@@ -441,33 +448,52 @@ private boolean debug;
 			itr_organism = pop.organisms.iterator();
 			double max_fitness_of_winner = 0.0;
 		 
+			
+			
+			//TODO DA PARALLELIZZARE
+			
+			int nThreads = Runtime.getRuntime().availableProcessors();			//// VERSIONE PARALLELA
+//			System.out.println(nThreads);
+			
+			ExecutorService fixedPool = Executors.newFixedThreadPool(nThreads);	//// VERSIONE PARALLELA
+			
 			while (itr_organism.hasNext()) 
 			{
 			//point to organism
-			   Organism _organism = ((Organism) itr_organism.next());
-			
-			//evaluate 
-			   esito = evaluate(_organism);
-
-			// if is a winner , store a flag
-			   if (esito) 
-			   {
-				  win = true;
+			   Organism organism = ((Organism) itr_organism.next());
 			   
-				  if (_organism.getFitness() > max_fitness_of_winner) 
-				  {
-					 max_fitness_of_winner = _organism.getFitness();
-					 EnvConstant.MAX_WINNER_FITNESS = max_fitness_of_winner;
-				  }
-			   //
-			   // 01.06.2002 : store only first organism 
-				  if (EnvConstant.FIRST_ORGANISM_WINNER == null) 
-				  {
-					 EnvConstant.FIRST_ORGANISM_WINNER = _organism;
-				  // System.out.print("\n okay flagged first *****");
-				  }
-			   }
+				fixedPool.submit(new OrganismRunnable(organism));	//// VERSIONE PARALLELA
+				
+//			//// VERSIONE SERIALE
+//			//evaluate 
+//			   esito = evaluate(organism);
+//
+//			// if is a winner , store a flag
+//			   if (esito) 
+//			   {
+//				  win = true;
+//			   
+//				  if (organism.getFitness() > max_fitness_of_winner) 
+//				  {
+//					 max_fitness_of_winner = organism.getFitness();
+//					 EnvConstant.MAX_WINNER_FITNESS = max_fitness_of_winner;
+//				  }
+//			   //
+//			   // 01.06.2002 : store only first organism 
+//				  if (EnvConstant.FIRST_ORGANISM_WINNER == null) 
+//				  {
+//					 EnvConstant.FIRST_ORGANISM_WINNER = organism;
+//				  // System.out.print("\n okay flagged first *****");
+//				  }
+//			   }
+//			///// FINE VERSIONE SERIALE
 			}
+			
+			fixedPool.shutdown();							//// VERSIONE PARALLELA
+			fixedPool.awaitTermination(1, TimeUnit.DAYS);	//// VERSIONE PARALLELA
+			
+			
+			//TODO FINE DA PARALLELIZZARE
 		 
 		 //compute average and max fitness for each species
 			Iterator itr_specie;
@@ -619,6 +645,7 @@ private boolean debug;
 			 double velocity = 0.0;
 			 double y_target = 0.0;
 			 double x_target = 0.0;
+			 double total_err = 0.0;
 			 Map<Integer,ArrayList<Double>> map = null;
 		  // per evitare errori il numero di ingressi e uscite viene calcolato in base
 		  // ai dati ;
@@ -1000,7 +1027,6 @@ private boolean debug;
 				   }
 				//System.out.println(Class_fit);
 				   Method_fit = Class_fit.getMethod("computeFitness", params);
-				   //System.out.println("CAZZO");
 				   ObjRet_fit = Method_fit.invoke(ObjClass_fit, paramsObj);
 				   //System.out.println(ObjRet_fit);
 //				   fit_dyn = Array.getDouble(ObjRet_fit, 0);
@@ -1019,6 +1045,7 @@ private boolean debug;
 				   velocity = arrayBest.get(MyConstants.VELOCITA_INDEX);
 				   y_target = arrayBest.get(MyConstants.Y_TARGET_INDEX);
 				   x_target = arrayBest.get(MyConstants.X_TARGET_INDEX);
+				   total_err = arrayBest.get(MyConstants.ERRORE_TOTALE_INDEX);
 				   map = mappa;
 				//			   System.out.print("\n ce so passo!");
 				
@@ -1034,6 +1061,7 @@ private boolean debug;
 			 
 				organism.setFitness(fit_dyn);
 				organism.setError(err_dyn);
+				organism.setTotalError(total_err);
 				organism.setAngle(angle);
 				organism.setVelocity(velocity);
 				organism.setYTarget(y_target);

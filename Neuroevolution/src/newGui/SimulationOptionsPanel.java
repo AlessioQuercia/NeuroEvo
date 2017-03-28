@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import jNeatCommon.EnvConstant;
 import myGui.myGuiConstants;
 
-public class OptionsPanel extends JPanel
+public class SimulationOptionsPanel extends JPanel
 {
 	private JFrame frame;
 	
@@ -29,13 +29,21 @@ public class OptionsPanel extends JPanel
 	private JButton startBtn;
 	private JButton autodrawBtn;
 
-	public OptionsPanel(JFrame frame) 
+	public SimulationOptionsPanel(JFrame frame) 
 	{
 		this.frame = frame;
+		
+		init();
+	}
+	
+	private void init() 
+	{
 //		Dimension size = getPreferredSize();
 //		
 //		size.width = MyConstants.OPTIONS_WIDTH;
 //		setPreferredSize(size);
+		
+		setLayout(new GridBagLayout());
 		
 		setBorder(BorderFactory.createTitledBorder("Selezione rete"));
 		
@@ -78,14 +86,11 @@ public class OptionsPanel extends JPanel
 		
 		startBtn = new JButton("Start");
 		
-		setLayout(new GridBagLayout());
-		
 		GridBagConstraints gc = new GridBagConstraints();
 		
 		////// First column ////////
 		gc.anchor = GridBagConstraints.LINE_END;
 		gc.fill = GridBagConstraints.HORIZONTAL;
-		gc.weightx = 0.5;
 		gc.weighty = 0.5;
 		
 		gc.gridx = 0;
@@ -110,14 +115,17 @@ public class OptionsPanel extends JPanel
 //		gc.weighty = 10;
 		
 		gc.anchor = GridBagConstraints.LINE_START;
+		gc.gridx = 0;
+		gc.gridy = 2;
+		add(startBtn, gc);
+		
+		gc.weightx = 0.5;
+		gc.anchor = GridBagConstraints.LINE_START;
 		gc.gridx = 1;
 		gc.gridy = 2;
 		add(autodrawBtn, gc);
 		
-		gc.anchor = GridBagConstraints.LINE_START;
-		gc.gridx = 0;
-		gc.gridy = 2;
-		add(startBtn, gc);
+
 		
 //		gc.weighty = 15;
 ////		gc.weightx = 10;
@@ -136,7 +144,7 @@ public class OptionsPanel extends JPanel
 //		add(info2, gc);
 		
 	}
-	
+
 	public JComboBox getGenerationList()
 	{
 		return generationList;

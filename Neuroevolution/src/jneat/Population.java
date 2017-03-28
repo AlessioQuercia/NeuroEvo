@@ -51,8 +51,26 @@
 	  int highest_last_changed;
 
 	  private double mean_cloned_fitness;
+	  private double lowest_error;
+	  private double mean_error;
    
-	   public Vector getOrganisms() {
+	   public double getLowest_error() {
+		return lowest_error;
+	}
+
+	public void setLowest_error(double lowest_error) {
+		this.lowest_error = lowest_error;
+	}
+
+	public double getMean_error() {
+		return mean_error;
+	}
+
+	public void setMean_error(double mean_error) {
+		this.mean_error = mean_error;
+	}
+
+	public Vector getOrganisms() {
 		 return organisms;
 	  }            
    
@@ -286,16 +304,20 @@
 	  
 		 itr_organism = organisms.iterator();
 		 total = 0.0;
+		 double error = 0.0;
 		 while (itr_organism.hasNext()) 
 		 {
 			Organism _organism = ((Organism) itr_organism.next());
 			total += _organism.fitness;
+			error += _organism.getTotal_error();
 		 }
 	  
 	  
 		 total_organisms = organisms.size();
 		 overall_average = total / total_organisms;
+		 double avg_error = error/ total_organisms;
 		 setMean_fitness(overall_average);
+		 setMean_error(avg_error);
 		 Organism o = (Organism)organisms.get(0);
 		 setFinal_gen(o.getGeneration());
 	  
@@ -443,6 +465,7 @@
 		 if (((Organism) curspecies.organisms.firstElement()).orig_fitness > highest_fitness) 
 		 {
 			highest_fitness = ((Organism) curspecies.organisms.firstElement()).orig_fitness; 
+			lowest_error = ((Organism) curspecies.organisms.firstElement()).getTotal_error();
 			highest_last_changed = 0;
 		 //	  	System.out.print("\n    Good! Population has reached a new *RECORD FITNESS* -> " + highest_fitness);
 			rep1.append("\n    population has reached a new *RECORD FITNESS* -> " + highest_fitness);

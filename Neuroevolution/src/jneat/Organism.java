@@ -100,10 +100,13 @@ import java.util.Map;
 	  
 	  /** Mappa contenente tutte le informazioni */
 	  Map<Integer,ArrayList<Double>> map;
+
+	private double total_error;
 	  
 	  ///////////////////////////////////
    
-	   public double getFitness() {
+
+	public double getFitness() {
 		 return fitness;
 	  }                                          
    
@@ -318,5 +321,15 @@ import java.util.Map;
 		 System.out.print(", Elim=" + eliminate);
 		 System.out.print(", offspring=" + expected_offspring);
 	  
-	  }                                 
+	  }
+
+public void setTotalError(double total_err)
+{
+	total_error = total_err;
+}       
+
+public double getTotal_error()
+{
+	return total_error;
+}
    }

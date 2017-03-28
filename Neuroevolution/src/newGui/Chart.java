@@ -47,6 +47,8 @@ public class Chart extends JPanel
 	private ArrayList<ArrayList<Vector2d>> lines = new ArrayList<ArrayList<Vector2d>> ();;
 	private ArrayList<String> names = new ArrayList<String> ();
 	private ArrayList<Color> colors = new ArrayList<Color> ();
+
+	private boolean startFromMax;
 	
 	public Chart(JFrame frame) 
 	{
@@ -60,6 +62,7 @@ public class Chart extends JPanel
 //		currY = 0;
 		
 		grid = false;
+		startFromMax = false;
     	
 		setMaxX(1000);
 		setMaxY(100000);
@@ -144,12 +147,9 @@ public class Chart extends JPanel
 		double numeroY = getMaxY()/hyphens_y;
 		
 		// DISEGNA LUNGO L'ASSE X
-		int pos = 0;
-		for (double i = x_axis, j = 0; i<larghezza+stepX; i+=stepX, j+=numeroX)
+		double i = x_axis;
+		for (int j = 0; j<=getMaxX(); i+=stepX, j+=numeroX)
 		{
-			if (i == x_axis) pos = 3;
-			else if (i > larghezza) pos = 12;
-			else pos = 9;
 			Line2D line = new Line2D.Double(ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y,
 					ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y + ChartConstants.HYPHEN_WIDTH);
 			g2d.draw(line);	// DISEGNA I TRATTINI
@@ -162,16 +162,17 @@ public class Chart extends JPanel
 				g2d.draw(horizontalGrid);
 				g2d.setColor(c);
 			}
-			g2d.drawString("" + (int)j, ChartConstants.BORDER_X + (int)i - pos, getHeight() - y_axis);	// DISEGNA I NUMERI
+			String s = "" + j;
+			
+			int sWidth = g2d.getFontMetrics().stringWidth(s);
+			
+			g2d.drawString(s, ChartConstants.BORDER_X + (int)i - sWidth/2, getHeight() - y_axis);	// DISEGNA I NUMERI
 		}
 		
 		// DISEGNA LUNGO L'ASSE Y
-		int x = 0;
-		for (double i = y_axis, j = 0; i<altezza+stepY; i+=stepY, j+=numeroY)
+		i = y_axis;
+		for (int j = 0; j<=getMaxY(); i+=stepY, j+=numeroY)
 		{
-			if (i == y_axis) x = x_axis;
-			else if (i > altezza) x = x_axis - 35;
-			else x = x_axis - 30;
 			Line2D line = new Line2D.Double(x_axis + ChartConstants.BORDER_X, getHeight() - ChartConstants.BORDER_Y - i,
 					 x_axis + ChartConstants.BORDER_X - ChartConstants.HYPHEN_WIDTH, getHeight() - ChartConstants.BORDER_Y - i);
 			g2d.draw(line);	// DISEGNA I TRATTINI
@@ -184,7 +185,12 @@ public class Chart extends JPanel
 				g2d.draw(verticalGrid);
 				g2d.setColor(c);
 			}
-			g2d.drawString("" + (int)j, x + 3, getHeight() - ChartConstants.BORDER_Y - (int)i + 5);	// DISEGNA I NUMERI
+			
+			String s = "" + j;
+			
+			int sWidth = g2d.getFontMetrics().stringWidth(s);
+			
+			g2d.drawString(s, ChartConstants.BORDER_X + x_axis - sWidth - 15, getHeight() - ChartConstants.BORDER_Y - (int)i + 5);	// DISEGNA I NUMERI
 		}
 	}
 	
@@ -224,6 +230,11 @@ public class Chart extends JPanel
 		double prevY = 0;
 		double currX = 0;
 		double currY = 0;
+		if (startFromMax)
+		{
+			prevY = proportionY(getMaxY());
+			currY = proportionY(getMaxY());
+		}
 		for (Vector2d punto : line)
 		{
 			prevX = currX;
@@ -371,5 +382,20 @@ public class Chart extends JPanel
 	public boolean getGrid()
 	{
 		return grid;
+	}
+	
+	public ArrayList<String> getNames() 
+	{
+		return names;
+	}
+
+	public ArrayList<Color> getColors()
+	{
+		return colors;
+	}
+
+	public void startFromMax() 
+	{
+		startFromMax = true;
 	}
 }

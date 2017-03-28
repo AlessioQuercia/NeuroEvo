@@ -24,7 +24,7 @@ public class SimulationLeftPanel extends JPanel
 {		
 	JFrame frame;
 	
-	OptionsPanel optionsPanel;
+	SimulationOptionsPanel optionsPanel;
 	NetDetailsPanel netPanel;
 	ThrowDetailsPanel throwPanel;
 	JLabel generationLabel;
@@ -46,7 +46,7 @@ public class SimulationLeftPanel extends JPanel
 		
 	}
 	
-	public OptionsPanel getOptionsPanel()
+	public SimulationOptionsPanel getOptionsPanel()
 	{
 		return optionsPanel;
 	}
@@ -232,7 +232,7 @@ public class SimulationLeftPanel extends JPanel
     	
     	GridBagConstraints gc = new GridBagConstraints();
 		
-		optionsPanel = new OptionsPanel(frame);
+		optionsPanel = new SimulationOptionsPanel(frame);
 		netPanel = new NetDetailsPanel(frame);
 		throwPanel = new ThrowDetailsPanel(frame);
 		generationLabel = new JLabel();

@@ -32,9 +32,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.text.Document;
 
+import org.joml.Vector2d;
+
 import gui.evo_fit;
 import gui.evo_in;
 import gui.evo_out;
+import jGraph.chartXY;
 import jNeatCommon.EnvConstant;
 import jNeatCommon.EnvRoutine;
 import jNeatCommon.IOseq;
@@ -84,6 +87,8 @@ private   volatile Thread  lookupThread;
 
 private boolean debug;
 
+private chartXY mappa;
+
 	  
 	public MainPanel(JFrame f) 
 	{
@@ -119,6 +124,8 @@ private boolean debug;
         graphs = new Graphs(frame);
         
         net = new Net(frame);
+        
+        mappa = new chartXY();
         
 		tabbedPanel = new JTabbedPane();
 		tabbedPanel.addTab("Simulation", simulation);
@@ -182,13 +189,14 @@ private boolean debug;
 					
 					x_tgt = info.get(MyConstants.X_TARGET_INDEX);
 					y_tgt = info.get(MyConstants.Y_TARGET_INDEX);
+					simulation.getRightPanel().resetTail();
 				}
 				
 	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
 	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
 				
-				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt, 
-						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt, 5, 5);
+				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
+						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt - 2.5, 5, 5);
 				
 				a = info.get(MyConstants.ANGOLO_INDEX);
 				v = info.get(MyConstants.VELOCITA_INDEX);
@@ -198,15 +206,44 @@ private boolean debug;
 	            double X = simulation.getRightPanel().proportionX(x);
 	            double Y = simulation.getRightPanel().proportionY(y);
 	            
+//	            simulation.getRightPanel().setA(a);
+//	            simulation.getRightPanel().setV(v);
+	            
 	            if (Y > 0)
 	            {
 	    			simulation.getRightPanel().getPeso().setFrame(
-	    					MyConstants.BORDER_X+X,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y, 3, 3);
+	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y - 1.5, 3, 3);
+	    			
+	    			simulation.getRightPanel().getTail().add(
+	    					new Vector2d(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y));
+	    			
+//	    			simulation.getRightPanel().getLines().add(
+//	    					new Line2D.Double(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y,
+//	    							MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y));
+	    			
+	    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+	    			{
+	    				simulation.getRightPanel().getTail().removeFirst();
+	    			}		
+	    			
+	    			
+//	    			simulation.getRightPanel().setTailEnd(MyConstants.BORDER_X+X);
+//	    			
+//	    			if (x == 0) simulation.getRightPanel().setTailStart(MyConstants.BORDER_X + X);
+//	    			
+//	    			else if (simulation.getRightPanel().getTailEnd() - 
+//	    					simulation.getRightPanel().getTailStart() > MyConstants.TAIL_LENGTH)
+//	    				simulation.getRightPanel().setTailStart(simulation.getRightPanel().getTailStart() - 1);
+//	    				
+//	    			simulation.getRightPanel().getTail().setLine(
+//	    					simulation.getRightPanel().getTailStart(),(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y,
+//	    					simulation.getRightPanel().getTailEnd(), (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y);
 	            }
 	            
 				if (x > MyConstants.ASSE_X || y > MyConstants.ASSE_Y) 
 				{
-					x=0;
+					simulation.getRightPanel().resetTail();
+					x = 0;
 				}
 				x++;    
 			}
@@ -593,6 +630,7 @@ private boolean debug;
 				   {
 					   simulation.storeBestNet(o);
 					   simulation.updateSimulationPanel(o);
+					   net.drawGraph(o, mappa);
 				   }
 				   
 				   if (o.getGeneration() == 1) debug = true;

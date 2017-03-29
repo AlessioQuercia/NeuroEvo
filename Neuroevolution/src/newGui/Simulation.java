@@ -172,7 +172,7 @@ private boolean autodraw;
 	   
 	   public void updateSimulationPanel(Organism o)
 	   { 
-//		   int bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(14).intValue();
+		   int bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(14).intValue();
 //		    System.out.println(bestThrow);
 		    
 			///GENERAZIONE

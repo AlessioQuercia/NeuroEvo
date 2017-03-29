@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+
+import org.joml.Vector2d;
 
 public class ThrowPanel extends JPanel
 {
@@ -30,7 +34,34 @@ public class ThrowPanel extends JPanel
 	
 	private Ellipse2D target;
 	private Ellipse2D peso;
+	private Line2D tailLine;
+	private double tailStart;
+	private double tailEnd;
+	private LinkedList<Vector2d> tail;
+	private LinkedList<Line2D> lines;
 	
+	private double a;
+	private double v;
+
+	public double getA() {
+		return a;
+	}
+
+
+	public void setA(double a) {
+		this.a = a;
+	}
+
+
+	public double getV() {
+		return v;
+	}
+
+
+	public void setV(double v) {
+		this.v = v;
+	}
+
 	boolean draw;
 
 	public ThrowPanel(JFrame frame) 
@@ -53,9 +84,18 @@ public class ThrowPanel extends JPanel
 		
 		peso = new Ellipse2D.Double(0, 0, 3, 3);
 		
+		tailLine = new Line2D.Double(0, 0, 0, 0);
+		
+		tail = new LinkedList<Vector2d> ();
+		
+		lines = new LinkedList<Line2D> ();
+		
+		tailStart = 0;
+		tailEnd = 0;
+		
 		draw = false;
 	}
-	
+
 	public void clearPanel()
 	{
         repaint();
@@ -118,6 +158,21 @@ public class ThrowPanel extends JPanel
         }
 	}
 	
+	public void drawParabola(Graphics2D g2d, double a, double v)
+	{
+        g2d.setColor(Color.BLACK);
+        for(int x=0; x<=getWidth()-MyConstants.BORDER_X; x++)
+        {
+            double y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
+            double Y = proportionY(y);	///PROPORZIONI Y
+            double X = proportionX(x);		///PROPORZIONI X
+            if (y < 0 || x > getWidth()-MyConstants.BORDER_X) break;
+            line = new Line2D.Double(MyConstants.BORDER_X+X,(getHeight()-MyConstants.BORDER_Y)-Y,MyConstants.BORDER_X+X,(getHeight()-MyConstants.BORDER_Y)-Y);
+            g2d.draw(line);
+//            g.drawLine(MyConstants.BORDER_X+x,(getHeight()-MyConstants.BORDER_Y)-Y,MyConstants.BORDER_X+x,(getHeight()-MyConstants.BORDER_Y)-Y);
+        }
+	}
+	
 	public double proportionX(double x)
 	{
         double X = x*(getWidth()-MyConstants.BORDER_X)/MyConstants.ASSE_X;	///PROPORZIONI X
@@ -147,6 +202,10 @@ public class ThrowPanel extends JPanel
 			drawTarget(g2d);
 			
 			drawWeight(g2d);
+			
+			drawTail(g2d);
+			
+//			drawParabola(g2d, a, v);
 		}
 	}
 
@@ -167,6 +226,23 @@ public class ThrowPanel extends JPanel
 		g2d.setColor(Color.BLACK);
 		g2d.fill(peso);
 	}
+	
+	public void drawTail(Graphics2D g2d) 
+	{
+		g2d.setColor(Color.BLACK);
+		for (int i=0; i<tail.size(); i++)
+		{
+			tailLine.setLine(tail.get(i).x, tail.get(i).y, tail.get(i).x, tail.get(i).y);
+			g2d.draw(tailLine);
+		}
+	}
+	
+//	public void drawTail(Graphics2D g2d) 
+//	{
+//		g2d.setColor(Color.BLACK);
+//		for (Line2D line : lines)
+//			g2d.draw(line);
+//	}
 
 	public Ellipse2D getPeso()
 	{
@@ -186,5 +262,45 @@ public class ThrowPanel extends JPanel
 	public void setDraw(boolean bool)
 	{
 		draw = bool;
+	}
+	
+	public Line2D getTailLine()
+	{
+		return tailLine;
+	}
+	
+	public double getTailStart() {
+		
+		return tailStart;
+	}
+
+	public void setTailStart(double tailStart) 
+	{
+		this.tailStart = tailStart;
+	}
+
+	public double getTailEnd() 
+	{
+		return tailEnd;
+	}
+
+	public void setTailEnd(double tailEnd) 
+	{
+		this.tailEnd = tailEnd;
+	}
+
+	public LinkedList<Vector2d> getTail() 
+	{
+		return tail;
+	}
+	
+	public LinkedList<Line2D> getLines()
+	{
+		return lines;
+	}
+
+	public void resetTail() 
+	{
+		tail.removeAll(tail);
 	}
 }

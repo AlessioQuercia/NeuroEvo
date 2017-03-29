@@ -2153,8 +2153,7 @@ public void itemStateChanged(ItemEvent e) {
 		 _mappa.setAxis(false);
 		 _mappa.setGrid(false);
 		 _mappa.setGrafo(v1);
-		 _mappa.repaint();
-	  
+		 _mappa.repaint();	  
 	  }
    
    

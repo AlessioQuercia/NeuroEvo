@@ -89,12 +89,16 @@ private boolean debug;
 
 private chartXY mappa;
 
+private ArrayList<Organism> winners;
+
 	  
 	public MainPanel(JFrame f) 
 	{
 		frame = f;	       
 		
 		debug = false;
+		
+		winners = new ArrayList<Organism> ();
 		
 		init();
 		
@@ -175,7 +179,16 @@ private chartXY mappa;
 			
 			if (simulation.getStart() && simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
 			{
+				if (winners.size() > 0)
+				{
+					int gen = net.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
+					Organism selectedOrg = winners.get(gen);
+					net.drawGraph(selectedOrg, mappa);
+					net.getLeftPanel().updateInfoRete(selectedOrg);
+				}
+				
 				simulation.getRightPanel().repaint();
+				net.repaint();
 				
 				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
 				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
@@ -430,6 +443,7 @@ private chartXY mappa;
 				  boolean esito = epoch(u_neat, u_pop, gen, curr_name_pop_specie);
 				  simulation.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
 				  graphs.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
+				  net.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
 //				  System.out.println(" running generation ->"+gen);
 				  if (EnvConstant.STOP_EPOCH)
 					 break;
@@ -590,6 +604,9 @@ private chartXY mappa;
 		    
 			graphs.updateGraphPanel(pop);
 			
+//			System.out.println(pop.getHighest_fitness());
+//			System.out.println(pop.getFinal_gen());
+			
 			if (!EnvConstant.REPORT_SPECIES_TESTA.equalsIgnoreCase("")) 
 			{
 				
@@ -618,7 +635,6 @@ private chartXY mappa;
 //			
 //			   
 //			   }
-			
 			   if (!(EnvConstant.CURR_ORGANISM_CHAMPION == null)) 
 			   {
 			
@@ -626,14 +642,19 @@ private chartXY mappa;
 				   Organism o = (Organism) EnvConstant.CURR_ORGANISM_CHAMPION;
 //				   System.out.println(o.getGeneration());
 
-				   if (debug)
+				   if (!debug && o.getGeneration() == 1) 
 				   {
-					   simulation.storeBestNet(o);
-					   simulation.updateSimulationPanel(o);
-					   net.drawGraph(o, mappa);
+				   		o.setGeneration(0);
+				   		debug = true;
 				   }
 				   
-				   if (o.getGeneration() == 1) debug = true;
+				   winners.add(o);
+				   simulation.storeBestNet(o);
+				   simulation.updateSimulationPanel(o);
+				   net.updateNetPanel(o);
+//				   net.drawGraph(o, mappa);
+				   
+
 			
 			   }
 			
@@ -706,6 +727,8 @@ private chartXY mappa;
 		  
 		  //	  			   System.out.print("\n evaluate.step 1 ");
 		  
+			 
+			 
 			 double in[] = null;
 			 in = new double[EnvConstant.NR_UNIT_INPUT + 1];
 //			 in = new double[EnvConstant.NR_UNIT_INPUT];

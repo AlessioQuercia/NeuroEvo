@@ -2857,6 +2857,7 @@
 		 StringTokenizer st;
 		 String curword;
 		 String xline;
+		 int nBiasNodes = 0;
 		 boolean done = false;
 	  //   	notes = null;
 	  
@@ -2905,6 +2906,9 @@
 			   NNode newnode;
 			   newnode = new NNode(xline, traits);
 			   nodes.addElement(newnode);
+			   if (newnode.getGen_node_label() == NeatConstant.BIAS) nBiasNodes++;	// SE E' UN NODO BIAS, LO CONTA
+			   EnvConstant.NR_UNIT_BIAS = nBiasNodes;
+			   System.err.println(nBiasNodes);
 			
 			} 
 			else if (curword.equals("gene")) 

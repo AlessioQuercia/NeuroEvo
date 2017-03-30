@@ -62,6 +62,7 @@ public class EnvConstant {
 	public static int EDIT_CLASS_OUT = 3;
 	public static int EDIT_STATUS = 0;
 	public static int NR_UNIT_INPUT = 2;
+	public static int NR_UNIT_BIAS = 1;
 	public static int NR_UNIT_MAX = 5;
 	public static int NR_UNIT_OUTPUT = 1;
 	public static String PREFIX_SPECIES_FILE = "specie";

@@ -3,6 +3,8 @@ package newGui;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -22,13 +25,20 @@ import jNeatCommon.CodeConstant;
 import jneat.Genome;
 import jneat.Organism;
 
-public class Net extends JPanel
+public class Net extends JPanel implements ActionListener
 {
 	private JFrame frame;
+	
+	private NetLeftPanel leftPanel;
+	private NetGraphPanel rightPanel;
+	
+	private boolean autodraw;
 	
 	public Net(JFrame frame) 
 	{
 		this.frame = frame;
+		
+		autodraw = true;
 		
 		init();
 	}
@@ -37,7 +47,27 @@ public class Net extends JPanel
 	{
 		setLayout(new GridBagLayout());
 		
-		setBorder(BorderFactory.createTitledBorder("Current net"));
+//		setBorder(BorderFactory.createTitledBorder("Current net"));
+		
+		leftPanel = new NetLeftPanel(frame);
+		leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
+		
+		rightPanel = new NetGraphPanel(frame);
+		
+		GridBagConstraints gc = new GridBagConstraints();
+		
+		gc.anchor = GridBagConstraints.LINE_START;
+		gc.fill = GridBagConstraints.BOTH;
+		
+		gc.gridx = 0;
+		gc.gridy = 0;	
+		add(leftPanel, gc);
+		
+		gc.weightx = 0.5;
+		gc.weighty = 0.5;
+		gc.gridx = 1;
+		gc.gridy = 0;	
+		add(rightPanel, gc);
 	}
 	
 	   public void drawGraph(Organism o, chartXY graph) 
@@ -98,7 +128,7 @@ public class Net extends JPanel
 			}
 		 }
 	  
-		 graph.setScale((getWidth())/2 , getHeight());
+		 graph.setScale(getWidth()/2 , getHeight());
 		 graph.setAxis(false);
 		 graph.setGrid(false);
 		 graph.setGrafo(v1);
@@ -113,7 +143,47 @@ public class Net extends JPanel
 			
 			gc.gridx = 0;
 			gc.gridy = 0;	
-			add(graph, gc);
+			rightPanel.add(graph, gc);
 	  }
-	
+	   
+		public NetLeftPanel getLeftPanel() 
+		{
+			return leftPanel;
+		}
+
+		public NetGraphPanel getRightPanel() 
+		{
+			return rightPanel;
+		}
+		
+		   public void updateNetPanel(Organism o)
+		   { 
+//			   int bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(14).intValue();
+//			    System.out.println(bestThrow);
+			    
+				///GENERAZIONE
+				leftPanel.getOptionsPanel().getGenerationList().addItem(o.getGeneration());
+				if (autodraw) 
+					leftPanel.getOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());;
+		   }
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			 JButton p = (JButton) e.getSource();
+			 
+			 if (p.getActionCommand().equals("Auto-draw: OFF")) 
+			 {
+				 autodraw = false;
+				 
+				 leftPanel.getOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
+			 } 
+			 
+			 else if (p.getActionCommand().equals("Auto-draw: ON")) 
+			 {
+				 autodraw = true;
+				 
+				 leftPanel.getOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
+			 } 
+		}
 }

@@ -2908,7 +2908,7 @@
 			   nodes.addElement(newnode);
 			   if (newnode.getGen_node_label() == NeatConstant.BIAS) nBiasNodes++;	// SE E' UN NODO BIAS, LO CONTA
 			   EnvConstant.NR_UNIT_BIAS = nBiasNodes;
-			   System.err.println(nBiasNodes);
+//			   System.err.println(nBiasNodes);
 			
 			} 
 			else if (curword.equals("gene")) 

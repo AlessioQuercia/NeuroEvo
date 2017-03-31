@@ -190,6 +190,7 @@ private ArrayList<Organism> winners;
 				simulation.getRightPanel().repaint();
 				net.repaint();
 				
+				
 				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
 				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
 				
@@ -207,9 +208,19 @@ private ArrayList<Organism> winners;
 				
 	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
 	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
+	            
 				
 				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
 						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt - 2.5, 5, 5);
+				
+				int gen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
+				Organism o = winners.get(gen);
+//				ArrayList<Double> bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES+1);
+				ArrayList<Double> bestThrow = evo_fit.calculateMinVel(x_tgt, y_tgt);
+//				System.out.println(bestThrow.get(1));
+				
+				simulation.getRightPanel().setA(bestThrow.get(0));
+				simulation.getRightPanel().setV(bestThrow.get(1));
 				
 				a = info.get(MyConstants.ANGOLO_INDEX);
 				v = info.get(MyConstants.VELOCITA_INDEX);

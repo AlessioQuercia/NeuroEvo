@@ -205,9 +205,32 @@ public class ThrowPanel extends JPanel
 			
 			drawTail(g2d);
 			
+			drawBestThrow(g2d);
+			
 //			drawParabola(g2d, a, v);
 		}
 	}
+
+	private void drawBestThrow(Graphics2D g2d) 
+	{
+		drawParabola(g2d, target.getCenterX(), target.getCenterY(), a, v);
+	}
+
+
+	private void drawParabola(Graphics2D g2d, double centerX, double centerY, double a2, double v2) 
+	{
+        g2d.setColor(Color.BLACK);
+        for(int x=0; x<=getWidth()-MyConstants.BORDER_X; x++)
+        {
+            double y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
+            double Y = proportionY(y);	///PROPORZIONI Y
+            double X = proportionX(x);		///PROPORZIONI X
+            if (y < 0 || x > getWidth()-MyConstants.BORDER_X) break;
+            line = new Line2D.Double(MyConstants.BORDER_X+X,(getHeight()-MyConstants.BORDER_Y)-Y,MyConstants.BORDER_X+X,(getHeight()-MyConstants.BORDER_Y)-Y);
+            g2d.draw(line);
+        }
+	}
+
 
 	public void drawAxis(Graphics2D g2d)
 	{

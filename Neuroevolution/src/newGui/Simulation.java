@@ -58,7 +58,7 @@ public class Simulation extends JPanel implements ActionListener
 
 private boolean start;
 
-private boolean autodraw; 
+private boolean autodraw;
 	
 	public Simulation(JFrame frame, MainPanel mainPanel) 
 	{
@@ -88,6 +88,7 @@ private boolean autodraw;
     	leftPanel = new SimulationLeftPanel(frame);
     	leftPanel.getOptionsPanel().getStartBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
+    	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
     	
     	rightPanel = new ThrowPanel(frame);
     	
@@ -253,9 +254,11 @@ private boolean autodraw;
 			 else if (p.getActionCommand().equals("Stop")) 
 			 {
 //				 System.out.println("stop");
-				 start = false;
+
 //				 autodraw = true;
 //				 EnvConstant.FORCE_RESTART = false;
+				 
+//				 start = false;
 				 mainPanel.stopProcessAsync();
 				 
 				 getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
@@ -273,6 +276,20 @@ private boolean autodraw;
 				 autodraw = true;
 				 
 				 getLeftPanel().getOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
+			 } 
+			 
+			 else if (p.getActionCommand().equals("Show best: OFF")) 
+			 {
+				 getRightPanel().setShowBest(false);
+				 
+				 getLeftPanel().getOptionsPanel().getShowBestBtn().setText("Show best: ON");
+			 } 
+			 
+			 else if (p.getActionCommand().equals("Show best: ON")) 
+			 {
+				 getRightPanel().setShowBest(true);
+				 
+				 getLeftPanel().getOptionsPanel().getShowBestBtn().setText("Show best: OFF");
 			 } 
 		}
 		

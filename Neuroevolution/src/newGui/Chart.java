@@ -398,4 +398,11 @@ public class Chart extends JPanel
 	{
 		startFromMax = true;
 	}
+	
+	public void reset()
+	{
+		for (ArrayList<Vector2d> arr: lines)
+			arr.clear();
+	}
+	
 }

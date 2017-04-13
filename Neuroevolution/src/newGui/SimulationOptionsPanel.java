@@ -28,6 +28,7 @@ public class SimulationOptionsPanel extends JPanel
 
 	private JButton startBtn;
 	private JButton autodrawBtn;
+	private JButton showBestBtn;
 
 	public SimulationOptionsPanel(JFrame frame) 
 	{
@@ -84,6 +85,8 @@ public class SimulationOptionsPanel extends JPanel
 		
 		autodrawBtn = new JButton("Auto-draw: OFF");
 		
+		showBestBtn = new JButton("Show best: ON");
+		
 		startBtn = new JButton("Start");
 		
 		GridBagConstraints gc = new GridBagConstraints();
@@ -125,6 +128,11 @@ public class SimulationOptionsPanel extends JPanel
 		gc.gridy = 2;
 		add(autodrawBtn, gc);
 		
+		gc.anchor = GridBagConstraints.LINE_START;
+		gc.gridx = 1;
+		gc.gridy = 3;
+		add(showBestBtn, gc);
+		
 
 		
 //		gc.weighty = 15;
@@ -163,5 +171,10 @@ public class SimulationOptionsPanel extends JPanel
 	public JButton getAutodrawBtn()
 	{
 		return autodrawBtn;
+	}
+	
+	public JButton getShowBestBtn()
+	{
+		return showBestBtn;
 	}
 }

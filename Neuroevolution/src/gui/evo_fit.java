@@ -12,7 +12,7 @@ public class evo_fit
 {
 	  public static double getMaxFitness() { return 1000; }  //ovvero quando l'errore è 0,1
 	  
-	  public static HashMap<Integer, ArrayList<Double>>  computeFitness(int _sample, double _out[][], double _tgt[][]) 
+	  public static HashMap<Integer, ArrayList<Double>>  computeFitness(int sample, double out[][], double tgt[][]) 
 	  {     
 		 //double d[] = new double[7];
 		 HashMap<Integer,ArrayList<Double>> mappa= new HashMap<Integer,ArrayList<Double>>();
@@ -36,10 +36,18 @@ public class evo_fit
 		 double error = 0.0;
 	     double errorsum = 0.0; 
 	     double errorsumquad = 0.0;
+ 	 	 double errsum = 0;
+ 	 	 double vel_error = 0;
+ 	 	 double velsum = 0;
+ 	 	 double asum = 0;
+ 	 	 double a_error = 0;
 	     double fitness = 0.0;
 	     double fitness2 = 0.0;
 	     double win = 0.0;
 	     double k = 0.01;	//costante per poter calcolare la fitness anche quando l'errore è 0
+	     
+	     double prova = 0;
+	     
 	     //d[2] = 0.0;
 	     ArrayList<Double> arrayBest = new ArrayList<Double> ();
 	     for (int i = 0; i<MyConstants.INFO_RETE_SIZE; i++)
@@ -56,7 +64,7 @@ public class evo_fit
 	     double minV = 0;
 	     double maxV = 75;
 	     
-	     for ( int j = 0; j < _sample; j++) 
+	     for ( int j = 0; j < sample; j++) 
 	        { 
 //	    	 System.out.println("X_TARGET:    "+_tgt[j][0]);
 //	    	 System.out.println("Y_TARGET:    "+_tgt[j][1]);
@@ -64,21 +72,26 @@ public class evo_fit
 		     for (int i=0; i<MyConstants.INFO_LANCIO_SIZE; i++)
 		    	 array.add(0.0);
 		     
-		     
 			    ///IMPLEMENTAZIONE DECISIONE DI LANCIO   
-		     	double m = _tgt[j][3];
-				double x_obj = minX + _tgt[j][0]*maxX;
-				double y_obj = minY + _tgt[j][1]*maxY;
-				double v = minV + _tgt[j][2]*maxV;
+		     	double m = tgt[j][3];
+				double x_obj = minX + tgt[j][0]*maxX;
+				double y_obj = minY + tgt[j][1]*maxY;
+				double v = tgt[j][2];
 				
-	    	 	double a = _out[j][0]*maxA;
-	    	 	double F = minF + _out[j][1]*maxF;
-	    	 	double lascia = _out[j][2];
-	    	 	
-	    	 	double acc = F/m;
-	    	 	double t = v/acc;
+//	    	 	double t = tgt[j][4];
+//	    	 	double acc = tgt[j][5];
 
+	    	 	double a = tgt[j][4];
+	    	 	double F = tgt[j][5];
+	    	 	double lascia = out[j][2];
 	    	 	
+	    	 	double acc = tgt[j][6];
+	    	 	double t = tgt[j][7];
+	    	 	
+//	    	 	System.out.println(F);
+	    	 	
+	    	 	
+	    	 	mappa.put(sample+1, calculateMinVel(x_obj, y_obj));
 //IMPLEMENTAZIONE VECCHIA		     
 ////		     array.add(0.0);
 ////		     for (int i = 0; i<7; i++)
@@ -114,10 +127,22 @@ public class evo_fit
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
 //	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));		//FITNESS VECCHIA
 	    	 	error = Math.abs(y_obj - y_tiro);
+	    	 	
+	    	 	vel_error = Math.abs(v - mappa.get(sample + 1).get(1));
+	    	 	
+	    	 	a_error = Math.toDegrees(Math.abs(a - mappa.get(sample + 1).get(0)));
+	    	 	
 //	    	 	errorsum += Math.pow(error, 2);		//fitness_somma_quadrati
 	    	 	errorsum += error;			//fitness_quadrato_somma
 //	    	 	errorsumquad += Math.pow(error, 2);		//fitness_somma_quadrati
 	    	 	
+	    	 	velsum += vel_error;
+	    	 	
+	    	 	asum += a_error;
+
+	    	 	errsum += error;
+	    	 	
+	    	 	prova += (200 - error) * (200 - vel_error);
 	    	 	//TIRO MIGLIORE
 	    	 	if (error<min_error)
 	    	 	{
@@ -165,10 +190,16 @@ public class evo_fit
 	    	 	array.set(MyConstants.MASSA_INDEX, m);
 	    	 	mappa.put(j, array);
 	        } 
+//	     System.out.println("VEL: " + velsum + "    " + "ERR: " + errorsum);
+	     
 //	     fitness = 1000000 - Math.pow(errorsum, 3);		//fitness_cubo_somma
-	     fitness = 100000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
+//	     fitness = 1000000 - Math.pow(errorsum, 2);		//fitness_quadrato_somma
 //	     fitness = 100000 - errorsumquad;		//fitness_somma_quadrati
 
+//	     fitness = 1000000000 - Math.pow((errorsum * velsum), 2);
+	     
+	     fitness = prova;
+	     
 //	     d[0] = fitness; 
 //	     d[1] = errorsum;
 //	     if (iter>=0)
@@ -183,14 +214,41 @@ public class evo_fit
 	    //if (fitness>=500) win = 1.0;
  	 	 arrayBest.set(MyConstants.FITNESS_TOTALE_INDEX, fitness);
 // 	 	 arrayBest.set(7, win);
- 	 	 arrayBest.set(MyConstants.ERRORE_TOTALE_INDEX, errorsum);
+ 	 	 arrayBest.set(MyConstants.ERRORE_TOTALE_INDEX, errsum);
  	 	 arrayBest.set(MyConstants.FITNESS_VECCHIA_INDEX, fitness2);
  	 	 arrayBest.set(MyConstants.LANCIO_MIGLIORE_INDEX, (double)bestThrowIndex);
  	 	 arrayBest.set(MyConstants.WIN_INDEX, win);
- 	 	 mappa.put(_sample, arrayBest);
+ 	 	 mappa.put(sample, arrayBest);
 	     //d[2] = 0.0;
 	     //if (fitness > 20) d[2] = 1;
 
 	     return mappa; 
 	  }
+	  
+		public static ArrayList<Double> calculateMinVel(double x, double y)
+		{
+			ArrayList<Double> array = new ArrayList<Double> ();
+			double g = 9.81;
+			double val = y/x;
+
+			double beta = Math.atan(val);
+			
+//			System.out.println(beta);
+			
+			double a = 45 + Math.toDegrees(beta)/2;
+			
+			double ang = Math.toRadians(a);
+			
+			double numeratore = g*Math.pow(x, 2);
+			double denominatore = 2*(Math.tan(ang)*x - y)*Math.pow(Math.cos(ang), 2);
+			
+//			System.out.println(denominatore);
+			
+			double vel = Math.sqrt(numeratore/denominatore);
+			
+			array.add(ang);
+			array.add(vel);
+			
+			return array;
+		}
 }

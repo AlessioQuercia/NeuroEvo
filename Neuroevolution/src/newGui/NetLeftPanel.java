@@ -87,7 +87,16 @@ public class NetLeftPanel extends JPanel
 				"nodi bias:  " + biasNodes + "\n" +
 				"nodi di input:  " + inputNodes + "\n" +
 				"nodi hidden:  " + hiddenNodes + "\n" +
-				"nodi di output:  " + outputNodes;
+				"nodi di output:  " + outputNodes + "\n" +
+				"\n" + "Lista input:  " + "\n" + 
+				"- id_1 = x_target" + "\n" +
+				"- id_2 = y_target" + "\n" +
+				"- id_3 = y_target" + "\n" +
+				"\n" + "Lista output:  " + "\n" + 
+				"- id_9 = angolo" + "\n" +
+				"- id_10 = forza" + "\n" +
+				"- id_11 = lascia" + "\n";
+
 			
 			detailsPanel.getInfoRete().setText(info_rete);
 	}

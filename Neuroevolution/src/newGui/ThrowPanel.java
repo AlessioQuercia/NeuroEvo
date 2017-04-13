@@ -42,6 +42,8 @@ public class ThrowPanel extends JPanel
 	
 	private double a;
 	private double v;
+	
+	private boolean showBest;
 
 	public double getA() {
 		return a;
@@ -94,6 +96,8 @@ public class ThrowPanel extends JPanel
 		tailEnd = 0;
 		
 		draw = false;
+		
+		showBest = false;
 	}
 
 	public void clearPanel()
@@ -205,7 +209,7 @@ public class ThrowPanel extends JPanel
 			
 			drawTail(g2d);
 			
-			drawBestThrow(g2d);
+			if(showBest) drawBestThrow(g2d);
 			
 //			drawParabola(g2d, a, v);
 		}
@@ -255,8 +259,13 @@ public class ThrowPanel extends JPanel
 		g2d.setColor(Color.BLACK);
 		for (int i=0; i<tail.size(); i++)
 		{
-			tailLine.setLine(tail.get(i).x, tail.get(i).y, tail.get(i).x, tail.get(i).y);
-			g2d.draw(tailLine);
+			try {
+				tailLine.setLine(tail.get(i).x, tail.get(i).y, tail.get(i).x, tail.get(i).y);
+				g2d.draw(tailLine);
+			} catch (Exception e) {
+				System.out.println("errore");
+			}
+
 		}
 	}
 	
@@ -325,5 +334,15 @@ public class ThrowPanel extends JPanel
 	public void resetTail() 
 	{
 		tail.removeAll(tail);
+	}
+
+	public boolean getShowBest()
+	{
+		return showBest;
+	}
+
+	public void setShowBest(boolean b) 
+	{
+		showBest = b;
 	}
 }

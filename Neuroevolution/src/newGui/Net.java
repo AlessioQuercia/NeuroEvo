@@ -70,8 +70,8 @@ public class Net extends JPanel implements ActionListener
 		add(rightPanel, gc);
 	}
 	
-	   public void drawGraph(Organism o, chartXY graph) 
-	  {
+	public void drawGraph(Organism o, chartXY graph) 
+	{
 		 Genome _g1 = o.genome;
 	  
 		 Vector v1 = new Vector(1, 0);
@@ -128,23 +128,23 @@ public class Net extends JPanel implements ActionListener
 			}
 		 }
 	  
-		 graph.setScale(getWidth()/2 , getHeight());
-		 graph.setAxis(false);
-		 graph.setGrid(false);
-		 graph.setGrafo(v1);
-		 graph.repaint();
-		 
-			GridBagConstraints gc = new GridBagConstraints();
-			
-			gc.anchor = GridBagConstraints.LINE_START;
-			gc.fill = GridBagConstraints.BOTH;
-			gc.weightx = 0.5;
-			gc.weighty = 0.5;
-			
-			gc.gridx = 0;
-			gc.gridy = 0;	
-			rightPanel.add(graph, gc);
-	  }
+	 	graph.setScale(getWidth()/2 , getHeight());
+	 	graph.setAxis(false);
+	 	graph.setGrid(false);
+	 	graph.setGrafo(v1);
+	 	graph.repaint();
+	 
+		GridBagConstraints gc = new GridBagConstraints();
+		
+		gc.anchor = GridBagConstraints.LINE_START;
+		gc.fill = GridBagConstraints.BOTH;
+		gc.weightx = 0.5;
+		gc.weighty = 0.5;
+		
+		gc.gridx = 0;
+		gc.gridy = 0;	
+		rightPanel.add(graph, gc);
+	}
 	   
 		public NetLeftPanel getLeftPanel() 
 		{

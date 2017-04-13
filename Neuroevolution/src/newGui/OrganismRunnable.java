@@ -76,6 +76,8 @@ public class OrganismRunnable implements Runnable
 		  
 		  //	  			   System.out.print("\n evaluate.step 1 ");
 		  
+			 
+			 
 			 double in[] = null;
 			 in = new double[EnvConstant.NR_UNIT_INPUT + 1];
 //			 in = new double[EnvConstant.NR_UNIT_INPUT];
@@ -90,7 +92,7 @@ public class OrganismRunnable implements Runnable
 			 //double tgt[][] = null;
 			 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 			 double tgt[][] = null;
-			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT+1];
+			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + 3];
 			 
 		  
 			 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);
@@ -210,22 +212,36 @@ public class OrganismRunnable implements Runnable
 					   double maxY = 80;
 					   double minM = 1;
 					   double maxM = 2;
-					   double massa = minM + rm.nextDouble()*maxM;	// 2kg
-					   double v = 0;
-					   double minF = 15;	// forza minima
-					   double maxF = 60;	// forza massima
+					   double minF = 0;	// forza minima
+					   double maxF = 75;	// forza massima
 					   double maxA = 1.5708;
 					   double minV = 0;
-					   double maxV = 75;
+					   double maxV = 129;
+					   
+					   double d_minA = -0.031416;
+					   double d_maxA = 0.062832;
+//					   double d_minA = 0;
+//					   double d_maxA = 0.031416;	   
+					   double d_minF = -5;
+					   double d_maxF = 10;
+					   		   
+					   double massa = minM + rm.nextDouble()*maxM;	// 2kg
+					   double v = 0;
+					   double a = 0;
+					   double F = 0;
 					   
 					   in[0] = rx.nextDouble();
 					   in[1] = ry.nextDouble();
 					   in[2] = v;
+					   in[3] = a;
+					   in[4] = F;
 					   
 					   tgt[count][0] = in[0];
 					   tgt[count][1] = in[1];
 					   tgt[count][2] = in[2];
-					   tgt[count][3] = massa;
+					   tgt[count][3] = in[3];
+					   tgt[count][4] = in[4];
+					   tgt[count][5] = massa;
 					   
 					   for (int i = 0; i<50; i++)
 					   {
@@ -263,9 +279,18 @@ public class OrganismRunnable implements Runnable
 						   // clear net		 
 						   _net.flush();
 						   
-						   double a = out[count][0]*maxA;
-						   double F = minF + out[count][1]*maxF;
+						   double delta_a = d_minA + out[count][0]*d_maxA;
+						   double delta_F = d_minF + out[count][1]*d_maxF;
 						   double lascia = out[count][2];
+						   
+						   a += delta_a;
+						   F += delta_F;
+						   
+						   if (F<0) F = 0;
+						   else if (F>75) F = 75;
+						   else if (a<0) a = 0;
+						   else if (a>1.5708) a = 1.5708;
+						   
 						   
 						   double acc = F/massa;
 						   double delta_v = acc*delta_t;
@@ -273,9 +298,17 @@ public class OrganismRunnable implements Runnable
 						   v += delta_v;
 						   
 						   double V = (v - minV)/maxV;
+						   double A = (a)/maxA;
+						   double Freal = (F - minF)/maxF;
 						   
 						   in[2] = V;
-						   tgt[count][2] = in[2];
+						   in[3] = A;
+						   in[4] = Freal;
+						   tgt[count][2] = v;
+						   tgt[count][3] = a;
+						   tgt[count][4] = F;
+						   tgt[count][6] = current_time;
+						   tgt[count][7] = acc;
 						   
 //						   double x_tgt = minX + tgt[count][0]*maxX;
 //						   double y_tgt = minY + tgt[count][1]*maxY;

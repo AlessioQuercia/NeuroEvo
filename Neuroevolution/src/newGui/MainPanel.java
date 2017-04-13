@@ -34,6 +34,8 @@ import javax.swing.text.Document;
 
 import org.joml.Vector2d;
 
+import com.sun.tools.internal.xjc.model.SymbolSpace;
+
 import gui.evo_fit;
 import gui.evo_in;
 import gui.evo_out;
@@ -90,6 +92,8 @@ private boolean debug;
 private chartXY mappa;
 
 private ArrayList<Organism> winners;
+
+private ExecutorService fixedPool;
 
 	  
 	public MainPanel(JFrame f) 
@@ -170,27 +174,18 @@ private ArrayList<Organism> winners;
 		double x_tgt = 0;
 		double y_tgt = 0;
 		
+		int simGen = 0;
+		int prevNetGen = -1;
+		int currNetGen = 0;
+		
 		while (isRunning)
 		{
 			long startTime = System.currentTimeMillis();
-			graphs.repaint();
 //			graphs.getFitnessChart().repaint();
 //			graphs.getErrorChart().repaint();
 			
 			if (simulation.getStart() && simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
 			{
-				if (winners.size() > 0)
-				{
-					int gen = net.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
-					Organism selectedOrg = winners.get(gen);
-					net.drawGraph(selectedOrg, mappa);
-					net.getLeftPanel().updateInfoRete(selectedOrg);
-				}
-				
-				simulation.getRightPanel().repaint();
-				net.repaint();
-				
-				
 				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
 				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
 				
@@ -213,8 +208,8 @@ private ArrayList<Organism> winners;
 				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
 						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt - 2.5, 5, 5);
 				
-				int gen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
-				Organism o = winners.get(gen);
+				simGen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
+				Organism o = winners.get(simGen);
 //				ArrayList<Double> bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES+1);
 				ArrayList<Double> bestThrow = evo_fit.calculateMinVel(x_tgt, y_tgt);
 //				System.out.println(bestThrow.get(1));
@@ -270,6 +265,27 @@ private ArrayList<Organism> winners;
 					x = 0;
 				}
 				x++;    
+				
+				simulation.getRightPanel().repaint();
+			}
+			
+			if (tabbedPanel.getSelectedIndex() == 1 && simulation.getStart())
+			{			
+				graphs.repaint();
+			}
+			
+			if (tabbedPanel.getSelectedIndex() == 2 && simulation.getStart() && winners.size() > 0)
+			{
+				currNetGen = net.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
+				Organism selectedOrg = winners.get(currNetGen);
+				net.drawGraph(selectedOrg, mappa);
+				net.getLeftPanel().updateInfoRete(selectedOrg);
+				
+				if (prevNetGen != currNetGen)
+				{
+					prevNetGen = currNetGen;
+					net.repaint();
+				}
 			}
 			
 			long endTime = System.currentTimeMillis() - startTime;
@@ -297,12 +313,19 @@ private ArrayList<Organism> winners;
 			 new Runnable() 
 			{
 				public void run() 
-				{
+				{		
+					
+					 simulation.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();
+					 simulation.getLeftPanel().getOptionsPanel().getThrowList().removeAllItems();
+					 graphs.getErrorChart().reset();
+					 graphs.getFitnessChart().reset();
+					 net.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();
+					 winners.clear();
+					 debug = false;
 					
 				  EnvRoutine.getSession();
 			   
 				  startProcess();
-			   
 			   }
 			};
 		 lookupThread = new Thread(lookupRun," looktest" );
@@ -312,7 +335,8 @@ private ArrayList<Organism> winners;
 	   
 	   public void stopProcessAsync()
 	  {
-		 lookupThread.interrupt();
+//		   lookupThread.interrupt();
+		   EnvConstant.STOP_EPOCH = true;
 	  } 
 	   
 	   public void startProcess() 
@@ -517,14 +541,14 @@ private ArrayList<Organism> winners;
 			int nThreads = Runtime.getRuntime().availableProcessors();			//// VERSIONE PARALLELA
 //			System.out.println(nThreads);
 			
-			ExecutorService fixedPool = Executors.newFixedThreadPool(nThreads);	//// VERSIONE PARALLELA
+			fixedPool = Executors.newFixedThreadPool(nThreads);	//// VERSIONE PARALLELA
 			
 			while (itr_organism.hasNext()) 
 			{
 			//point to organism
 			   Organism organism = ((Organism) itr_organism.next());
 			   
-				fixedPool.submit(new OrganismRunnable(organism));	//// VERSIONE PARALLELA
+				fixedPool.submit(new OrganismRunnableFirst(organism));	//// VERSIONE PARALLELA
 				
 //			//// VERSIONE SERIALE
 //			//evaluate 
@@ -881,15 +905,28 @@ private ArrayList<Organism> winners;
 					   double maxA = 1.5708;
 					   double minV = 0;
 					   double maxV = 75;
+//					   double d_minA = -0.031416;
+					   double d_minA = 0;
+					   double d_maxA = 0.031416;
+//					   double d_minF = -5;
+					   double d_minF = 0;
+					   double d_maxF = 5;
+					   
+					   double a = 0;
+					   double F = 15;
 					   
 					   in[0] = rx.nextDouble();
 					   in[1] = ry.nextDouble();
 					   in[2] = v;
+					   in[3] = a;
+					   in[4] = F;
 					   
 					   tgt[count][0] = in[0];
 					   tgt[count][1] = in[1];
 					   tgt[count][2] = in[2];
-					   tgt[count][3] = massa;
+					   tgt[count][3] = in[3];
+					   tgt[count][4] = in[4];
+					   tgt[count][5] = massa;
 					   
 					   for (int i = 0; i<50; i++)
 					   {
@@ -927,9 +964,12 @@ private ArrayList<Organism> winners;
 						   // clear net		 
 						   _net.flush();
 						   
-						   double a = out[count][0]*maxA;
-						   double F = minF + out[count][1]*maxF;
+						   double delta_a = d_minA + out[count][0]*d_maxA;
+						   double delta_F = d_minF + out[count][1]*d_maxF;
 						   double lascia = out[count][2];
+						   
+						   a += delta_a;
+						   F += delta_F;
 						   
 						   double acc = F/massa;
 						   double delta_v = acc*delta_t;
@@ -937,9 +977,15 @@ private ArrayList<Organism> winners;
 						   v += delta_v;
 						   
 						   double V = (v - minV)/maxV;
+						   double A = (a)/maxA;
+						   double Freal = (F -minF)/maxF;
 						   
 						   in[2] = V;
-						   tgt[count][2] = in[2];
+						   in[3] = A;
+						   in[4] = Freal;
+						   tgt[count][2] = v;
+						   tgt[count][3] = a;
+						   tgt[count][4] = F;
 						   
 //						   double x_tgt = minX + tgt[count][0]*maxX;
 //						   double y_tgt = minY + tgt[count][1]*maxY;

@@ -200,6 +200,8 @@ public class evo_fit
 	     
 	     fitness = prova;
 	     
+	     System.out.println("ciao");
+	     
 //	     d[0] = fitness; 
 //	     d[1] = errorsum;
 //	     if (iter>=0)

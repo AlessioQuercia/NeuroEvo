@@ -18,8 +18,6 @@ import javax.swing.JPanel;
 
 import org.joml.Vector2d;
 
-import com.sun.tools.internal.xjc.model.SymbolSpace;
-
 import jGraph.chartXY;
 import jGraph.code;
 import jNeatCommon.CodeConstant;

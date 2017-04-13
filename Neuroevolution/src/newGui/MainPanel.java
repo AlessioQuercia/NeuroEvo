@@ -34,8 +34,6 @@ import javax.swing.text.Document;
 
 import org.joml.Vector2d;
 
-import com.sun.tools.internal.xjc.model.SymbolSpace;
-
 import gui.evo_fit;
 import gui.evo_in;
 import gui.evo_out;

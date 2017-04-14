@@ -226,7 +226,7 @@ private ExecutorService fixedPool;
 //	            simulation.getRightPanel().setA(a);
 //	            simulation.getRightPanel().setV(v);
 	            
-	            if (Y > 0)
+	            if (y > 0)
 	            {
 	    			simulation.getRightPanel().getPeso().setFrame(
 	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y - 1.5, 3, 3);

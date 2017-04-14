@@ -53,8 +53,17 @@
 	  private double mean_cloned_fitness;
 	  private double lowest_error;
 	  private double mean_error;
+	  private int cloned;
    
-	   public double getLowest_error() {
+	   public int getCloned() {
+		return cloned;
+	}
+
+	public void setCloned(int cloned) {
+		this.cloned = cloned;
+	}
+
+	public double getLowest_error() {
 		return lowest_error;
 	}
 
@@ -694,7 +703,8 @@
 		 while (itr_specie.hasNext()) 
 		 {
 			_specie = ((Species) itr_specie.next());
-			if (_specie.getExpected_offspring() > 5) 
+			System.out.println(_specie.getExpected_offspring());
+			if (_specie.getExpected_offspring() > 4) 	//originale 5
 			{
 				clone = true;
 				total_cloned_fitness += _specie.getMax_fitness();
@@ -705,8 +715,12 @@
 		 }
 		 
 		double mean_cloned_fit = total_cloned_fitness/cloned;
-//		if (!clone) mean_cloned_fit = 0;
+		if (!clone) mean_cloned_fit = 0;
 		setMean_cloned_fitness(mean_cloned_fit);
+		setCloned(cloned);
+		
+//		System.out.println(cloned);
+//		System.out.println(getHighest_fitness());
 	  
 	  //   	System.out.print("\n Reproduction completed");
 	  

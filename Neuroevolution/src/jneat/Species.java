@@ -526,7 +526,7 @@
 			} //end population champ
 			
 			//If we have a Species champion, just clone it 
-			else if ((!champ_done) && (expected_offspring > 5)) 
+			else if ((!champ_done) && (expected_offspring > 4)) 	//originale 5
 			{
 //				System.out.println(expected_offspring + " " + generation);
 				

@@ -57,7 +57,7 @@ public class Graphs extends JPanel implements ActionListener
     	leftPanel = new GraphLeftPanel(f);
     	leftPanel.getOptionsPanel().getGridButton().addActionListener(this);;
     	
-		fitnessChart = new Chart(f, 200, 100000, "Generation", "Fitness", 10, 5);
+		fitnessChart = new Chart(f, 200, 400000, "Generation", "Fitness", 10, 5);
 		fitnessChart.addLine("Mean fitness", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA
 		fitnessChart.addLine("Mean cloned fitness", Color.GREEN);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA DEI CLONATI
 		fitnessChart.addLine("Highest fitness", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS PIU' ALTA
@@ -151,6 +151,9 @@ public class Graphs extends JPanel implements ActionListener
 		double lowest_error = pop.getLowest_error();
 		double mean_error = pop.getMean_error();
 		double generation = pop.getFinal_gen();
+		
+//		System.out.println(mean_cloned_fitness);
+		System.out.println(pop.getCloned());
 
 		fitnessChart.addVector(0, new Vector2d(generation, mean_fitness));
 		fitnessChart.addVector(1, new Vector2d(generation, mean_cloned_fitness));

@@ -22,6 +22,7 @@ import jGraph.chartXY;
 import jGraph.code;
 import jNeatCommon.CodeConstant;
 import jNeatCommon.EnvConstant;
+import jneat.Organism;
 import jneat.Population;
 import log.HistoryLog;
 
@@ -32,9 +33,12 @@ public class Graphs extends JPanel implements ActionListener
 	private GraphLeftPanel leftPanel;
 	private Chart fitnessChart;
 	private Chart errorChart;
+	private Chart forzaChart;
 	
 	private GridBagConstraints gc;
-	private boolean fitness, error;
+	private boolean fitness, error, forza;
+	
+	private boolean autodraw;
 
 	public Graphs(JFrame f) 
 	{
@@ -42,6 +46,9 @@ public class Graphs extends JPanel implements ActionListener
 		
 		fitness = true;
 		error = false;
+		forza = false;
+		
+		autodraw = true;
 		
 		init();
 	}
@@ -55,7 +62,8 @@ public class Graphs extends JPanel implements ActionListener
     	gc = new GridBagConstraints();
     	
     	leftPanel = new GraphLeftPanel(f);
-    	leftPanel.getOptionsPanel().getGridButton().addActionListener(this);;
+    	leftPanel.getOptionsPanel().getGridButton().addActionListener(this);
+    	leftPanel.getForzaOptionsPanel().getAutodrawBtn().addActionListener(this);
     	
 		fitnessChart = new Chart(f, 200, 400000, "Generation", "Fitness", 10, 5);
 		fitnessChart.addLine("Mean fitness", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA
@@ -69,12 +77,19 @@ public class Graphs extends JPanel implements ActionListener
 		errorChart.addLine("Lowest error", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		errorChart.setGrid(true);
 		errorChart.setBorder(BorderFactory.createTitledBorder("Error chart"));
-		errorChart.startFromMax();
+		errorChart.startFromFirst();
 		
-		
+		forzaChart = new Chart(f, 50, 75, "Step", "Forza", 10, 5);
+//		forzaChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
+		forzaChart.addLine("Forza", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
+		forzaChart.setGrid(true);
+		forzaChart.setBorder(BorderFactory.createTitledBorder("Forza chart"));
+		forzaChart.startFromFirst();
+
 		leftPanel.getLegendPanel().setLegend(fitnessChart.getNames(), fitnessChart.getColors());
 		leftPanel.getOptionsPanel().getChartList().addItem("Fitness");
 		leftPanel.getOptionsPanel().getChartList().addItem("Error");
+		leftPanel.getOptionsPanel().getChartList().addItem("Forza");
 		
 		
     	
@@ -94,6 +109,7 @@ public class Graphs extends JPanel implements ActionListener
 		gc.gridy = 0;
     	add(fitnessChart, gc);
     	add(errorChart, gc);
+    	add(forzaChart, gc);
 //    	setLayout(new GridBagLayout());
 //    	
 //    	GridBagConstraints gc = new GridBagConstraints();
@@ -153,7 +169,7 @@ public class Graphs extends JPanel implements ActionListener
 		double generation = pop.getFinal_gen();
 		
 //		System.out.println(mean_cloned_fitness);
-		System.out.println(pop.getCloned());
+//		System.out.println(pop.getCloned());
 
 		fitnessChart.addVector(0, new Vector2d(generation, mean_fitness));
 		fitnessChart.addVector(1, new Vector2d(generation, mean_cloned_fitness));
@@ -163,10 +179,22 @@ public class Graphs extends JPanel implements ActionListener
 		errorChart.addVector(0, new Vector2d(generation, lowest_error));
 	}
 
+	public void updateForzaChart(Organism o, int currSelectedThrow)
+	{
+		forzaChart.reset();
+		for (int i=0; i<o.getForzaMap().get(currSelectedThrow).size(); i++)
+			forzaChart.addVector(0, new Vector2d(i, o.getForzaMap().get(currSelectedThrow).get(i)));
+	}
+	
+	public Chart getForzaChart() {
+		return forzaChart;
+	}
+
 	public GraphLeftPanel getLeftPanel() 
 	{
 		return leftPanel;
 	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
@@ -177,17 +205,35 @@ public class Graphs extends JPanel implements ActionListener
 		 {
 			 fitnessChart.setGrid(false);
 			 errorChart.setGrid(false);
+			 forzaChart.setGrid(false);
 			 
 			 leftPanel.getOptionsPanel().getGridButton().setText("Grid: ON");
+			 repaint();
 		 } 
 		 
 		 else if (p.getActionCommand().equals("Grid: ON")) 
 		 {
 			 fitnessChart.setGrid(true);
 			 errorChart.setGrid(true);
+			 forzaChart.setGrid(true);
 			 
 			 leftPanel.getOptionsPanel().getGridButton().setText("Grid: OFF");
+			 repaint();
 		 } 
+		 
+		 else if (p.getActionCommand().equals("Auto-draw: OFF"))
+		 {
+			 autodraw = false;
+			 
+			 getLeftPanel().getForzaOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
+		 }
+		 
+		 else if (p.getActionCommand().equals("Auto-draw: ON"))
+		 {
+			 autodraw = true;
+			 
+			 getLeftPanel().getForzaOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
+		 }
 	}
 	
 	@Override
@@ -196,30 +242,79 @@ public class Graphs extends JPanel implements ActionListener
 		super.paintComponent(g);
 		 if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Error") && !error)
 		 {
+			 if (leftPanel.getForzaPanel())
+			 {
+				 leftPanel.setNormalPanel();
+			 }
+			 
 			 leftPanel.getLegendPanel().setLegend(errorChart.getNames(), errorChart.getColors());
 			 gc.fill = GridBagConstraints.BOTH;
 			 gc.weightx = 0.5;
 			 gc.weighty = 0.5;
 			 gc.gridx = 1;
 			 gc.gridy = 0;
-//			 remove(fitnessChart);
-			 add(fitnessChart, gc);
+			 remove(errorChart);
+			 remove(fitnessChart);
+			 remove(forzaChart);
+	    	 add(errorChart, gc);
+	    	 add(fitnessChart, gc);
+	       	 add(forzaChart, gc);
 			 error = true;
 			 fitness = false;
+			 forza = false;
 		 } 
 		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Fitness") && !fitness)
 		 {
+			 if (leftPanel.getForzaPanel())
+			 {
+				 leftPanel.setNormalPanel();
+			 }
+			 
 			 leftPanel.getLegendPanel().setLegend(fitnessChart.getNames(), fitnessChart.getColors());
 			 gc.fill = GridBagConstraints.BOTH;
 			 gc.weightx = 0.5;
 			 gc.weighty = 0.5;
 			 gc.gridx = 1;
 			 gc.gridy = 0;
-//			 remove(errorChart);
-			 add(errorChart, gc);
+			 remove(errorChart);
+			 remove(fitnessChart);
+			 remove(forzaChart);
+			 add(fitnessChart, gc);
+		     add(errorChart, gc);
+		     add(forzaChart, gc);
 			 fitness = true;
 			 error = false;
+			 forza = false;
 		 }
+		 
+		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Forza") && !forza)
+		 {
+			 leftPanel.getLegendPanel().setLegend(forzaChart.getNames(), forzaChart.getColors());
+			 gc.fill = GridBagConstraints.BOTH;
+			 
+			 leftPanel.setForzaPanel();
+			 
+			 gc.weightx = 0.5;
+			 gc.weighty = 0.5;
+			 gc.gridx = 1;
+			 gc.gridy = 0;
+			 remove(errorChart);
+			 remove(fitnessChart);
+			 remove(forzaChart);
+	    	 add(forzaChart, gc);
+	    	 add(errorChart, gc);
+	    	 add(fitnessChart, gc);
+			 fitness = false;
+			 error = false;
+			 forza = true;
+		 }
+	}
+
+	public void updateForzaOptionsPanel(Organism o) 
+	{
+		leftPanel.getForzaOptionsPanel().getGenerationList().addItem(o.getGeneration());
+		if (autodraw) 
+			leftPanel.getForzaOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());
 	}
 	
 }

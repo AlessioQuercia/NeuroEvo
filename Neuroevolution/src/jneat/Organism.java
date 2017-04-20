@@ -100,6 +100,19 @@ import java.util.Map;
 	  
 	  /** Mappa contenente tutte le informazioni */
 	  Map<Integer,ArrayList<Double>> map;
+	  
+	  /** Array contentente la forza ad ogni step */
+	  Map<Integer,ArrayList<Double>> forzaMap;
+
+	public Map<Integer, ArrayList<Double>> getForzaMap() 
+	{
+		return forzaMap;
+	}
+
+	public void setForzaMap(Map<Integer, ArrayList<Double>> forzaMap) 
+	{
+		this.forzaMap = forzaMap;
+	}
 
 	private double total_error;
 	  

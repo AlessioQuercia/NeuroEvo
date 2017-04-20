@@ -49,6 +49,8 @@ public class Chart extends JPanel
 	private ArrayList<Color> colors = new ArrayList<Color> ();
 
 	private boolean startFromMax;
+
+	private boolean startFromFirst;
 	
 	public Chart(JFrame frame) 
 	{
@@ -63,6 +65,7 @@ public class Chart extends JPanel
 		
 		grid = false;
 		startFromMax = false;
+		startFromFirst = false;
     	
 		setMaxX(1000);
 		setMaxY(100000);
@@ -235,6 +238,12 @@ public class Chart extends JPanel
 			prevY = proportionY(getMaxY());
 			currY = proportionY(getMaxY());
 		}
+		else if (startFromFirst && line.size() > 0)
+		{
+			prevY = proportionY(line.get(0).y);
+			currY = proportionY(line.get(0).y);
+		}
+		
 		for (Vector2d punto : line)
 		{
 			prevX = currX;
@@ -396,7 +405,14 @@ public class Chart extends JPanel
 
 	public void startFromMax() 
 	{
+		startFromFirst = false;
 		startFromMax = true;
+	}
+	
+	public void startFromFirst()
+	{
+		startFromMax = false;
+		startFromFirst = true;
 	}
 	
 	public void reset()

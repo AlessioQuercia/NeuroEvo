@@ -146,7 +146,7 @@ public class SimulationLeftPanel extends JPanel
 //				"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX),
 //			};
 		String info_rete =
-			"errore totale:  " + array.get(MyConstants.ERRORE_TOTALE_INDEX) + "\n" +
+			"errore totale:  " + array.get(MyConstants.ERRORE_TOTALE_INDEX) + " m" + "\n" +
 			"fitness totale:  " + array.get(MyConstants.FITNESS_TOTALE_INDEX) + "\n" +
 			"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX);
 		
@@ -191,16 +191,16 @@ public class SimulationLeftPanel extends JPanel
 		
 		
 		String info_lancio = 
-				"x_target:  " + array.get(MyConstants.X_TARGET_INDEX) + "\n" +
-				"y_target:  " + array.get(MyConstants.Y_TARGET_INDEX) + "\n" +
-				"y_lancio:  " + array.get(MyConstants.Y_LANCIO_INDEX) + "\n" +
-				"angolo:  " + array.get(MyConstants.ANGOLO_INDEX) + "\n" +
-				"velocità:  " + array.get(MyConstants.VELOCITA_INDEX) + "\n" +
-				"forza:  " + array.get(MyConstants.FORZA_INDEX) + "\n" +
-				"tempo:  " + array.get(MyConstants.TEMPO_INDEX) + "\n" +	
+				"x_target:  " + array.get(MyConstants.X_TARGET_INDEX) + " m" + "\n" +
+				"y_target:  " + array.get(MyConstants.Y_TARGET_INDEX) + " m" + "\n" +
+				"y_lancio:  " + array.get(MyConstants.Y_LANCIO_INDEX) + " m" + "\n" +
+				"angolo:  " + Math.toDegrees(array.get(MyConstants.ANGOLO_INDEX)) + "°" + "\n" +
+				"velocità:  " + array.get(MyConstants.VELOCITA_INDEX) + " m/s" + "\n" +
+				"forza:  " + array.get(MyConstants.FORZA_INDEX) + " N" + "\n" +
+				"tempo:  " + array.get(MyConstants.TEMPO_INDEX) + " s" + "\n" +	
 				"accelerazione:  " + array.get(MyConstants.ACCELERAZIONE_INDEX) + "\n" +
-				"massa:  " + array.get(MyConstants.MASSA_INDEX) + "\n" +
-				"errore:  " + array.get(MyConstants.ERRORE_INDEX);
+				"massa:  " + array.get(MyConstants.MASSA_INDEX) + " kg" + "\n" +
+				"errore:  " + array.get(MyConstants.ERRORE_INDEX) + " m";
 		
 		throwPanel.getInfoLancio().setText(info_lancio);
 		

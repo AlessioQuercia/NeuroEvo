@@ -175,6 +175,13 @@ private ExecutorService fixedPool;
 		int simGen = 0;
 		int prevNetGen = -1;
 		int currNetGen = 0;
+		String prevSelectedChart = graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString();
+		
+		int prevForzaGen = -1;
+		int currForzaGen = 0;
+		
+		int prevSelectedThrow = -1;
+		int currSelectedThrow = graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().getSelectedIndex();
 		
 		while (isRunning)
 		{
@@ -268,7 +275,35 @@ private ExecutorService fixedPool;
 			}
 			
 			if (tabbedPanel.getSelectedIndex() == 1 && simulation.getStart())
-			{			
+			{	
+				currForzaGen = graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getSelectedIndex();
+				Organism selectedOrg = winners.get(currForzaGen);
+				currSelectedThrow = graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().getSelectedIndex();
+				if (currSelectedThrow == EnvConstant.NUMBER_OF_SAMPLES)
+					currSelectedThrow = selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue();
+				if (graphs.getLeftPanel().getForzaPanel())
+					graphs.updateForzaChart(selectedOrg, currSelectedThrow);
+				
+				if (prevForzaGen != currForzaGen)
+				{
+					prevForzaGen = currForzaGen;
+					
+					graphs.repaint();
+				}
+				
+				if (prevSelectedThrow != currSelectedThrow)
+				{
+					prevSelectedThrow = currSelectedThrow;
+					
+					graphs.repaint();
+				}
+//				graphs.repaint();
+			}
+			
+			if (tabbedPanel.getSelectedIndex() == 1 && !simulation.getStart() && !graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString().equals(prevSelectedChart))
+			{
+				prevSelectedChart = graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString();
+				
 				graphs.repaint();
 			}
 			
@@ -317,6 +352,9 @@ private ExecutorService fixedPool;
 					 simulation.getLeftPanel().getOptionsPanel().getThrowList().removeAllItems();
 					 graphs.getErrorChart().reset();
 					 graphs.getFitnessChart().reset();
+					 graphs.getForzaChart().reset();
+					 graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().removeAllItems();
+					 graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().removeAllItems();
 					 net.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();
 					 winners.clear();
 					 debug = false;
@@ -397,11 +435,17 @@ private ExecutorService fixedPool;
 			   EnvConstant.NUMBER_OF_SAMPLES = Integer.parseInt(ObjRet_inp.toString());
 			
 			   
-			   ///RIEMPE LISTA LANCI
+			   ///RIEMPE LISTA LANCI IN SIMULATION
 				for (int i = 1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
 					simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem(i);
 				simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
 				simulation.getLeftPanel().getOptionsPanel().getThrowList().setSelectedItem("Best");
+				
+			   ///RIEMPE LISTA LANCI IN SIMULATION
+				for (int i = 1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
+					graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem(i);
+				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem("Best");
+				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().setSelectedItem("Best");
 			   
 			   
 			   
@@ -684,6 +728,7 @@ private ExecutorService fixedPool;
 				   winners.add(o);
 				   simulation.storeBestNet(o);
 				   simulation.updateSimulationPanel(o);
+				   graphs.updateForzaOptionsPanel(o);
 				   net.updateNetPanel(o);
 //				   net.drawGraph(o, mappa);
 				   

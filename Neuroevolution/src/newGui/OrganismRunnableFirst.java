@@ -183,9 +183,11 @@ public class OrganismRunnableFirst implements Runnable
 					 long seedM = (long)(Math.random()*1000);
 					 rm.setSeed(seedM);
 					 
+					 HashMap<Integer,ArrayList<Double>> mappa= new HashMap<Integer,ArrayList<Double>>();
 					 
 				   for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 
 				   {
+						 ArrayList<Double> arrayForza = new ArrayList<Double> ();
 //					   y = Math.random()*maxY;
 //					   input[count] = y;
 					  //plist_in[0] = count;
@@ -291,11 +293,16 @@ public class OrganismRunnableFirst implements Runnable
 //						   in[0] = X;
 //						   tgt[count][0] = in[0];
 						   
+						   arrayForza.add(F);
+						   
 						   if (lascia >= 0.5) 
 						   {
 							   break;
 						   }
 					   }
+					   
+					   mappa.put(count, arrayForza);
+					   o.setForzaMap(mappa);
 					   
 					   
 			 ///IMPLEMENTAZIONE VECCHIA  				   

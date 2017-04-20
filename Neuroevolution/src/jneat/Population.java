@@ -703,7 +703,7 @@
 		 while (itr_specie.hasNext()) 
 		 {
 			_specie = ((Species) itr_specie.next());
-			System.out.println(_specie.getExpected_offspring());
+//			System.out.println(_specie.getExpected_offspring());
 			if (_specie.getExpected_offspring() > 4) 	//originale 5
 			{
 				clone = true;

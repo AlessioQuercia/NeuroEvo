@@ -51,8 +51,6 @@ public class Graphs extends JPanel implements ActionListener
 		autodraw = true;
 		
 		init();
-		
-		System.out.println("Fix");
 	}
 	
 	public void init()

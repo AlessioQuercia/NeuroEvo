@@ -288,16 +288,16 @@ private ExecutorService fixedPool;
 				{
 					prevForzaGen = currForzaGen;
 					
-					graphs.repaint();
+//					graphs.repaint();
 				}
 				
 				if (prevSelectedThrow != currSelectedThrow)
 				{
 					prevSelectedThrow = currSelectedThrow;
 					
-					graphs.repaint();
+//					graphs.repaint();
 				}
-//				graphs.repaint();
+				graphs.repaint();
 			}
 			
 			if (tabbedPanel.getSelectedIndex() == 1 && !simulation.getStart() && !graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString().equals(prevSelectedChart))

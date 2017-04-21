@@ -257,8 +257,8 @@ public class Graphs extends JPanel implements ActionListener
 			 remove(fitnessChart);
 			 remove(forzaChart);
 	    	 add(errorChart, gc);
-	    	 add(fitnessChart, gc);
-	       	 add(forzaChart, gc);
+//	    	 add(fitnessChart, gc);
+//	       	 add(forzaChart, gc);
 			 error = true;
 			 fitness = false;
 			 forza = false;
@@ -280,8 +280,8 @@ public class Graphs extends JPanel implements ActionListener
 			 remove(fitnessChart);
 			 remove(forzaChart);
 			 add(fitnessChart, gc);
-		     add(errorChart, gc);
-		     add(forzaChart, gc);
+//		     add(errorChart, gc);
+//		     add(forzaChart, gc);
 			 fitness = true;
 			 error = false;
 			 forza = false;
@@ -302,8 +302,8 @@ public class Graphs extends JPanel implements ActionListener
 			 remove(fitnessChart);
 			 remove(forzaChart);
 	    	 add(forzaChart, gc);
-	    	 add(errorChart, gc);
-	    	 add(fitnessChart, gc);
+//	    	 add(errorChart, gc);
+//	    	 add(fitnessChart, gc);
 			 fitness = false;
 			 error = false;
 			 forza = true;

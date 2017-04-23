@@ -1,7 +1,8 @@
-/jGraph/
-/jNeatCommon/
-/jneat/
-/log/
-/myGui/
-/newGui/
-/testcase/
+/jGraph/*
+/jNeatCommon/*
+/jneat/*
+/log/*
+/myGui/*
+/newGui/*
+/testcase/*
+/gui/*

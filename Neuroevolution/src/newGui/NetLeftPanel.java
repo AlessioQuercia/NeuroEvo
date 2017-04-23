@@ -91,7 +91,7 @@ public class NetLeftPanel extends JPanel
 				"\n" + "Lista input:  " + "\n" + 
 				"- id_1 = x_target" + "\n" +
 				"- id_2 = y_target" + "\n" +
-				"- id_3 = y_target" + "\n" +
+				"- id_3 = velocità" + "\n" +
 				"\n" + "Lista output:  " + "\n" + 
 				"- id_9 = angolo" + "\n" +
 				"- id_10 = forza" + "\n" +

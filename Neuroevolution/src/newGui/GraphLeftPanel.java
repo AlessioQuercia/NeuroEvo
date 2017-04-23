@@ -162,8 +162,8 @@ public class GraphLeftPanel extends JPanel
 		return generationLabel;
 	}
 	
-    public ForzaOptionsPanel getForzaOptionsPanel()
-    {
+	public ForzaOptionsPanel getForzaOptionsPanel()
+	{
 		return forzaOptionsPanel;
 	}
 

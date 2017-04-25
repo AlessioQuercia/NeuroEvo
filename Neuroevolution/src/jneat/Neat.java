@@ -2,14 +2,15 @@
 
    package jneat;
 
-   import java.lang.reflect.*;
+   import java.io.Serializable;
+import java.lang.reflect.*;
    import java.util.*;
    import gui.*;
    import jNeatCommon.*;
 
 
 /** Is a superclass for definition of all parameters , threshold and others values. */
-	public class Neat 
+	public class Neat implements Serializable
 	{
    /** Probability  of mutating a single trait param */
 	  public static double p_trait_param_mut_prob;

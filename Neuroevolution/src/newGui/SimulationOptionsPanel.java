@@ -27,8 +27,11 @@ public class SimulationOptionsPanel extends JPanel
 	private JComboBox throwList;
 
 	private JButton startBtn;
+	private JButton loadBtn;
 	private JButton autodrawBtn;
 	private JButton showBestBtn;
+	
+	GridBagConstraints gc;
 
 	public SimulationOptionsPanel(JFrame frame) 
 	{
@@ -89,7 +92,9 @@ public class SimulationOptionsPanel extends JPanel
 		
 		startBtn = new JButton("Start");
 		
-		GridBagConstraints gc = new GridBagConstraints();
+		loadBtn = new JButton("Load");
+		
+		gc = new GridBagConstraints();
 		
 		////// First column ////////
 		gc.anchor = GridBagConstraints.LINE_END;
@@ -127,6 +132,11 @@ public class SimulationOptionsPanel extends JPanel
 		gc.gridx = 1;
 		gc.gridy = 2;
 		add(autodrawBtn, gc);
+		
+		gc.anchor = GridBagConstraints.LINE_START;
+		gc.gridx = 0;
+		gc.gridy = 3;
+		add(loadBtn, gc);
 		
 		gc.anchor = GridBagConstraints.LINE_START;
 		gc.gridx = 1;
@@ -176,5 +186,15 @@ public class SimulationOptionsPanel extends JPanel
 	public JButton getShowBestBtn()
 	{
 		return showBestBtn;
+	}
+
+	public JButton getLoadBtn() 
+	{
+		return loadBtn;
+	}
+
+	public GridBagConstraints getGC() 
+	{
+		return gc;
 	}
 }

@@ -34,6 +34,8 @@ import javax.swing.text.Document;
 
 import org.joml.Vector2d;
 
+import com.sun.tools.doclint.Env;
+
 import gui.evo_fit;
 import gui.evo_in;
 import gui.evo_out;
@@ -89,9 +91,11 @@ private boolean debug;
 
 private chartXY mappa;
 
-private ArrayList<Organism> winners;
+static ArrayList<Organism> winners;
 
 private ExecutorService fixedPool;
+
+private boolean done;
 
 	  
 	public MainPanel(JFrame f) 
@@ -99,6 +103,8 @@ private ExecutorService fixedPool;
 		frame = f;	       
 		
 		debug = false;
+		
+		done = false;
 		
 		winners = new ArrayList<Organism> ();
 		
@@ -150,6 +156,32 @@ private ExecutorService fixedPool;
         
 		// Add behaviour
 		//TODO
+		try
+		{
+			// data input
+			   Class_inp = evo_in.class; //Class.forName(EnvConstant.DATA_INP);
+			   ObjClass_inp = Class_inp.newInstance();
+			   Method_inp = Class_inp.getMethod("getNumUnit", null);
+			   ObjRet_inp = Method_inp.invoke(ObjClass_inp, null);
+			   EnvConstant.NR_UNIT_INPUT = Integer.parseInt(ObjRet_inp.toString());
+			
+			// number of samples
+			   Method_inp = Class_inp.getMethod("getNumSamples", null);
+			   ObjRet_inp = Method_inp.invoke(ObjClass_inp, null);
+			   EnvConstant.NUMBER_OF_SAMPLES = Integer.parseInt(ObjRet_inp.toString());
+			   
+			// data output
+			   Class_tgt = evo_out.class; //Class.forName(EnvConstant.DATA_OUT);
+			   ObjClass_tgt = Class_tgt.newInstance();
+			   Method_tgt = Class_tgt.getMethod("getNumUnit", null);
+			   ObjRet_tgt = Method_tgt.invoke(ObjClass_tgt, null);
+			   EnvConstant.NR_UNIT_OUTPUT = Integer.parseInt(ObjRet_tgt.toString());
+		} 
+		catch (Exception e) 
+		
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void start()
@@ -189,12 +221,44 @@ private ExecutorService fixedPool;
 //			graphs.getFitnessChart().repaint();
 //			graphs.getErrorChart().repaint();
 			
-			if (simulation.getStart() && simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
+			if (simulation.getLoad() && !done)
+			{
+				for (int i=1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
+					simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem(i);
+				simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
+				simulation.getLeftPanel().getOptionsPanel().getThrowList().setSelectedItem("Best");
+				
+				for (int i=1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
+					graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem(i);
+				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem("Best");
+				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().setSelectedItem("Best");
+				
+				done = true;
+			}
+			
+			if (simulation.isLoading())
+			{
+				simulation.getRightPanel().setDraw(true);
+				graphs.updateLoadedOrganismChart(winners.get(winners.size()-1));
+				net.updateNetPanel(winners.get(winners.size()-1));
+				
+				graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().addItem(winners.get(winners.size()-1).getGeneration());
+				graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().setSelectedItem(winners.get(winners.size()-1).getGeneration());
+				
+				simulation.setLoading(false);
+			}
+			
+			if ((simulation.getStart() || simulation.getLoad()) && simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
 			{
 				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
 				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
 				
 				ArrayList<Double> info = simulation.readNet(generazione, lancio);
+				
+				if (simulation.getLoad())
+				{
+					graphs.updateLoadedOrganismChart(winners.get(simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex()));
+				}
 				
 				if (x_tgt != info.get(MyConstants.X_TARGET_INDEX) || y_tgt != info.get(MyConstants.Y_TARGET_INDEX))
 				{					
@@ -274,7 +338,7 @@ private ExecutorService fixedPool;
 				simulation.getRightPanel().repaint();
 			}
 			
-			if (tabbedPanel.getSelectedIndex() == 1 && simulation.getStart())
+			if (tabbedPanel.getSelectedIndex() == 1 && (simulation.getStart() || simulation.getLoad()))
 			{	
 				currForzaGen = graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism selectedOrg = winners.get(currForzaGen);
@@ -300,14 +364,14 @@ private ExecutorService fixedPool;
 				graphs.repaint();
 			}
 			
-			if (tabbedPanel.getSelectedIndex() == 1 && !simulation.getStart() && !graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString().equals(prevSelectedChart))
+			if (tabbedPanel.getSelectedIndex() == 1 && (!simulation.getStart() && !simulation.getLoad()) && !graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString().equals(prevSelectedChart))
 			{
 				prevSelectedChart = graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString();
 				
 				graphs.repaint();
 			}
 			
-			if (tabbedPanel.getSelectedIndex() == 2 && simulation.getStart() && winners.size() > 0)
+			if (tabbedPanel.getSelectedIndex() == 2 && (simulation.getStart() || simulation.getLoad()) && winners.size() > 0)
 			{
 				currNetGen = net.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism selectedOrg = winners.get(currNetGen);
@@ -441,7 +505,7 @@ private ExecutorService fixedPool;
 				simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
 				simulation.getLeftPanel().getOptionsPanel().getThrowList().setSelectedItem("Best");
 				
-			   ///RIEMPE LISTA LANCI IN SIMULATION
+			   ///RIEMPE LISTA LANCI NEL GRAFICO DELLA FORZA
 				for (int i = 1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
 					graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem(i);
 				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem("Best");
@@ -679,7 +743,9 @@ private ExecutorService fixedPool;
 //			System.out.println("FITNESS PIU' ALTA: " + pop.getHighest_fitness());
 //		    System.out.println("FITNESS MEDIA: " + pop.getMean_fitness());
 		    
-			graphs.updateGraphPanel(pop);
+			graphs.updateGraphPanel((Organism)EnvConstant.CURR_ORGANISM_CHAMPION, pop);
+			
+//			graphs.updateGraphPanel(pop);
 			
 //			System.out.println(pop.getHighest_fitness());
 //			System.out.println(pop.getFinal_gen());
@@ -717,6 +783,7 @@ private ExecutorService fixedPool;
 			
 //				  drawGraph((Organism) EnvConstant.CURR_ORGANISM_CHAMPION, " ", mappa_graph_curr); 
 				   Organism o = (Organism) EnvConstant.CURR_ORGANISM_CHAMPION;
+				   
 //				   System.out.println(o.getGeneration());
 
 				   if (!debug && o.getGeneration() == 1) 
@@ -727,6 +794,7 @@ private ExecutorService fixedPool;
 				   
 				   winners.add(o);
 				   simulation.storeBestNet(o);
+				   simulation.serializeOnFile(o);
 				   simulation.updateSimulationPanel(o);
 				   graphs.updateForzaOptionsPanel(o);
 				   net.updateNetPanel(o);

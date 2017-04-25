@@ -420,5 +420,10 @@ public class Chart extends JPanel
 		for (ArrayList<Vector2d> arr: lines)
 			arr.clear();
 	}
+
+	public void setLines(ArrayList<ArrayList<Vector2d>> lines)
+	{
+		this.lines = lines;
+	}
 	
 }

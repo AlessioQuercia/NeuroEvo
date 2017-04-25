@@ -704,7 +704,7 @@
 		 {
 			_specie = ((Species) itr_specie.next());
 //			System.out.println(_specie.getExpected_offspring());
-			if (_specie.getExpected_offspring() > 4) 	//originale 5
+			if (_specie.getExpected_offspring() > 5) 	//originale 5
 			{
 				clone = true;
 				total_cloned_fitness += _specie.getMax_fitness();

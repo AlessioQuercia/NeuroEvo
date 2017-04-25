@@ -2,6 +2,7 @@ package newGui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.TextArea;
@@ -10,9 +11,13 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -29,6 +34,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
 
 import gui.evo_fit;
 import gui.evo_in;
@@ -56,9 +62,13 @@ public class Simulation extends JPanel implements ActionListener
 	 String mask6d;
 	 DecimalFormat fmt6d;
 
-private boolean start;
-
-private boolean autodraw;
+	private boolean start;
+	
+	private boolean load;
+	
+	private boolean loading;
+	
+	private boolean autodraw;
 	
 	public Simulation(JFrame frame, MainPanel mainPanel) 
 	{
@@ -89,6 +99,7 @@ private boolean autodraw;
     	leftPanel.getOptionsPanel().getStartBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
+    	leftPanel.getOptionsPanel().getLoadBtn().addActionListener(this);
     	
     	rightPanel = new ThrowPanel(frame);
     	
@@ -248,6 +259,8 @@ private boolean autodraw;
 				 EnvConstant.FORCE_RESTART = false;
 				 mainPanel.startProcessAsync();
 				 
+				 getLeftPanel().getOptionsPanel().remove(getLeftPanel().getOptionsPanel().getLoadBtn());
+				 
 				 getLeftPanel().getOptionsPanel().getStartBtn().setText("Stop");
 			 }
 			 
@@ -261,7 +274,41 @@ private boolean autodraw;
 //				 start = false;
 				 mainPanel.stopProcessAsync();
 				 
+				 getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
+				 getLeftPanel().getOptionsPanel().getGC().gridx = 0;
+				 getLeftPanel().getOptionsPanel().getGC().gridy = 3;
+				 getLeftPanel().getOptionsPanel().add(getLeftPanel().getOptionsPanel().getLoadBtn(), getLeftPanel().getOptionsPanel().getGC());
+				 
 				 getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
+			 }
+			 
+			 else if (p.getActionCommand().equals("Load"))
+			 {
+				 boolean temp = start;
+				 start = false;
+				 load = false;
+				 FileDialog fd = new FileDialog(frame, "load file parameter", FileDialog.LOAD);
+				 fd.setVisible(true);
+			 
+				 String tmp1 = fd.getDirectory();
+				 String tmp2 = fd.getFile();
+			 
+				 if (tmp1 != null && tmp2 != null) 
+				 {
+					 String name = tmp1 + tmp2;
+					 boolean rc = readSerializedFile(name);
+				
+					 if (rc)
+					 {
+						 System.out.println("file letto");
+						 
+						 load = true;
+						 loading = true;
+						 start = temp;
+					 }
+					 else
+						 System.out.println("error reading file " + name);
+				 }
 			 }
 			 
 			 else if (p.getActionCommand().equals("Auto-draw: OFF")) 
@@ -293,6 +340,66 @@ private boolean autodraw;
 			 } 
 		}
 		
+		public boolean serializeOnFile(Organism o)
+		{
+			boolean success = false;
+			FileOutputStream fileOutputStream = null;
+			ObjectOutputStream objectOutputStream = null;
+			
+			try 
+			{
+				fileOutputStream = new FileOutputStream(MyConstants.RESULTS_DIR + "prova_" + o.getGeneration());
+				objectOutputStream = new ObjectOutputStream(fileOutputStream);
+				objectOutputStream.writeObject(o);
+				objectOutputStream.close();
+				fileOutputStream.close();
+//				System.out.println("Oggetto correttamente salvato su file.");
+				success = true;
+			} 
+			catch (IOException ex) 
+			{
+				ex.printStackTrace();
+			}
+			
+			return success;
+		}
+		
+		public boolean readSerializedFile(String name) 
+		{
+			boolean success = false;
+			FileInputStream fileInputStream = null;
+			ObjectInputStream objectInputStream = null;
+			Organism o = null;
+			
+			try 
+			{
+				fileInputStream = new FileInputStream(name);
+				objectInputStream = new ObjectInputStream(fileInputStream);
+				o = (Organism) objectInputStream.readObject();
+				objectInputStream.close();
+				fileInputStream.close();
+				
+				getLeftPanel().getOptionsPanel().getGenerationList().addItem(o.getGeneration());
+				getLeftPanel().getOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());
+				
+				MainPanel.winners.add(o);
+				
+				success = true;
+			} 
+			catch (IOException ex)
+			{
+				ex.printStackTrace();
+			} 
+			catch (ClassNotFoundException ex) 
+			{
+				ex.printStackTrace();
+			}
+			
+//			System.out.println(o.getGeneration());
+			
+			return success;
+		}
+
 		public boolean storeBestNet(Organism o)
 		{
 			boolean success = false;
@@ -520,9 +627,28 @@ private boolean autodraw;
 		{
 			return start;
 		}
+
+		public boolean getLoad() 
+		{
+			return load;
+		}
 		
 		public boolean getAutodraw()
 		{
 			return autodraw;
+		}
+
+		public void setLoad(boolean b)
+		{
+			load = b;
+		}
+
+		public boolean isLoading() {
+			return loading;
+		}
+
+		public void setLoading(boolean loading)
+		{
+			this.loading = loading;
 		}
 }

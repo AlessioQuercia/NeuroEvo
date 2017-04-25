@@ -65,14 +65,14 @@ public class Graphs extends JPanel implements ActionListener
     	leftPanel.getOptionsPanel().getGridButton().addActionListener(this);
     	leftPanel.getForzaOptionsPanel().getAutodrawBtn().addActionListener(this);
     	
-		fitnessChart = new Chart(f, 200, 400000, "Generation", "Fitness", 10, 5);
+		fitnessChart = new Chart(f, 500, 400000, "Generation", "Fitness", 10, 5);
 		fitnessChart.addLine("Mean fitness", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA
 		fitnessChart.addLine("Mean cloned fitness", Color.GREEN);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA DEI CLONATI
 		fitnessChart.addLine("Highest fitness", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS PIU' ALTA
 		fitnessChart.setGrid(true);
 		fitnessChart.setBorder(BorderFactory.createTitledBorder("Fitness chart"));
 		
-		errorChart = new Chart(f, 200, 300, "Generation", "Error", 10, 10);
+		errorChart = new Chart(f, 500, 300, "Generation", "Error", 10, 10);
 //		errorChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
 		errorChart.addLine("Lowest error", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		errorChart.setGrid(true);
@@ -159,7 +159,7 @@ public class Graphs extends JPanel implements ActionListener
 		return errorChart;
 	}
 
-	public void updateGraphPanel(Population pop)
+	public void updateGraphPanel(Organism o, Population pop)
 	{
 		double highest_fitness = pop.getHighest_fitness();
 		double mean_fitness = pop.getMean_fitness();
@@ -177,13 +177,25 @@ public class Graphs extends JPanel implements ActionListener
 		
 //		errorChart.addVector(0, new Vector2d(generation, mean_error));	//TROPPO ALTO
 		errorChart.addVector(0, new Vector2d(generation, lowest_error));
+		
+		o.setFitnessLinesChart(fitnessChart.getLines());
+		o.setErrorLinesChart(errorChart.getLines());
 	}
 
 	public void updateForzaChart(Organism o, int currSelectedThrow)
 	{
-		forzaChart.reset();
+		if (forzaChart.getLines().size() > 0) forzaChart.reset();
 		for (int i=0; i<o.getForzaMap().get(currSelectedThrow).size(); i++)
 			forzaChart.addVector(0, new Vector2d(i, o.getForzaMap().get(currSelectedThrow).get(i)));
+		
+//		o.setForzaLinesChart(forzaChart.getLines());
+	}
+	
+	public void updateLoadedOrganismChart(Organism o)
+	{
+		fitnessChart.setLines(o.getFitnessLinesChart());
+		errorChart.setLines(o.getErrorLinesChart());
+//		forzaChart.setLines(o.getForzaLinesChart());
 	}
 	
 	public Chart getForzaChart() {

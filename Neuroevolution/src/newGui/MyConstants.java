@@ -52,4 +52,9 @@ public class MyConstants
 	public static int ASSE_X = 150;
 	public static int ASSE_Y = 150;	
 	public static int TAIL_LENGTH = 15;
+	
+	////COSTANTI LOAD INPUT
+	public static double LOADED_X;
+	public static double LOADED_Y;
+	public static boolean LOADED_INPUTS = false;
 }

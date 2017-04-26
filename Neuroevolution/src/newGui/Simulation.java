@@ -100,6 +100,7 @@ public class Simulation extends JPanel implements ActionListener
     	leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getLoadBtn().addActionListener(this);
+    	leftPanel.getInputPanel().getLoadInputBtn().addActionListener(this);
     	
     	rightPanel = new ThrowPanel(frame);
     	
@@ -261,6 +262,8 @@ public class Simulation extends JPanel implements ActionListener
 				 
 				 getLeftPanel().getOptionsPanel().remove(getLeftPanel().getOptionsPanel().getLoadBtn());
 				 
+				 getLeftPanel().setNormalLayout();
+				 
 				 getLeftPanel().getOptionsPanel().getStartBtn().setText("Stop");
 			 }
 			 
@@ -284,7 +287,8 @@ public class Simulation extends JPanel implements ActionListener
 			 
 			 else if (p.getActionCommand().equals("Load"))
 			 {
-				 boolean temp = start;
+				 boolean temp1 = start;
+				 boolean temp2 = load;
 				 start = false;
 				 load = false;
 				 FileDialog fd = new FileDialog(frame, "load file parameter", FileDialog.LOAD);
@@ -304,11 +308,34 @@ public class Simulation extends JPanel implements ActionListener
 						 
 						 load = true;
 						 loading = true;
-						 start = temp;
+//						 start = temp1;
 					 }
 					 else
 						 System.out.println("error reading file " + name);
+					 
 				 }
+				 else
+				 {
+					 start = temp1;
+					 load = temp2;
+				 }
+
+			 }
+			 
+			 else if (p.getActionCommand().equals("Load inputs"))
+			 {
+				 double x_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getxArea().getText());
+				 double y_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getyArea().getText());
+				 
+				 if ((x_tgt >= 20 && x_tgt <= 100) && (y_tgt >= 20 && y_tgt <= 100))
+				 {
+					 MyConstants.LOADED_X = x_tgt;
+					 MyConstants.LOADED_Y = y_tgt;
+					 MyConstants.LOADED_INPUTS = true;
+				 }
+				 else
+					 System.out.println("I target devono essere entrambi valori tra 20 e 100"); 
+				 
 			 }
 			 
 			 else if (p.getActionCommand().equals("Auto-draw: OFF")) 

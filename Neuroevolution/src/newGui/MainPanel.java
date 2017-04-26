@@ -36,6 +36,7 @@ import org.joml.Vector2d;
 
 import com.sun.tools.doclint.Env;
 
+import gui.OrganismRunnableLoaded;
 import gui.evo_fit;
 import gui.evo_in;
 import gui.evo_out;
@@ -221,8 +222,38 @@ private boolean done;
 //			graphs.getFitnessChart().repaint();
 //			graphs.getErrorChart().repaint();
 			
+			if (MyConstants.LOADED_INPUTS)
+			{
+				Organism organism = winners.get(
+						simulation.getLeftPanel().getOptionsPanel().
+						getGenerationList().getSelectedIndex());
+				
+				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
+				if (lancio.equals("Best"))
+					lancio = ""+(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue()+1);
+				
+				int selectedThrow = Integer.parseInt(lancio)-1;
+				
+				fixedPool = Executors.newFixedThreadPool(1);	//// VERSIONE PARALLELA
+				
+				fixedPool.submit(new OrganismRunnableLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
+				
+				fixedPool.shutdown();							//// VERSIONE PARALLELA
+				try {
+					fixedPool.awaitTermination(1, TimeUnit.DAYS);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	//// VERSIONE PARALLELA
+				
+				MyConstants.LOADED_INPUTS = false;
+			}
+			
 			if (simulation.getLoad() && !done)
 			{
+				simulation.getLeftPanel().getOptionsPanel().getThrowList().removeAllItems();
+				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().removeAllItems();
+				
 				for (int i=1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
 					simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem(i);
 				simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
@@ -232,6 +263,8 @@ private boolean done;
 					graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem(i);
 				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem("Best");
 				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().setSelectedItem("Best");
+				
+				simulation.getLeftPanel().setLoadLayout();
 				
 				done = true;
 			}
@@ -250,23 +283,34 @@ private boolean done;
 			
 			if ((simulation.getStart() || simulation.getLoad()) && simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
 			{
-				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
-				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
+//				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
+//				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
+//				
+//				ArrayList<Double> info = simulation.readNet(generazione, lancio);
 				
-				ArrayList<Double> info = simulation.readNet(generazione, lancio);
+				int gen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
+				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
+
+				Organism selectedOrg = winners.get(gen);
+				
+				if (lancio.equals("Best"))
+					lancio = ""+ (selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue()+1);
+				
+				int selectedThrow = Integer.parseInt(lancio)-1;
+				ArrayList<Double> infoLancio = selectedOrg.getMap().get(selectedThrow);
 				
 				if (simulation.getLoad())
 				{
 					graphs.updateLoadedOrganismChart(winners.get(simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex()));
 				}
 				
-				if (x_tgt != info.get(MyConstants.X_TARGET_INDEX) || y_tgt != info.get(MyConstants.Y_TARGET_INDEX))
+				if (x_tgt != infoLancio.get(MyConstants.X_TARGET_INDEX) || y_tgt != infoLancio.get(MyConstants.Y_TARGET_INDEX))
 				{					
-					simulation.getLeftPanel().updateInfoRete(info);
-					simulation.getLeftPanel().updateInfoLancio(info);
+					simulation.getLeftPanel().updateInfoRete(selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
+					simulation.getLeftPanel().updateInfoLancio(infoLancio);
 					
-					x_tgt = info.get(MyConstants.X_TARGET_INDEX);
-					y_tgt = info.get(MyConstants.Y_TARGET_INDEX);
+					x_tgt = infoLancio.get(MyConstants.X_TARGET_INDEX);
+					y_tgt = infoLancio.get(MyConstants.Y_TARGET_INDEX);
 					simulation.getRightPanel().resetTail();
 				}
 				
@@ -286,8 +330,8 @@ private boolean done;
 				simulation.getRightPanel().setA(bestThrow.get(0));
 				simulation.getRightPanel().setV(bestThrow.get(1));
 				
-				a = info.get(MyConstants.ANGOLO_INDEX);
-				v = info.get(MyConstants.VELOCITA_INDEX);
+				a = infoLancio.get(MyConstants.ANGOLO_INDEX);
+				v = infoLancio.get(MyConstants.VELOCITA_INDEX);
 				
 	            double y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
 	            
@@ -422,6 +466,8 @@ private boolean done;
 					 net.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();
 					 winners.clear();
 					 debug = false;
+					 simulation.setLoad(false);
+					 done = false;
 					
 				  EnvRoutine.getSession();
 			   

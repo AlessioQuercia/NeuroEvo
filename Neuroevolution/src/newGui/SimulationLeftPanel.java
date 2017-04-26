@@ -1,5 +1,6 @@
 package newGui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,25 +11,28 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import jNeatCommon.EnvConstant;
+import jneat.Organism;
 import myGui.myGuiConstants;
 
 public class SimulationLeftPanel extends JPanel
 {		
 	JFrame frame;
 	
-	SimulationOptionsPanel optionsPanel;
-	InputPanel inputPanel;
-	NetDetailsPanel netPanel;
-	ThrowDetailsPanel throwPanel;
-	JLabel generationLabel;
+	private SimulationOptionsPanel optionsPanel;
+	private InputPanel inputPanel;
+	private NetDetailsPanel netPanel;
+	private ThrowDetailsPanel throwPanel;
+	private JLabel generationLabel;
 
 	//	JTextPane infoRete;
 //	JTextPane infoLancio;
@@ -38,6 +42,10 @@ public class SimulationLeftPanel extends JPanel
     SimpleAttributeSet attr;
 	String mask6d;
 	DecimalFormat fmt6d;
+
+	private JSplitPane splitPanel;
+	
+	private GridBagConstraints gc;
     
 	public SimulationLeftPanel(JFrame frame) 
 	{
@@ -147,9 +155,9 @@ public class SimulationLeftPanel extends JPanel
 //				"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX),
 //			};
 		String info_rete =
-			"errore totale:  " + array.get(MyConstants.ERRORE_TOTALE_INDEX) + " m" + "\n" +
-			"fitness totale:  " + array.get(MyConstants.FITNESS_TOTALE_INDEX) + "\n" +
-			"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX);
+			"errore totale:  " + fmt6d.format(array.get(MyConstants.ERRORE_TOTALE_INDEX)) + " m" + "\n" +
+			"fitness totale:  " + fmt6d.format(array.get(MyConstants.FITNESS_TOTALE_INDEX));
+//			"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX);
 		
 		netPanel.getInfoRete().setText(info_rete);
 		
@@ -192,16 +200,16 @@ public class SimulationLeftPanel extends JPanel
 		
 		
 		String info_lancio = 
-				"x_target:  " + array.get(MyConstants.X_TARGET_INDEX) + " m" + "\n" +
-				"y_target:  " + array.get(MyConstants.Y_TARGET_INDEX) + " m" + "\n" +
-				"y_lancio:  " + array.get(MyConstants.Y_LANCIO_INDEX) + " m" + "\n" +
-				"angolo:  " + Math.toDegrees(array.get(MyConstants.ANGOLO_INDEX)) + "°" + "\n" +
-				"velocità:  " + array.get(MyConstants.VELOCITA_INDEX) + " m/s" + "\n" +
-				"forza:  " + array.get(MyConstants.FORZA_INDEX) + " N" + "\n" +
-				"tempo:  " + array.get(MyConstants.TEMPO_INDEX) + " s" + "\n" +	
-				"accelerazione:  " + array.get(MyConstants.ACCELERAZIONE_INDEX) + "\n" +
-				"massa:  " + array.get(MyConstants.MASSA_INDEX) + " kg" + "\n" +
-				"errore:  " + array.get(MyConstants.ERRORE_INDEX) + " m";
+				"x_target:  " + fmt6d.format(array.get(MyConstants.X_TARGET_INDEX)) + " m" + "\n" +
+				"y_target:  " + fmt6d.format(array.get(MyConstants.Y_TARGET_INDEX)) + " m" + "\n" +
+				"y_lancio:  " + fmt6d.format(array.get(MyConstants.Y_LANCIO_INDEX)) + " m" + "\n" +
+				"angolo:  " + fmt6d.format(Math.toDegrees(array.get(MyConstants.ANGOLO_INDEX))) + "°" + "\n" +
+				"velocità:  " + fmt6d.format(array.get(MyConstants.VELOCITA_INDEX)) + " m/s" + "\n" +
+//				"forza:  " + array.get(MyConstants.FORZA_INDEX) + " N" + "\n" +
+				"tempo:  " + fmt6d.format(array.get(MyConstants.TEMPO_INDEX)) + " s" + "\n" +	
+//				"accelerazione:  " + array.get(MyConstants.ACCELERAZIONE_INDEX) + "\n" +
+				"massa:  " + fmt6d.format(array.get(MyConstants.MASSA_INDEX)) + " kg" + "\n" +
+				"errore:  " + fmt6d.format(array.get(MyConstants.ERRORE_INDEX)) + " m";
 		
 		throwPanel.getInfoLancio().setText(info_lancio);
 		
@@ -220,10 +228,39 @@ public class SimulationLeftPanel extends JPanel
 //		return infoRete;
 //	}
 	
+	public void updateInfoRete(Organism o)
+	{
+		ArrayList<Double> array = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES);
+		String info_rete =
+				"errore totale:  " + array.get(MyConstants.ERRORE_TOTALE_INDEX) + " m" + "\n" +
+				"fitness totale:  " + array.get(MyConstants.FITNESS_TOTALE_INDEX);
+//				"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX);
+			
+			netPanel.getInfoRete().setText(info_rete);
+	}
+	
+	public void updateInfoLancio(Organism o, int lancio)
+	{
+		ArrayList<Double> array = o.getMap().get(lancio);
+		String info_lancio = 
+				"x_target:  " + array.get(MyConstants.X_TARGET_INDEX) + " m" + "\n" +
+				"y_target:  " + array.get(MyConstants.Y_TARGET_INDEX) + " m" + "\n" +
+				"y_lancio:  " + array.get(MyConstants.Y_LANCIO_INDEX) + " m" + "\n" +
+				"angolo:  " + Math.toDegrees(array.get(MyConstants.ANGOLO_INDEX)) + "°" + "\n" +
+				"velocità:  " + array.get(MyConstants.VELOCITA_INDEX) + " m/s" + "\n" +
+//				"forza:  " + array.get(MyConstants.FORZA_INDEX) + " N" + "\n" +
+				"tempo:  " + array.get(MyConstants.TEMPO_INDEX) + " s" + "\n" +	
+//				"accelerazione:  " + array.get(MyConstants.ACCELERAZIONE_INDEX) + "\n" +
+				"massa:  " + array.get(MyConstants.MASSA_INDEX) + " kg" + "\n" +
+				"errore:  " + array.get(MyConstants.ERRORE_INDEX) + " m";
+		
+		throwPanel.getInfoLancio().setText(info_lancio);
+	}
+	
 	public void init()
 	{
 		Dimension size = getPreferredSize();
-		mask6d = "  0.0000000";
+		mask6d = "  0.000000";
 		fmt6d = new DecimalFormat(mask6d);
 		
 		size.width = MyConstants.OPTIONS_WIDTH;
@@ -231,7 +268,7 @@ public class SimulationLeftPanel extends JPanel
 		
     	setLayout(new GridBagLayout());
     	
-    	GridBagConstraints gc = new GridBagConstraints();
+    	gc = new GridBagConstraints();
 		
 		optionsPanel = new SimulationOptionsPanel(frame);
 		inputPanel = new InputPanel(frame);
@@ -273,7 +310,27 @@ public class SimulationLeftPanel extends JPanel
 //		getInfoLancio();
 //		for (String s : getInfoLancio())
 //			infoLancio.append(s);
+	
+	    UIManager.put("SplitPaneDivider.border", BorderFactory.createEmptyBorder()); 
+	    
+		splitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPanel.setTopComponent(throwPanel);
+		splitPanel.setBottomComponent(inputPanel);
+		splitPanel.setOneTouchExpandable(true);
+		splitPanel.setContinuousLayout(true);
 		
+		throwPanel.setMinimumSize(new Dimension(MyConstants.OPTIONS_WIDTH, 15));
+		inputPanel.setMinimumSize(new Dimension(MyConstants.OPTIONS_WIDTH, 100));
+		
+		splitPanel.setDividerLocation(optionsPanel.getHeight()/2);
+		splitPanel.setDividerSize(10);
+		
+		splitPanel.setPreferredSize(new Dimension(MyConstants.OPTIONS_WIDTH, throwPanel.getHeight()));
+	    
+		splitPanel.setBorder(
+			BorderFactory.createCompoundBorder(
+			BorderFactory.createEmptyBorder(), 
+			BorderFactory.createEmptyBorder())); 
 		
 //		gc.anchor = GridBagConstraints.LINE_START;
 		gc.fill = GridBagConstraints.BOTH;
@@ -294,16 +351,15 @@ public class SimulationLeftPanel extends JPanel
 		gc.weighty = 10;
 		
 		gc.gridx = 0;
-		gc.gridy = 2;		
+		gc.gridy = 2;	
 		add(throwPanel, gc);
+//		add(splitPanel, gc);
 		
 		gc.weighty = 0.01;
 		
 		gc.gridx = 0;
 		gc.gridy = 3;		
 		add(generationLabel, gc);
-		
-		
 	}
 	
 	public JLabel getGenerationLabel() 
@@ -314,4 +370,66 @@ public class SimulationLeftPanel extends JPanel
 //	{
 //		return infoRete;
 //	}
+
+	public JSplitPane getSplitPanel() 
+	{
+		return splitPanel;
+	}
+	
+	public GridBagConstraints getGC()
+	{
+		return gc;
+	}
+
+	public ThrowDetailsPanel getThrowPanel()
+	{
+		return throwPanel;
+	}
+
+	public InputPanel getInputPanel() 
+	{
+		return inputPanel;
+	}
+	
+	public void setNormalLayout()
+	{
+		remove(splitPanel);
+		
+		gc.weighty = 10;
+		
+		gc.gridx = 0;
+		gc.gridy = 2;	
+		add(throwPanel, gc);
+	}
+	
+	public void setLoadLayout()
+	{
+		remove(throwPanel);
+		
+		splitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPanel.setTopComponent(throwPanel);
+		splitPanel.setBottomComponent(inputPanel);
+		splitPanel.setOneTouchExpandable(true);
+		splitPanel.setContinuousLayout(true);
+		
+		throwPanel.setMinimumSize(new Dimension(MyConstants.OPTIONS_WIDTH, 15));
+		inputPanel.setMinimumSize(new Dimension(MyConstants.OPTIONS_WIDTH, 100));
+		
+		splitPanel.setDividerLocation(optionsPanel.getHeight()/2);
+		splitPanel.setDividerSize(10);
+		
+		splitPanel.setPreferredSize(new Dimension(MyConstants.OPTIONS_WIDTH, throwPanel.getHeight()));
+	    
+		splitPanel.setBorder(
+			BorderFactory.createCompoundBorder(
+			BorderFactory.createEmptyBorder(), 
+			BorderFactory.createEmptyBorder())); 
+		
+		
+		gc.weighty = 10;
+		
+		gc.gridx = 0;
+		gc.gridy = 2;	
+		add(splitPanel, gc);
+	}
 }

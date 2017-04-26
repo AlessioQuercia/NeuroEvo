@@ -47,6 +47,7 @@ public class evo_fit
 	     double k = 0.01;	//costante per poter calcolare la fitness anche quando l'errore è 0
 	     
 	     double prova = 0;
+	     double throwFit = 0;
 	     
 	     //d[2] = 0.0;
 	     ArrayList<Double> arrayBest = new ArrayList<Double> ();
@@ -142,7 +143,9 @@ public class evo_fit
 
 	    	 	errsum += error;
 	    	 	
-	    	 	prova += (200 - error) * (200 - vel_error);
+	    	 	throwFit = (200 - error) * (200 - vel_error);
+	    	 	
+	    	 	prova += throwFit;
 	    	 	//TIRO MIGLIORE
 	    	 	if (error<min_error)
 	    	 	{
@@ -155,7 +158,7 @@ public class evo_fit
 	    	 		arrayBest.set(MyConstants.ANGOLO_INDEX, a);
 	    	 		arrayBest.set(MyConstants.VELOCITA_INDEX, v);
 	    	 		arrayBest.set(MyConstants.ERRORE_INDEX, min_error);
-//		    	 	arrayBest.set(MyConstants.FITNESS_INDEX, fitness);
+		    	 	arrayBest.set(MyConstants.FITNESS_INDEX, throwFit);
 		    	 	arrayBest.set(MyConstants.FORZA_INDEX, F);
 		    	 	arrayBest.set(MyConstants.TEMPO_INDEX, t);
 		    	 	arrayBest.set(MyConstants.ACCELERAZIONE_INDEX, acc);
@@ -183,7 +186,7 @@ public class evo_fit
     	 		array.set(MyConstants.ANGOLO_INDEX, a);
     	 		array.set(MyConstants.VELOCITA_INDEX, v);
     	 		array.set(MyConstants.ERRORE_INDEX, error);
-//	    	 	array.set(MyConstants.FITNESS_INDEX, fitness);
+	    	 	array.set(MyConstants.FITNESS_INDEX, throwFit);
 	    	 	array.set(MyConstants.FORZA_INDEX, F);
 	    	 	array.set(MyConstants.TEMPO_INDEX, t);
 	    	 	array.set(MyConstants.ACCELERAZIONE_INDEX, acc);

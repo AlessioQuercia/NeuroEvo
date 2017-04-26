@@ -12,6 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.NumberFormatter;
+import javax.swing.text.PlainDocument;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
@@ -45,14 +50,61 @@ public class InputPanel extends JPanel
     	xLabel = new JLabel("x_target:");
     	yLabel = new JLabel("y_target:");
     	
-    	Format format = NumberFormat.getInstance();
+//        NumberFormat format = NumberFormat.getInstance();
+//        format.setGroupingUsed(false);
+//        NumberFormatter formatter = new NumberFormatter(format);
+//        formatter.setValueClass(Integer.class);
+//        formatter.setMinimum(0);
+//        formatter.setMaximum(100);
+//        formatter.setAllowsInvalid(false);
+//        // If you want the value to be committed on each keystroke instead of focus lost
+//        formatter.setCommitsOnValidEdit(true);
     	
-    	xArea = new JFormattedTextField(format);
+    	xArea = new JFormattedTextField();
     	xArea.setEditable(true);
     	
-    	yArea = new JFormattedTextField(format);
+    	
+    	yArea = new JFormattedTextField();
     	yArea.setEditable(true);
     	
+//    	xArea.getDocument().addDocumentListener(new DocumentListener() {
+//    	    @Override
+//    	    public void insertUpdate(DocumentEvent e) {
+//    	        Runnable format = new Runnable() {
+//    	            @Override
+//    	            public void run() {
+//    	                String text = xArea.getText();
+//    	                if(!text.matches("\\d{0,3}(\\.\\d{0,5})?")){
+//    	                    xArea.setText(text.substring(0,text.length()-1));
+//    	                }
+//    	            }
+//    	        };
+//    	        SwingUtilities.invokeLater(format);
+//    	    }
+//
+//    	    @Override
+//    	    public void removeUpdate(DocumentEvent e) {
+//
+//    	    }
+//
+//    	    @Override
+//    	    public void changedUpdate(DocumentEvent e) {
+//
+//    	    }
+//    	});
+    	
+    	String pattern = "\\d{0,3}(\\.\\d{0,6})?";
+    	
+    	PlainDocument xDoc = (PlainDocument) xArea.getDocument();
+    	xDoc.setDocumentFilter(new PatternFilter(pattern));
+    	
+    	PlainDocument yDoc = (PlainDocument) xArea.getDocument();
+    	yDoc.setDocumentFilter(new PatternFilter(pattern));
+    	
+//        xArea.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+//        		new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+//        yArea.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(
+//        		new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
     	loadInputBtn = new JButton("Load inputs");
 		
 		////// First column ////////
@@ -86,5 +138,25 @@ public class InputPanel extends JPanel
 		gc.gridx = 1;
 		gc.gridy = 2;
 		add(loadInputBtn, gc);
+	}
+
+	public JLabel getxLabel() {
+		return xLabel;
+	}
+
+	public JLabel getyLabel() {
+		return yLabel;
+	}
+
+	public JFormattedTextField getxArea() {
+		return xArea;
+	}
+
+	public JFormattedTextField getyArea() {
+		return yArea;
+	}
+
+	public JButton getLoadInputBtn() {
+		return loadInputBtn;
 	}
 }

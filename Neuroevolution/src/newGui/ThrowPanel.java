@@ -259,11 +259,14 @@ public class ThrowPanel extends JPanel
 		g2d.setColor(Color.BLACK);
 		for (int i=0; i<tail.size(); i++)
 		{
-			try {
+			try 
+			{
 				tailLine.setLine(tail.get(i).x, tail.get(i).y, tail.get(i).x, tail.get(i).y);
 				g2d.draw(tailLine);
-			} catch (Exception e) {
-				System.out.println("errore");
+			} 
+			catch (Exception e) 
+			{
+				System.out.println("Errore nel disegnare la coda");
 			}
 
 		}

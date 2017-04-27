@@ -123,9 +123,16 @@ import org.joml.Vector2d;
 	private ArrayList<ArrayList<Vector2d>> errorLinesChart;
 
 	private ArrayList<ArrayList<Vector2d>> forzaLinesChart;
+
+	private Map<Integer, Vector2d> bestPoints;
 	  
 	  ///////////////////////////////////
    
+
+	public void setBestPoints(Map<Integer, Vector2d> bestPoints)
+	{
+		this.bestPoints = bestPoints;
+	}
 
 	public double getFitness() {
 		 return fitness;
@@ -382,5 +389,10 @@ public ArrayList<ArrayList<Vector2d>> getErrorLinesChart()
 public ArrayList<ArrayList<Vector2d>> getForzaLinesChart() 
 {
 	return forzaLinesChart;
+}
+
+public Map<Integer, Vector2d> getBestPoints() 
+{
+	return bestPoints;
 }
    }

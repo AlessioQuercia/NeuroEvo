@@ -21,17 +21,19 @@ public class MyConstants
 	public static int TEMPO_INDEX = 8;
 	public static int ACCELERAZIONE_INDEX = 9;
 	public static int MASSA_INDEX = 10;
+	public static int X_MIGLIORE_INDEX = 11;
+	public static int Y_MIGLIORE_INDEX = 12;
 	
 	/////INDICI DELLE INFORMAZIONI SULLA RETE
-	public static int ERRORE_TOTALE_INDEX = 11;
-	public static int FITNESS_TOTALE_INDEX = 12;
-	public static int FITNESS_VECCHIA_INDEX = 13;
-	public static int LANCIO_MIGLIORE_INDEX = 14;
-	public static int WIN_INDEX = 15;
+	public static int ERRORE_TOTALE_INDEX = 13;
+	public static int FITNESS_TOTALE_INDEX = 14;
+	public static int FITNESS_VECCHIA_INDEX = 15;
+	public static int LANCIO_MIGLIORE_INDEX = 16;
+	public static int WIN_INDEX = 17;
 	
 	/////NUMERO INDICI
-	public static int INFO_LANCIO_SIZE = 11;
-	public static int INFO_RETE_SIZE = 16;
+	public static int INFO_LANCIO_SIZE = 13;
+	public static int INFO_RETE_SIZE = 18;
 	
 	
 	/////INFORMAZIONI PER START

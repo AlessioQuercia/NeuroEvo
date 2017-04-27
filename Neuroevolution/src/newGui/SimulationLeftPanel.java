@@ -202,6 +202,8 @@ public class SimulationLeftPanel extends JPanel
 		String info_lancio = 
 				"x_target:  " + fmt6d.format(array.get(MyConstants.X_TARGET_INDEX)) + " m" + "\n" +
 				"y_target:  " + fmt6d.format(array.get(MyConstants.Y_TARGET_INDEX)) + " m" + "\n" +
+				"x_migliore:  " + fmt6d.format(array.get(MyConstants.X_MIGLIORE_INDEX)) + " m" + "\n" +
+				"y_migliore:  " + fmt6d.format(array.get(MyConstants.Y_MIGLIORE_INDEX)) + " m" + "\n" +
 				"y_lancio:  " + fmt6d.format(array.get(MyConstants.Y_LANCIO_INDEX)) + " m" + "\n" +
 				"angolo:  " + fmt6d.format(Math.toDegrees(array.get(MyConstants.ANGOLO_INDEX))) + "°" + "\n" +
 				"velocità:  " + fmt6d.format(array.get(MyConstants.VELOCITA_INDEX)) + " m/s" + "\n" +

@@ -36,7 +36,6 @@ import org.joml.Vector2d;
 
 import com.sun.tools.doclint.Env;
 
-import gui.OrganismRunnableLoaded;
 import gui.evo_fit;
 import gui.evo_in;
 import gui.evo_out;
@@ -61,7 +60,7 @@ public class MainPanel extends JPanel implements Runnable
 	private Thread mainThread;
 	private boolean isRunning;
 	
-	private Simulation simulation;
+	private SimulationPanel simulation;
 	private Graphs graphs;
 	private Net net;
 	private JTabbedPane tabbedPanel;
@@ -114,7 +113,7 @@ private boolean done;
 		start();	// LANCIA IL THREAD CHE GESITSCE LA GRAFICA
 	}
 
-	public Simulation getSimulationPanel()
+	public SimulationPanel getSimulationPanel()
 	{
 		return simulation;
 	}
@@ -132,7 +131,7 @@ private boolean done;
         
         // Create Swing component
         
-        simulation = new Simulation(frame, this);
+        simulation = new SimulationPanel(frame, this);
         
         graphs = new Graphs(frame);
         
@@ -237,7 +236,6 @@ private boolean done;
 				fixedPool = Executors.newFixedThreadPool(1);	//// VERSIONE PARALLELA
 				
 				fixedPool.submit(new OrganismRunnableLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
-				
 				fixedPool.shutdown();							//// VERSIONE PARALLELA
 				try {
 					fixedPool.awaitTermination(1, TimeUnit.DAYS);
@@ -324,7 +322,7 @@ private boolean done;
 				simGen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism o = winners.get(simGen);
 //				ArrayList<Double> bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES+1);
-				ArrayList<Double> bestThrow = evo_fit.calculateMinVel(x_tgt, y_tgt);
+				ArrayList<Double> bestThrow = evo_fit.computeMinVel(x_tgt, y_tgt);
 //				System.out.println(bestThrow.get(1));
 				
 				simulation.getRightPanel().setA(bestThrow.get(0));
@@ -372,12 +370,13 @@ private boolean done;
 //	    					simulation.getRightPanel().getTailEnd(), (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y);
 	            }
 	            
+	            x++;
+	            
 				if (x > MyConstants.ASSE_X || y > MyConstants.ASSE_Y) 
 				{
 					simulation.getRightPanel().resetTail();
 					x = 0;
 				}
-				x++;    
 				
 				simulation.getRightPanel().repaint();
 			}

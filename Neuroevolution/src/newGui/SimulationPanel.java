@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -51,7 +52,7 @@ import jneat.Population;
 import jneat.Species;
 import myGui.myGuiConstants;
 
-public class Simulation extends JPanel implements ActionListener
+public class SimulationPanel extends JPanel implements ActionListener
 {
 	private JFrame frame;
 	
@@ -70,7 +71,7 @@ public class Simulation extends JPanel implements ActionListener
 	
 	private boolean autodraw;
 	
-	public Simulation(JFrame frame, MainPanel mainPanel) 
+	public SimulationPanel(JFrame frame, MainPanel mainPanel) 
 	{
 		this.frame = frame;
 		this.mainPanel = mainPanel;
@@ -305,14 +306,13 @@ public class Simulation extends JPanel implements ActionListener
 					 if (rc)
 					 {
 						 System.out.println("file letto");
-						 
+
 						 load = true;
 						 loading = true;
 //						 start = temp1;
 					 }
 					 else
 						 System.out.println("error reading file " + name);
-					 
 				 }
 				 else
 				 {
@@ -324,8 +324,17 @@ public class Simulation extends JPanel implements ActionListener
 			 
 			 else if (p.getActionCommand().equals("Load inputs"))
 			 {
-				 double x_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getxArea().getText());
-				 double y_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getyArea().getText());
+				 String x_string = getLeftPanel().getInputPanel().getxArea().getText();
+				 String y_string = getLeftPanel().getInputPanel().getyArea().getText();
+				 
+				 double x_tgt = -1;
+				 double y_tgt = -1;
+				 
+				 if(!x_string.equals("") && !y_string.equals(""))
+				 {
+					 x_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getxArea().getText());
+					 y_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getyArea().getText());
+				 }
 				 
 				 if ((x_tgt >= 20 && x_tgt <= 100) && (y_tgt >= 20 && y_tgt <= 100))
 				 {
@@ -398,6 +407,8 @@ public class Simulation extends JPanel implements ActionListener
 			ObjectInputStream objectInputStream = null;
 			Organism o = null;
 			
+			boolean alreadyLoaded = false;
+			
 			try 
 			{
 				fileInputStream = new FileInputStream(name);
@@ -406,10 +417,23 @@ public class Simulation extends JPanel implements ActionListener
 				objectInputStream.close();
 				fileInputStream.close();
 				
-				getLeftPanel().getOptionsPanel().getGenerationList().addItem(o.getGeneration());
-				getLeftPanel().getOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());
-				
-				MainPanel.winners.add(o);
+				for (int i=0; i<getLeftPanel().getOptionsPanel().getGenerationList().getItemCount(); i++)
+				{
+					if(getLeftPanel().getOptionsPanel().getGenerationList().getItemAt(i).toString().equals(""+o.getGeneration()))
+					{
+						System.out.println("Organismo già presente nella lista!");
+						alreadyLoaded = true;
+						break;
+					}
+				}
+
+				if(!alreadyLoaded)
+				{
+					getLeftPanel().getOptionsPanel().getGenerationList().addItem(o.getGeneration());
+					getLeftPanel().getOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());
+					
+					MainPanel.winners.add(o);
+				}
 				
 				success = true;
 			} 

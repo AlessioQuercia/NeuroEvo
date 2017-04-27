@@ -2,13 +2,9 @@ package gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import myGui.myGuiConstants;
 import newGui.MyConstants;
 
-public class evo_fit 
+public class evo_fitNew 
 {
 	  public static double getMaxFitness() { return 1000; }  //ovvero quando l'errore è 0,1
 	  
@@ -127,9 +123,7 @@ public class evo_fit
 	    	 	
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
 //	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));		//FITNESS VECCHIA
-//	    	 	error = Math.abs(y_obj - y_tiro);
-	    	 	error = Math.abs(tgt[j][8]);
-//	    	 	System.out.println(error);
+	    	 	error = Math.abs(y_obj - y_tiro);
 	    	 	
 	    	 	vel_error = Math.abs(v - mappa.get(sample + 1).get(1));
 	    	 	
@@ -193,8 +187,6 @@ public class evo_fit
 	    	 	array.set(MyConstants.TEMPO_INDEX, t);
 	    	 	array.set(MyConstants.ACCELERAZIONE_INDEX, acc);
 	    	 	array.set(MyConstants.MASSA_INDEX, m);
-	    	 	array.set(MyConstants.X_MIGLIORE_INDEX, tgt[j][9]);
-	    	 	array.set(MyConstants.Y_MIGLIORE_INDEX, tgt[j][10]);
 	    	 	mappa.put(j, array);
 	        } 
 //	     System.out.println("VEL: " + velsum + "    " + "ERR: " + errorsum);

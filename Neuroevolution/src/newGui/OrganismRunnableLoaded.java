@@ -1,4 +1,4 @@
-package gui;
+package newGui;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.sun.tools.doclint.Env;
+import org.joml.Vector2d;
 
+import gui.evo_fit;
 import jNeatCommon.EnvConstant;
 import jneat.NNode;
 import jneat.Network;
 import jneat.Organism;
-import newGui.MyConstants;
 
 public class OrganismRunnableLoaded implements Runnable
 {
@@ -100,7 +100,7 @@ public class OrganismRunnableLoaded implements Runnable
 			 //double tgt[][] = null;
 			 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 			 double tgt[][] = null;
-			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + 5];
+			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + 8];
 			 
 		  
 			 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);
@@ -234,10 +234,6 @@ public class OrganismRunnableLoaded implements Runnable
 
 				   in[0] = (x_tgt - minX)/maxX;
 				   in[1] = (y_tgt - minY)/maxY;
-				   
-				   System.out.println(in[0]);
-				   System.out.println(in[1]);
-				   System.out.println("fatto");
 				   in[2] = v;
 				   
 				   tgt[count][0] = in[0];
@@ -422,8 +418,17 @@ public class OrganismRunnableLoaded implements Runnable
 		  // control the result 
 			 if (success) 
 			 {
+				 Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
 				try 
 				{
+					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
+					{
+						bestPoints.put(i, simulate(o, i, tgt));
+					}
+					
+					o.setBestPoints(bestPoints);
+					
+					
 				   Method_fit = Class_fit.getMethod("computeFitness", params);
 				   ObjRet_fit = Method_fit.invoke(ObjClass_fit, paramsObj);
 				   //System.out.println(ObjRet_fit);
@@ -475,9 +480,6 @@ public class OrganismRunnableLoaded implements Runnable
 						.get(MyConstants.FITNESS_TOTALE_INDEX) - prev_fitness +
 						o.getMap().get(count).get(MyConstants.FITNESS_INDEX);
 				
-				System.out.println(prev_fitness);
-				System.out.println(newTotalFitness);
-				
 				organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).set(
 						MyConstants.ERRORE_TOTALE_INDEX, newTotalError);
 				
@@ -514,5 +516,47 @@ public class OrganismRunnableLoaded implements Runnable
 			 organism.setWinner(false);
 			 return false;
 		  }
+	   
+		private Vector2d simulate(Organism o, int i, double[][] tgt) 
+		{
+			double minX = 20;
+			double maxX = 80;
+			double minY = 20;
+			double maxY = 80;
+			double y = 0;
+			double a = tgt[i][4];
+			double v = tgt[i][2];
+			double x_tgt = minX + tgt[i][0]*maxX;
+			double y_tgt = minY + tgt[i][1]*maxY;
+			
+			Vector2d target = new Vector2d(x_tgt, y_tgt);
+			Vector2d bestPoint = new Vector2d(-1,-1);
+			Vector2d currPoint = new Vector2d(-1, -1);
+			
+			double bestDistance = Double.MAX_VALUE;
+			double currDistance = Double.MAX_VALUE;
+			
+			for (double x = 0; x<100; x++)
+			{
+					y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
+					
+					if (y < 0)	break;
+					
+					currPoint.set(x, y);
+					currDistance = target.distance(currPoint);
+					
+					if (currDistance < bestDistance)
+					{
+						bestDistance = currDistance;
+						bestPoint = new Vector2d(x, y);
+					}
+			}
+			
+			tgt[i][8] = bestDistance;
+			tgt[i][9] = bestPoint.x;
+			tgt[i][10] = bestPoint.y;
+			
+			return bestPoint;
+		}
 
 }

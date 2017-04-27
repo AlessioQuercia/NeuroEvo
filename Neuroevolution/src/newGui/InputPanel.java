@@ -98,7 +98,7 @@ public class InputPanel extends JPanel
     	PlainDocument xDoc = (PlainDocument) xArea.getDocument();
     	xDoc.setDocumentFilter(new PatternFilter(pattern));
     	
-    	PlainDocument yDoc = (PlainDocument) xArea.getDocument();
+    	PlainDocument yDoc = (PlainDocument) yArea.getDocument();
     	yDoc.setDocumentFilter(new PatternFilter(pattern));
     	
 //        xArea.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(

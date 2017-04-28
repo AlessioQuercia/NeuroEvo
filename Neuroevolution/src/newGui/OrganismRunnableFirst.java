@@ -512,7 +512,7 @@ public class OrganismRunnableFirst implements Runnable
 		double bestDistance = Double.MAX_VALUE;
 		double currDistance = Double.MAX_VALUE;
 		
-		for (double x = 0; x<100; x++)
+		for (double x = 0; x<x_tgt+50; x+=0.001)
 		{
 				y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
 				

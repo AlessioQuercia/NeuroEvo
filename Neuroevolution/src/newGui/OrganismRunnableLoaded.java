@@ -313,8 +313,7 @@ public class OrganismRunnableLoaded implements Runnable
 					   }
 				   }
 				   
-				   mappa.put(count, arrayForza);
-				   o.setForzaMap(mappa);
+				   o.getForzaMap().put(count, arrayForza);
 				   
 				   
 		 ///IMPLEMENTAZIONE VECCHIA  				   
@@ -421,14 +420,13 @@ public class OrganismRunnableLoaded implements Runnable
 				 Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
 				try 
 				{
-					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
-					{
-						bestPoints.put(i, simulate(o, i, tgt));
-					}
+					// SIMULAZIONE DI LANCIO PER CALCOLO DISTANZA MINIMA TRAIETTORIA-BERSAGLIO
 					
-					o.setBestPoints(bestPoints);
+//					bestPoints.put(count, simulate(o, count, tgt));
+//					
+//					o.setBestPoints(bestPoints);
 					
-					
+					// CALCOLO FITNESS
 				   Method_fit = Class_fit.getMethod("computeFitness", params);
 				   ObjRet_fit = Method_fit.invoke(ObjClass_fit, paramsObj);
 				   //System.out.println(ObjRet_fit);
@@ -536,7 +534,7 @@ public class OrganismRunnableLoaded implements Runnable
 			double bestDistance = Double.MAX_VALUE;
 			double currDistance = Double.MAX_VALUE;
 			
-			for (double x = 0; x<x_tgt+50; x+=0.001)
+			for (double x = 0; x<x_tgt+50; x++)
 			{
 					y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
 					
@@ -551,6 +549,59 @@ public class OrganismRunnableLoaded implements Runnable
 						bestPoint = new Vector2d(x, y);
 					}
 			}
+			
+			tgt[i][8] = bestDistance;
+			tgt[i][9] = bestPoint.x;
+			tgt[i][10] = bestPoint.y;
+			
+			return bestPoint;
+		}
+	   
+		private Vector2d computeMinDistance(Organism o, int i, double[][] tgt) 
+		{
+			double minX = 20;
+			double maxX = 80;
+			double minY = 20;
+			double maxY = 80;
+			double x = 0;
+			double y = 0;
+			double a = tgt[i][4];
+			double v = tgt[i][2];
+			double x_tgt = minX + tgt[i][0]*maxX;
+			double y_tgt = minY + tgt[i][1]*maxY;
+			
+			// Fisso un punto P = (x, f(x)) sulla parabola,
+			// creo la funzione distanza d(x) = |P - T|, dove T = (x_tgt, y_tgt) è il target,
+			// calcolo i minimi di d(x) (che è equivalente a calcolare i minimi di d^2(x)
+			
+			double[] coeff_parabola = {-(MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2))), Math.tan(a)};
+			Funzione parabola = new Funzione(coeff_parabola);	// funzione f della parabola
+			
+			Vector2d target = new Vector2d(x_tgt, y_tgt);	// punto T (target)
+			Vector2d punto = new Vector2d(x, parabola.getValue(x));	// punto P fissato sulla parabola
+			
+			//Distanza tra due punti al quadrato (quindi scompare la radice)
+//			double distance = Math.pow((punto.x-target.x), 2) + 
+//					Math.pow((coeff_parabola[0]*Math.pow(x_tgt, 2) + coeff_parabola[1]*punto.x -target.y), 2);
+			
+			double c0 = -coeff_parabola[0];
+			double c1 = coeff_parabola[1];
+			
+			double[] coeff_distanza = {
+					Math.pow(c0, 2),								// a0 (coeff x^4)
+					-(2*c0*c1),										// a1 (coeff x^3)
+					1 + Math.pow(c1, 2) + 2*c0*target.y,			// a2 (coeff x^2)
+					-(2*target.x) - 2*c1*target.y,					// a3 (coeff x^1)
+					Math.pow(target.x, 2) + Math.pow(target.y, 2)	// a4 (coeff x^0)
+					};
+			
+			Funzione distanza = new Funzione(coeff_distanza);	// funzione d^2(x)
+			
+			Funzione derivata = distanza.getDerivativeFunction();
+			
+			Vector2d bestPoint = derivata.computeEquation();
+			
+			double bestDistance = target.distance(bestPoint);
 			
 			tgt[i][8] = bestDistance;
 			tgt[i][9] = bestPoint.x;

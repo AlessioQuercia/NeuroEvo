@@ -414,12 +414,12 @@ public class OrganismRunnableFirst implements Runnable
 				{
 					//SIMULAZIONE DI LANCIO PER CALCOLO DISTANZA MINIMA TRAIETTORIA-BERSAGLIO
 					
-					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
-					{
-						bestPoints.put(i, simulate(o, i, tgt));
-					}
-					
-					o.setBestPoints(bestPoints);
+//					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
+//					{
+//						bestPoints.put(i, simulate(o, i, tgt));
+//					}
+//					
+//					o.setBestPoints(bestPoints);
 					
 					//CALCOLO FITNESS
 				   Method_fit = Class_fit.getMethod("computeFitness", params);
@@ -512,7 +512,7 @@ public class OrganismRunnableFirst implements Runnable
 		double bestDistance = Double.MAX_VALUE;
 		double currDistance = Double.MAX_VALUE;
 		
-		for (double x = 0; x<x_tgt+50; x+=0.001)
+		for (double x = 0; x<x_tgt+50; x++)
 		{
 				y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
 				

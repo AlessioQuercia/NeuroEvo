@@ -381,7 +381,8 @@ private boolean done;
 				simulation.getRightPanel().repaint();
 			}
 			
-			if (tabbedPanel.getSelectedIndex() == 1 && (simulation.getStart() || simulation.getLoad()))
+			if (tabbedPanel.getSelectedIndex() == 1 && (simulation.getStart() || simulation.getLoad()) && winners.size()>0
+					&& graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getItemCount()>0)
 			{	
 				currForzaGen = graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism selectedOrg = winners.get(currForzaGen);
@@ -414,7 +415,8 @@ private boolean done;
 				graphs.repaint();
 			}
 			
-			if (tabbedPanel.getSelectedIndex() == 2 && (simulation.getStart() || simulation.getLoad()) && winners.size() > 0)
+			if (tabbedPanel.getSelectedIndex() == 2 && (simulation.getStart() || simulation.getLoad()) && winners.size() > 0
+					&& net.getLeftPanel().getOptionsPanel().getGenerationList().getItemCount()>0)
 			{
 				currNetGen = net.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism selectedOrg = winners.get(currNetGen);

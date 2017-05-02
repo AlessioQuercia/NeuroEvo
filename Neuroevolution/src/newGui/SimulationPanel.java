@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,11 +32,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 
 import gui.evo_fit;
@@ -52,7 +57,7 @@ import jneat.Population;
 import jneat.Species;
 import myGui.myGuiConstants;
 
-public class SimulationPanel extends JPanel implements ActionListener
+public class SimulationPanel extends JPanel implements ActionListener, KeyListener
 {
 	private JFrame frame;
 	
@@ -102,6 +107,11 @@ public class SimulationPanel extends JPanel implements ActionListener
     	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getLoadBtn().addActionListener(this);
     	leftPanel.getInputPanel().getLoadInputBtn().addActionListener(this);
+    	leftPanel.getInputPanel().getLoadInputBtn().addKeyListener(this);
+    	leftPanel.getInputPanel().getxArea().addKeyListener(this);
+    	leftPanel.getInputPanel().getyArea().addKeyListener(this);
+
+ 
     	
     	rightPanel = new ThrowPanel(frame);
     	
@@ -244,6 +254,31 @@ public class SimulationPanel extends JPanel implements ActionListener
 //			 System.out.println();
 	   }
 	   
+	   public void loadInputsPressed()
+	   {
+			 String x_string = getLeftPanel().getInputPanel().getxArea().getText();
+			 String y_string = getLeftPanel().getInputPanel().getyArea().getText();
+			 
+			 double x_tgt = -1;
+			 double y_tgt = -1;
+			 
+			 if(!x_string.equals("") && !y_string.equals(""))
+			 {
+				 x_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getxArea().getText());
+				 y_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getyArea().getText());
+			 }
+			 
+			 if ((x_tgt >= 20 && x_tgt <= 100) && (y_tgt >= 20 && y_tgt <= 100))
+			 {
+				 MyConstants.LOADED_X = x_tgt;
+				 MyConstants.LOADED_Y = y_tgt;
+				 MyConstants.LOADED_INPUTS = true;
+			 }
+			 else
+				 System.out.println("I target devono essere entrambi valori tra 20 e 100"); 
+			
+	   }
+	   
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
@@ -278,16 +313,17 @@ public class SimulationPanel extends JPanel implements ActionListener
 //				 start = false;
 				 mainPanel.stopProcessAsync();
 				 
-				 getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
-				 getLeftPanel().getOptionsPanel().getGC().gridx = 0;
-				 getLeftPanel().getOptionsPanel().getGC().gridy = 3;
-				 getLeftPanel().getOptionsPanel().add(getLeftPanel().getOptionsPanel().getLoadBtn(), getLeftPanel().getOptionsPanel().getGC());
-				 
-				 getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
+//				 getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
+//				 getLeftPanel().getOptionsPanel().getGC().gridx = 0;
+//				 getLeftPanel().getOptionsPanel().getGC().gridy = 3;
+//				 getLeftPanel().getOptionsPanel().add(getLeftPanel().getOptionsPanel().getLoadBtn(), getLeftPanel().getOptionsPanel().getGC());
+//				 
+//				 getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
 			 }
 			 
 			 else if (p.getActionCommand().equals("Load"))
 			 {
+				 if (!EnvConstant.STOP_EPOCH) EnvConstant.STOP_EPOCH = true;
 				 boolean temp1 = start;
 				 boolean temp2 = load;
 				 start = false;
@@ -297,7 +333,7 @@ public class SimulationPanel extends JPanel implements ActionListener
 			 
 				 String tmp1 = fd.getDirectory();
 				 String tmp2 = fd.getFile();
-			 
+				 
 				 if (tmp1 != null && tmp2 != null) 
 				 {
 					 String name = tmp1 + tmp2;
@@ -324,27 +360,7 @@ public class SimulationPanel extends JPanel implements ActionListener
 			 
 			 else if (p.getActionCommand().equals("Load inputs"))
 			 {
-				 String x_string = getLeftPanel().getInputPanel().getxArea().getText();
-				 String y_string = getLeftPanel().getInputPanel().getyArea().getText();
-				 
-				 double x_tgt = -1;
-				 double y_tgt = -1;
-				 
-				 if(!x_string.equals("") && !y_string.equals(""))
-				 {
-					 x_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getxArea().getText());
-					 y_tgt = Double.parseDouble(getLeftPanel().getInputPanel().getyArea().getText());
-				 }
-				 
-				 if ((x_tgt >= 20 && x_tgt <= 100) && (y_tgt >= 20 && y_tgt <= 100))
-				 {
-					 MyConstants.LOADED_X = x_tgt;
-					 MyConstants.LOADED_Y = y_tgt;
-					 MyConstants.LOADED_INPUTS = true;
-				 }
-				 else
-					 System.out.println("I target devono essere entrambi valori tra 20 e 100"); 
-				 
+				 loadInputsPressed();
 			 }
 			 
 			 else if (p.getActionCommand().equals("Auto-draw: OFF")) 
@@ -701,5 +717,26 @@ public class SimulationPanel extends JPanel implements ActionListener
 		public void setLoading(boolean loading)
 		{
 			this.loading = loading;
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) 
+		{
+			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+			{
+            	loadInputsPressed();
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 }

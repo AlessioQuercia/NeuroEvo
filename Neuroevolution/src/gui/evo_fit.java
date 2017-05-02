@@ -127,9 +127,14 @@ public class evo_fit
 	    	 	
 	    	 	double y_tiro = Math.tan(a)*x_obj - ((g/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_obj, 2));
 //	    	 	errorsum  += ( double ) (Math.abs(_tgt[j] - y_tiro));		//FITNESS VECCHIA
-	    	 	error = Math.abs(y_obj - y_tiro);
-//	    	 	error = Math.abs(tgt[j][8]);	//SIMULAZIONE TIRO (DISTANZA TRA DUE PUNTI)
-//	    	 	System.out.println(error);
+//	    	 	error = Math.abs(y_obj - y_tiro);	// DISTANZA Y
+	    	 	error = Math.abs(tgt[j][8]);	//SIMULAZIONE TIRO (DISTANZA TRA DUE PUNTI)
+//	    	 	if (error != 0)
+//	    	 	{
+//	    	 		System.out.println("MinDist = " + error + " vs PrevError = " + Math.abs(y_obj - y_tiro));
+//	    	 		System.out.println(error <= Math.abs(y_obj-y_tiro));
+//	    	 	}
+//	    	 	System.out.println(Math.abs(y_obj-y_tiro));
 	    	 	
 	    	 	vel_error = Math.abs(v - mappa.get(sample + 1).get(1));
 	    	 	

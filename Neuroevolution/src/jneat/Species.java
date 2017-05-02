@@ -59,8 +59,38 @@
    * If this is too long ago, the Species will goes extinct. 
    */
 	  int age_of_last_improvement;
+	  
+	  
+	  private double cloned_fitness;
+	  private double mean_cloned_fitness;
+	  private int cloned;
+	  private boolean clone;
    
-	   public int getId() {
+	   public double getCloned_fitness() {
+		return cloned_fitness;
+	}
+	public void setCloned_fitness(double cloned_fitness) {
+		this.cloned_fitness = cloned_fitness;
+	}
+	public double getMean_cloned_fitness() {
+		return mean_cloned_fitness;
+	}
+	public void setMean_cloned_fitness(double mean_cloned_fitness) {
+		this.mean_cloned_fitness = mean_cloned_fitness;
+	}
+	public int getCloned() {
+		return cloned;
+	}
+	public void setCloned(int cloned) {
+		this.cloned = cloned;
+	}
+	public boolean isClone() {
+		return clone;
+	}
+	public void setClone(boolean clone) {
+		this.clone = clone;
+	}
+	public int getId() {
 		 return id;
 	  }         
 	   public void setId(int id) {
@@ -468,7 +498,11 @@
 		 thechamp = (Organism) organisms.firstElement();
 	  
 	  
-	  
+//		 // RISERVA ALCUNI FIGLI AL MIGLIORE DELLA POPOLAZIONE (ASSICURANDO LA CLONAZIONE DEL MIGLIORE DI OGNI GENERAZIONE)
+//		 Organism popBestOrg = (Organism)pop.organisms.firstElement();
+//		 popBestOrg.setSuper_champ_offspring(pop.p_pop_size/100);
+		 
+		 
 	  //Create the designated number of offspring for the Species
 	  //one at a time
 		 boolean outside = false;
@@ -496,7 +530,7 @@
 			   mom = thechamp;
 			// create a new genome from this copy 
 			   new_genome = mom.genome.duplicate(count);
-			   if ((thechamp.super_champ_offspring) > 1) 
+			   if ((thechamp.super_champ_offspring) > 1) // Le copie del migliore vengonoleggermente mutato (modifica peso o aggiunta arco)
 			   {
 				  if ((NeatRoutine.randfloat() < .8) || (Neat.p_mutate_add_link_prob == 0.0))
 					 new_genome.mutate_link_weight(mut_power, 1.0, NeatConstant.GAUSSIAN);
@@ -511,8 +545,11 @@
 			
 			   baby = new Organism(0.0, new_genome, generation);
 			
-			   if ((thechamp.super_champ_offspring) == 1) 
+			   if ((thechamp.super_champ_offspring) == 1)	// Una copia del migliore viene clonata così com'è
 			   {
+				   clone = true; 	// in questa specie viene clonato almeno un organismo
+				   cloned++;	// aumenta il contatore degli organismi clonati in questa specie
+				   cloned_fitness+= mom.getOrig_fitness();
 				  if (thechamp.pop_champ) 
 				  {
 				  //			   		System.out.print("\n The new org baby's (champion) genome is : "+baby.genome.getGenome_id());
@@ -534,6 +571,11 @@
 			   new_genome = mom.genome.duplicate(count);
 			   baby = new Organism(0.0, new_genome, generation); //Baby is just like mommy
 			   champ_done = true;
+			   
+			   clone = true;
+			   cloned++;
+			   cloned_fitness += mom.getOrig_fitness();
+//			   System.out.println("Il campione della specie " + id + " è stato clonato!");
 			
 			} 
 			else if ((NeatRoutine.randfloat() < Neat.p_mutate_only_prob) || poolsize == 1) 
@@ -801,6 +843,18 @@
 			} // end block control and update species
 		 
 		 } // end offspring cycle
+		 
+		 
+		 // CALCOLA LA FITNESS MEDIA DEGLI ORGANISMI CLONATI
+		 
+		 if (clone) 
+		 {
+			 mean_cloned_fitness = cloned_fitness/cloned;
+			 
+//			 System.out.println("MeanClonedFitness = " + mean_cloned_fitness + " Specie: " + id);
+		 }
+		 
+		 
 	  
 		 return true;
 	  }/**

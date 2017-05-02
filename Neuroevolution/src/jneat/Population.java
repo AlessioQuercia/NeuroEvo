@@ -50,6 +50,7 @@
    /** If  too high, leads to delta coding process. */
 	  int highest_last_changed;
 
+	  private double currentPop_highest_Fitness;
 	  private double mean_cloned_fitness;
 	  private double lowest_error;
 	  private double mean_error;
@@ -327,8 +328,10 @@
 		 double avg_error = error/ total_organisms;
 		 setMean_fitness(overall_average);
 		 setMean_error(avg_error);
-		 Organism o = (Organism)organisms.get(0);
+		 Organism o = (Organism)organisms.firstElement();
 		 setFinal_gen(o.getGeneration());
+		 
+		 currentPop_highest_Fitness = o.getOrig_fitness();
 	  
 	  //Now compute expected number of offspring for each individual organism
 	  //
@@ -524,6 +527,8 @@
 		 // the first species  can have offspring = 1/2 pop size
 			_specie.expected_offspring = half_pop;
 			_specie.age_of_last_improvement = _specie.age;
+			
+			System.out.println(((Organism)_specie.organisms.firstElement()).super_champ_offspring);
 		 
 			if (itr_specie.hasNext()) 
 			{
@@ -692,6 +697,13 @@
 	  System.out.print("\n ---------------------------------------------");
 	  System.out.print("\n Start reproduction of species ....");
 	  */   	
+		 
+		 
+//		 // RISERVA ALCUNI FIGLI AL MIGLIORE DELLA POPOLAZIONE (ASSICURANDO LA CLONAZIONE DEL MIGLIORE DI OGNI GENERAZIONE)
+//		 Organism popBestOrg = (Organism)organisms.firstElement();
+//		 popBestOrg.setSuper_champ_offspring(p_pop_size/100);
+		 
+		 
 		 boolean rc = false;
 	  
 		 itr_specie = sorted_species.iterator();
@@ -700,18 +712,26 @@
 		 int cloned = 0;
 		 double total_cloned_fitness = 0;
 		 boolean clone = false;
+		 
 		 while (itr_specie.hasNext()) 
 		 {
 			_specie = ((Species) itr_specie.next());
 //			System.out.println(_specie.getExpected_offspring());
-			if (_specie.getExpected_offspring() > 5) 	//originale 5
-			{
-				clone = true;
-				total_cloned_fitness += _specie.getMax_fitness();
-				cloned++;
-//				System.out.println(_specie.getMax_fitness());	// ORGANISMI CLONATI (il migliore di ogni specie)
-			}
+//			if (_specie.getExpected_offspring() > 5) 	//originale 5
+//			{
+//				clone = true;
+//				total_cloned_fitness += _specie.getMax_fitness();
+//				cloned++;
+////				System.out.println(_specie.getMax_fitness());	// ORGANISMI CLONATI (il migliore di ogni specie)
+//			}
 			rc = _specie.reproduce(generation, this, sorted_species);
+			
+			if (_specie.isClone())
+			{
+				clone = _specie.isClone();
+				cloned += _specie.getCloned();
+				total_cloned_fitness += _specie.getCloned_fitness();
+			}
 		 }
 		 
 		double mean_cloned_fit = total_cloned_fitness/cloned;
@@ -719,7 +739,10 @@
 		setMean_cloned_fitness(mean_cloned_fit);
 		setCloned(cloned);
 		
-//		System.out.println(cloned);
+//		System.out.println("GENERAZIONE: " + generation);
+//		System.out.println("Clonati: " + cloned);
+//		System.out.println("Mean_Cloned_Fitness: " + mean_cloned_fit);
+		
 //		System.out.println(getHighest_fitness());
 	  
 	  //   	System.out.print("\n Reproduction completed");
@@ -893,7 +916,15 @@
 	  
 	  }
    
-	   public void setMean_cloned_fitness(double mean_cloned_fitness) 
+	   public double getCurrentPop_highest_Fitness() {
+	return currentPop_highest_Fitness;
+}
+
+public void setCurrentPop_highest_Fitness(double currentPop_highest_Fitness) {
+	this.currentPop_highest_Fitness = currentPop_highest_Fitness;
+}
+
+	public void setMean_cloned_fitness(double mean_cloned_fitness) 
 	   {
 		   this.mean_cloned_fitness = mean_cloned_fitness;
 	   }

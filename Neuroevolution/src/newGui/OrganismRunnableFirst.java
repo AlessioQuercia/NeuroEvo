@@ -414,12 +414,12 @@ public class OrganismRunnableFirst implements Runnable
 				{
 					//SIMULAZIONE DI LANCIO PER CALCOLO DISTANZA MINIMA TRAIETTORIA-BERSAGLIO
 					
-//					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
-//					{
-//						bestPoints.put(i, simulate(o, i, tgt));
-//					}
-//					
-//					o.setBestPoints(bestPoints);
+					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
+					{
+						bestPoints.put(i, computeMinDistance(o, i, tgt));
+					}
+					
+					o.setBestPoints(bestPoints);
 					
 					//CALCOLO FITNESS
 				   Method_fit = Class_fit.getMethod("computeFitness", params);
@@ -529,6 +529,158 @@ public class OrganismRunnableFirst implements Runnable
 		}
 		
 		tgt[i][8] = bestDistance;
+		tgt[i][9] = bestPoint.x;
+		tgt[i][10] = bestPoint.y;
+		
+		return bestPoint;
+	}
+	
+	private Vector2d computeMinDistance(Organism o, int i, double[][] tgt) 
+	{
+		double minX = 20;
+		double maxX = 80;
+		double minY = 20;
+		double maxY = 80;
+		double a = tgt[i][4];
+		double v = tgt[i][2];
+		double x_tgt = minX + tgt[i][0]*maxX;
+		double y_tgt = minY + tgt[i][1]*maxY;
+		
+		// Fisso un punto P = (x, f(x)) sulla parabola,
+		// creo la funzione distanza d(x) = |P - T|, dove T = (x_tgt, y_tgt) è il target,
+		// calcolo i minimi di d(x) (che è equivalente a calcolare i minimi di d^2(x)
+		
+		double[] coeff_parabola = {-(MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2))), Math.tan(a), 0};
+		Funzione parabola = new Funzione(coeff_parabola);	// funzione f della parabola
+		
+//		System.out.println("f(x) = " + parabola);
+		
+		Vector2d target = new Vector2d(x_tgt, y_tgt);	// punto T (target)
+//		Vector2d punto = new Vector2d(x, parabola.getValue(x));	// punto P fissato sulla parabola
+		
+		//Distanza tra due punti al quadrato (quindi scompare la radice)
+//		double distance = Math.pow((punto.x-target.x), 2) + 
+//				Math.pow((coeff_parabola[0]*Math.pow(x_tgt, 2) + coeff_parabola[1]*punto.x -target.y), 2);
+		
+		double c0 = coeff_parabola[0];	// (-coeff???)
+		double c1 = coeff_parabola[1];
+		
+		double[] coeff_distanza = {};
+		
+		Funzione distanza = new Funzione(coeff_distanza);		// funzione d(x)
+		
+		double[] coeff_distanzaQuad = {
+				Math.pow(c0, 2),								// a0 (coeff x^4)
+				(2*c0*c1),										// a1 (coeff x^3)
+				1 + Math.pow(c1, 2) - 2*c0*target.y,			// a2 (coeff x^2)
+				- (2*target.x) - 2*c1*target.y,					// a3 (coeff x^1)
+				Math.pow(target.x, 2) + Math.pow(target.y, 2)	// a4 (coeff x^0)
+				};
+		
+		Funzione distanzaQuad = new Funzione(coeff_distanzaQuad);	// funzione d^2(x)
+		
+//		System.out.println("d^2(x) = " + distanzaQuad);
+		
+		Funzione derivata = distanzaQuad.getDerivativeFunction();
+		
+//		System.out.println("d^2(x)' = " + derivata);
+		
+//		double sol = derivata.computeThirdDegreeEquationFormaDepressa();
+		
+//		double distQuad = Math.abs(derivata.getValue(sol));
+		
+//		double dist = Math.sqrt(distQuad);
+		
+		String mask6d;
+		DecimalFormat fmt6d;
+		mask6d = "  0.000000000000";
+		fmt6d = new DecimalFormat(mask6d);
+		
+//		System.out.println(Math.sqrt(distanzaQuad.getValue(sol)));	// Questa è la distanza minima corretta!
+		
+//		System.out.println("distQUad: " + fmt6d.format(distQuad));
+		
+//		System.out.println("dist: " + fmt6d.format(dist));
+		
+		
+		//SBAGLIATA!! Quella corretta è quella successiva!
+//		double minDist = Math.sqrt(derivata.computeEquationFormaDepressa());
+		
+		//il valore ottenuto da computeEquation è il valore della x della funzione derivata della distanza al quadrato
+		// perciò di derivata. Per ottenere la distanza minima al quadrato devo calcolare d^2(x) con il valore della x ottenuto e poi fare
+		// la radice quadrata per ottenere la distanza minima d(x)
+		
+//		double sol = derivata.computeThirdDegreeEquationFormaDepressa();
+		
+		double soluzioni_x[] = derivata.computeThirdDegreeEquationFormaDepressa();
+		
+		double distanzaMinima = Double.POSITIVE_INFINITY;
+		
+		Vector2d bestPoint = new Vector2d();
+		
+		for (int j = 0; j<soluzioni_x.length; j++)
+		{
+			Vector2d temp = new Vector2d(soluzioni_x[j], parabola.getValue(soluzioni_x[j]));
+			
+			double dist = temp.distance(target);
+			if (dist < distanzaMinima)
+			{
+				distanzaMinima = dist;	
+				bestPoint = temp;
+			}
+		}
+		
+//		double minDist = Math.sqrt(distanzaQuad.getValue(sol));		// d(x) minima
+		
+//		System.out.println("minDist = " + minDist);
+		
+		
+//		System.out.println("a = "+ a + " v = "+ v);
+//		double x = sol;
+//		double y = parabola.getValue(x);
+//		y = parabola.getValue(x);
+		
+//		System.out.println("distanza^2 = " + distanza.getValue(x));
+//		System.out.println("distanza = " + Math.sqrt(distanza.getValue(x)));
+//		
+//		System.out.println(derivata.getValue(x));
+//		System.out.println(Math.sqrt(derivata.getValue(x)));
+//		System.out.println(parabola.getValue(x));
+		
+//		Vector2d bestPoint = new Vector2d(x, y);
+		
+//		System.out.println("x :" + bestPoint.x + " y: " + bestPoint.y);
+		
+		double bestDistance = target.distance(bestPoint);
+		
+//		System.out.println(bestDistance == minDist);
+		
+		double y_tiro = Math.tan(a)*x_tgt - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x_tgt, 2));
+		
+//		System.out.println(bestDistance <= Math.abs(y_tgt-y_tiro));
+//		System.out.println("bestDistance = " + bestDistance + " minDist = " + minDist + " prevErr = " + Math.abs(y_tgt-y_tiro));
+		
+//		if (distanzaMinima > Math.abs(y_tgt-y_tiro))
+//		{
+//			System.out.println("##### INIZIO #####" + "\n" + 
+//								"DELTA = " + derivata.getDelta() + "\n" + 
+//								"bestPoint = (" + bestPoint.x + " ," + bestPoint.y + ")" + "\n" +
+//								"bestDistance = " + bestDistance + "\n" +
+//								"target = (" + x_tgt + " ," + y_tgt + ")" + "\n" +
+//								"prevPoint = (" + x_tgt + " ," + y_tiro + ")" + "\n" +
+//								"prevDistance = " + Math.abs(y_tgt-y_tiro) + "\n"
+//								);
+//		}
+		
+//		if (distanzaMinima != bestDistance)
+//		{
+//			System.out.println("##### INIZIO #####" + "\n" + 
+//					"DistanzaMinima: " + distanzaMinima + "\n" +
+//								"BestDistance: " + bestDistance + "\n");
+//		}
+		
+//		tgt[i][8] = minDist;
+		tgt[i][8] = distanzaMinima;
 		tgt[i][9] = bestPoint.x;
 		tgt[i][10] = bestPoint.y;
 		

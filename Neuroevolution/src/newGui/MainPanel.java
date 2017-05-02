@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -215,6 +216,12 @@ private boolean done;
 		int prevSelectedThrow = -1;
 		int currSelectedThrow = graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().getSelectedIndex();
 		
+		double x_rimbalzo = 0; // per traslare la parabola
+		double X_rimbalzo = 0;
+		
+		double y_rimbalzo = 0;
+		double Y_rimbalzo = 0;
+		
 		while (isRunning)
 		{
 			long startTime = System.currentTimeMillis();
@@ -237,6 +244,10 @@ private boolean done;
 				
 				fixedPool.submit(new OrganismRunnableLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
 				fixedPool.shutdown();							//// VERSIONE PARALLELA
+				
+				simulation.getLeftPanel().updateInfoRete(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
+				simulation.getLeftPanel().updateInfoLancio(organism.getMap().get(selectedThrow));
+				
 				try {
 					fixedPool.awaitTermination(1, TimeUnit.DAYS);
 				} catch (InterruptedException e) {
@@ -339,7 +350,7 @@ private boolean done;
 //	            simulation.getRightPanel().setA(a);
 //	            simulation.getRightPanel().setV(v);
 	            
-	            if (y > 0)
+	            if (y >= 0)
 	            {
 	    			simulation.getRightPanel().getPeso().setFrame(
 	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y - 1.5, 3, 3);
@@ -356,6 +367,8 @@ private boolean done;
 	    				simulation.getRightPanel().getTail().removeFirst();
 	    			}		
 	    			
+	    			x_rimbalzo = x;
+	    			X_rimbalzo = X;
 	    			
 //	    			simulation.getRightPanel().setTailEnd(MyConstants.BORDER_X+X);
 //	    			
@@ -369,13 +382,43 @@ private boolean done;
 //	    					simulation.getRightPanel().getTailStart(),(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y,
 //	    					simulation.getRightPanel().getTailEnd(), (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y);
 	            }
+	            else	// La y è minore di 0, quindi graficamente la rappresento su Y = 0 per far vedere che atterra sull'asse delle ascise
+	            {
+	            	double a_rimbalzo = a;
+	            	double v_rimbalzo = v;
+//	            	
+//	            	double y_rimbalzo = Math.tan(a_rimbalzo)*x - ((MyConstants.GRAVITY/(2*Math.pow(v_rimbalzo, 2)*Math.pow(Math.cos(a_rimbalzo), 2)))*Math.pow(x, 2));
+//	            	
+//		            double Y_rimbalzo = simulation.getRightPanel().proportionY(y_rimbalzo);
+//		            
+//		            System.out.println(Y_rimbalzo);
+//	            	Y_rimbalzo = 0;
+	            	
+	    			simulation.getRightPanel().getPeso().setFrame(
+	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rimbalzo - 1.5, 3, 3);
+	    			
+	    			simulation.getRightPanel().getTail().add(
+	    					new Vector2d(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rimbalzo));
+	    			
+	    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+	    			{
+	    				simulation.getRightPanel().getTail().removeFirst();
+	    			}	
+	    			
+	    			// TEMPORANEO (TRASLA LA PARABOLA DI 500 IN MODO DA FAR SCOMPARIRE IL LANCIO)
+	    			//TODO IMPLEMENTARE RIMBALZO PROIETTILE
+	    			y_rimbalzo = Math.tan(a_rimbalzo)*(x + 500) - ((MyConstants.GRAVITY/(2*Math.pow(v_rimbalzo, 2)*Math.pow(Math.cos(a_rimbalzo), 2)))*Math.pow(( + 500), 2));
+	    			
+	    			Y_rimbalzo = simulation.getRightPanel().proportionY(y_rimbalzo);
+	            }
 	            
 	            x++;
 	            
-				if (x > MyConstants.ASSE_X || y > MyConstants.ASSE_Y) 
+				if (x > MyConstants.ASSE_X) // || y > MyConstants.ASSE_Y) 
 				{
 					simulation.getRightPanel().resetTail();
 					x = 0;
+					y_rimbalzo = 0;
 				}
 				
 				simulation.getRightPanel().repaint();
@@ -484,6 +527,13 @@ private boolean done;
 	  {
 //		   lookupThread.interrupt();
 		   EnvConstant.STOP_EPOCH = true;
+		   
+			 simulation.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().gridx = 0;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().gridy = 3;
+			 simulation.getLeftPanel().getOptionsPanel().add(simulation.getLeftPanel().getOptionsPanel().getLoadBtn(), simulation.getLeftPanel().getOptionsPanel().getGC());
+			 
+			 simulation.getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
 	  } 
 	   
 	   public void startProcess() 
@@ -636,6 +686,10 @@ private boolean done;
 				  if (EnvConstant.STOP_EPOCH)
 					 break;
 			   }
+			   
+			   // Una volta finite le epoche (tutte le generazioni) chiama lo stop per poter effettuare un'altra simulazione
+			   stopProcessAsync();
+			   
 			   if (EnvConstant.STOP_EPOCH)
 				  break;
 			}
@@ -731,7 +785,6 @@ private boolean done;
 			fixedPool.shutdown();							//// VERSIONE PARALLELA
 			fixedPool.awaitTermination(1, TimeUnit.DAYS);	//// VERSIONE PARALLELA
 			
-			
 			//TODO FINE DA PARALLELIZZARE
 		 
 		 //compute average and max fitness for each species
@@ -783,7 +836,7 @@ private boolean done;
 				  }
 			   }
 			}
-		 
+			
 		 // wait an epoch and make a reproduction of the best species
 			pop.epoch(generation);
 			

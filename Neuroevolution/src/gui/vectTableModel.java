@@ -3,7 +3,11 @@
 
    import javax.swing.*;
    import javax.swing.table.*;
-   import java.awt.*;
+
+import jNeatCommon.EnvRoutine;
+import jneat.Neat;
+
+import java.awt.*;
    import java.awt.event.*;
    import java.text.*;
 
@@ -18,11 +22,33 @@
 	  public int rows;
    
 	  public static final String columnNames[] = {" Parameter ", " Value "};
+	  
+	  private String filename;
+	  private Neat netx;
+	  private boolean updateFile;
+	  private boolean fileRead;
    
    
+	  public vectTableModel(Vector _data, String filename, Neat netx)
+	  {
+		  this.filename = filename;
+		  this.netx = netx;
+		  data = _data;
+		  rows = -1;
+		  updateFile = true;
+		  fileRead = false;
+	  }
    
-   
-	   public vectTableModel(Vector _data) {
+	   public boolean isFileRead() {
+		return fileRead;
+	}
+
+	public void setFileRead(boolean fileRead) {
+		this.fileRead = fileRead;
+	}
+
+	public vectTableModel(Vector _data) 
+	   {
 		 data = _data;
 		 rows = -1;
 	  }
@@ -132,6 +158,11 @@
 	  
 		 fireTableCellUpdated(row, col);
 	  
+		 if (updateFile && fileRead)
+		 {
+				netx.updateParam(this);
+				netx.writeParam(filename);
+		 }
 	  
 	  }
    

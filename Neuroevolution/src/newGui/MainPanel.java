@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,6 +37,7 @@ import javax.swing.text.Document;
 import org.joml.Vector2d;
 
 import com.sun.tools.doclint.Env;
+import com.sun.tools.internal.xjc.model.SymbolSpace;
 
 import gui.evo_fit;
 import gui.evo_in;
@@ -64,6 +66,7 @@ public class MainPanel extends JPanel implements Runnable
 	private SimulationPanel simulation;
 	private Graphs graphs;
 	private Net net;
+	private SettingsPanel settings;
 	private JTabbedPane tabbedPanel;
 	
 	
@@ -138,12 +141,15 @@ private boolean done;
         
         net = new Net(frame);
         
+        settings = new SettingsPanel(frame);
+        
         mappa = new chartXY();
         
 		tabbedPanel = new JTabbedPane();
 		tabbedPanel.addTab("Simulation", simulation);
 		tabbedPanel.addTab("Graphs", graphs);
 		tabbedPanel.addTab("Net", net);
+		tabbedPanel.addTab("Settings", settings);
 		tabbedPanel.setSelectedIndex(0);
 		
         // Add Swing components to content pane
@@ -199,6 +205,17 @@ private boolean done;
 	@Override
 	public void run() 
 	{	
+		JComboBox[] boxess = settings.getOtherSettings().getUpperPanel().getComboBoxes();
+		
+		int[] selectedOptions = new int[boxess.length];
+		
+		for (int i = 0; i<boxess.length; i++)
+		{
+			selectedOptions[i] = boxess[i].getSelectedIndex();
+		}
+		
+		int prevSelectedSettingsIndex = -1;
+		
 		double x = 0;
 		double a = 0;
 		double v = 0;
@@ -222,6 +239,20 @@ private boolean done;
 		double y_rimbalzo = 0;
 		double Y_rimbalzo = 0;
 		
+		double t_sim = 0;
+		double x_sim = 0;
+		double y_sim = 0;
+		double x_rim_sim = 0;
+		double y_rim_sim = 0;
+		double t_rim_sim = 0;
+		double v_rim_sim = 0;
+		double h_max = 0;
+		double gittata = 0;
+		double diametro = 0.05;	// Il diametro del corpo lanciato è di 50 mm (5 cm)
+		
+		// Mappa rappresentante il vettore velocità: ad ogni istante t è associata una coppia di valori ( v_x(t) = v0x , v_y(t) )
+		Map<Double, Vector2d> vel_vector = new HashMap<Double, Vector2d> ();
+		
 		while (isRunning)
 		{
 			long startTime = System.currentTimeMillis();
@@ -230,6 +261,16 @@ private boolean done;
 			
 			if (MyConstants.LOADED_INPUTS)
 			{
+				t_sim = 0;
+				x_sim = 0;
+				y_sim = 0;
+				x_rim_sim = 0;
+				y_rim_sim = 0;
+				t_rim_sim = 0;
+				v_rim_sim = 0;
+				h_max = 0;
+				gittata = 0;
+				
 				Organism organism = winners.get(
 						simulation.getLeftPanel().getOptionsPanel().
 						getGenerationList().getSelectedIndex());
@@ -314,13 +355,24 @@ private boolean done;
 				}
 				
 				if (x_tgt != infoLancio.get(MyConstants.X_TARGET_INDEX) || y_tgt != infoLancio.get(MyConstants.Y_TARGET_INDEX))
-				{					
+				{
+					t_sim = 0;
+					x_sim = 0;
+					y_sim = 0;
+					x_rim_sim = 0;
+					y_rim_sim = 0;
+					t_rim_sim = 0;
+					v_rim_sim = 0;
+					h_max = 0;
+					gittata = 0;
+					
 					simulation.getLeftPanel().updateInfoRete(selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
 					simulation.getLeftPanel().updateInfoLancio(infoLancio);
 					
 					x_tgt = infoLancio.get(MyConstants.X_TARGET_INDEX);
 					y_tgt = infoLancio.get(MyConstants.Y_TARGET_INDEX);
 					simulation.getRightPanel().resetTail();
+					repaint();
 				}
 				
 	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
@@ -341,85 +393,207 @@ private boolean done;
 				
 				a = infoLancio.get(MyConstants.ANGOLO_INDEX);
 				v = infoLancio.get(MyConstants.VELOCITA_INDEX);
-				
-	            double y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
-	            
-	            double X = simulation.getRightPanel().proportionX(x);
-	            double Y = simulation.getRightPanel().proportionY(y);
-	            
+//				
+//	            double y = Math.tan(a)*x - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(a), 2)))*Math.pow(x, 2));
+//	            
+//	            double X = simulation.getRightPanel().proportionX(x);
+//	            double Y = simulation.getRightPanel().proportionY(y);
+//	            
 //	            simulation.getRightPanel().setA(a);
 //	            simulation.getRightPanel().setV(v);
 	            
-	            if (y >= 0)
-	            {
-	    			simulation.getRightPanel().getPeso().setFrame(
-	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y - 1.5, 3, 3);
-	    			
-	    			simulation.getRightPanel().getTail().add(
-	    					new Vector2d(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y));
-	    			
-//	    			simulation.getRightPanel().getLines().add(
-//	    					new Line2D.Double(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y,
-//	    							MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y));
-	    			
-	    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
-	    			{
-	    				simulation.getRightPanel().getTail().removeFirst();
-	    			}		
-	    			
-	    			x_rimbalzo = x;
-	    			X_rimbalzo = X;
-	    			
-//	    			simulation.getRightPanel().setTailEnd(MyConstants.BORDER_X+X);
+//	            if (y >= 0)
+//	            {
+//	    			simulation.getRightPanel().getPeso().setFrame(
+//	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y - 1.5, 3, 3);
 //	    			
-//	    			if (x == 0) simulation.getRightPanel().setTailStart(MyConstants.BORDER_X + X);
+//	    			simulation.getRightPanel().getTail().add(
+//	    					new Vector2d(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y));
 //	    			
-//	    			else if (simulation.getRightPanel().getTailEnd() - 
-//	    					simulation.getRightPanel().getTailStart() > MyConstants.TAIL_LENGTH)
-//	    				simulation.getRightPanel().setTailStart(simulation.getRightPanel().getTailStart() - 1);
-//	    				
-//	    			simulation.getRightPanel().getTail().setLine(
-//	    					simulation.getRightPanel().getTailStart(),(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y,
-//	    					simulation.getRightPanel().getTailEnd(), (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y);
-	            }
-	            else	// La y è minore di 0, quindi graficamente la rappresento su Y = 0 per far vedere che atterra sull'asse delle ascise
-	            {
-	            	double a_rimbalzo = a;
-	            	double v_rimbalzo = v;
+////	    			simulation.getRightPanel().getLines().add(
+////	    					new Line2D.Double(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y,
+////	    							MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y));
+//	    			
+//	    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+//	    			{
+//	    				simulation.getRightPanel().getTail().removeFirst();
+//	    			}		
+//	    			
+//	    			x_rimbalzo = x;
+//	    			X_rimbalzo = X;
+//	    			
+////	    			simulation.getRightPanel().setTailEnd(MyConstants.BORDER_X+X);
+////	    			
+////	    			if (x == 0) simulation.getRightPanel().setTailStart(MyConstants.BORDER_X + X);
+////	    			
+////	    			else if (simulation.getRightPanel().getTailEnd() - 
+////	    					simulation.getRightPanel().getTailStart() > MyConstants.TAIL_LENGTH)
+////	    				simulation.getRightPanel().setTailStart(simulation.getRightPanel().getTailStart() - 1);
+////	    				
+////	    			simulation.getRightPanel().getTail().setLine(
+////	    					simulation.getRightPanel().getTailStart(),(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y,
+////	    					simulation.getRightPanel().getTailEnd(), (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y)-Y);
+//	            }
+//	            else	// La y è minore di 0, quindi graficamente la rappresento su Y = 0 per far vedere che atterra sull'asse delle ascise
+//	            {
+//	            	double a_rimbalzo = a;
+//	            	double v_rimbalzo = v;
+////	            	
+////	            	double y_rimbalzo = Math.tan(a_rimbalzo)*x - ((MyConstants.GRAVITY/(2*Math.pow(v_rimbalzo, 2)*Math.pow(Math.cos(a_rimbalzo), 2)))*Math.pow(x, 2));
+////	            	
+////		            double Y_rimbalzo = simulation.getRightPanel().proportionY(y_rimbalzo);
+////		            
+////		            System.out.println(Y_rimbalzo);
+////	            	Y_rimbalzo = 0;
 //	            	
-//	            	double y_rimbalzo = Math.tan(a_rimbalzo)*x - ((MyConstants.GRAVITY/(2*Math.pow(v_rimbalzo, 2)*Math.pow(Math.cos(a_rimbalzo), 2)))*Math.pow(x, 2));
-//	            	
-//		            double Y_rimbalzo = simulation.getRightPanel().proportionY(y_rimbalzo);
-//		            
-//		            System.out.println(Y_rimbalzo);
-//	            	Y_rimbalzo = 0;
-	            	
-	    			simulation.getRightPanel().getPeso().setFrame(
-	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rimbalzo - 1.5, 3, 3);
-	    			
-	    			simulation.getRightPanel().getTail().add(
-	    					new Vector2d(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rimbalzo));
-	    			
-	    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
-	    			{
-	    				simulation.getRightPanel().getTail().removeFirst();
-	    			}	
-	    			
-	    			// TEMPORANEO (TRASLA LA PARABOLA DI 500 IN MODO DA FAR SCOMPARIRE IL LANCIO)
-	    			//TODO IMPLEMENTARE RIMBALZO PROIETTILE
-	    			y_rimbalzo = Math.tan(a_rimbalzo)*(x + 500) - ((MyConstants.GRAVITY/(2*Math.pow(v_rimbalzo, 2)*Math.pow(Math.cos(a_rimbalzo), 2)))*Math.pow(( + 500), 2));
-	    			
-	    			Y_rimbalzo = simulation.getRightPanel().proportionY(y_rimbalzo);
-	            }
-	            
-	            x++;
-	            
-				if (x > MyConstants.ASSE_X) // || y > MyConstants.ASSE_Y) 
+//	    			simulation.getRightPanel().getPeso().setFrame(
+//	    					MyConstants.BORDER_X+X -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rimbalzo - 1.5, 3, 3);
+//	    			
+//	    			simulation.getRightPanel().getTail().add(
+//	    					new Vector2d(MyConstants.BORDER_X+X, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rimbalzo));
+//	    			
+//	    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+//	    			{
+//	    				simulation.getRightPanel().getTail().removeFirst();
+//	    			}	
+//	    			
+//	    			// TEMPORANEO (TRASLA LA PARABOLA DI 500 IN MODO DA FAR SCOMPARIRE IL LANCIO)
+//	    			//TODO IMPLEMENTARE RIMBALZO PROIETTILE
+//	    			y_rimbalzo = Math.tan(a_rimbalzo)*(x + 500) - ((MyConstants.GRAVITY/(2*Math.pow(v_rimbalzo, 2)*Math.pow(Math.cos(a_rimbalzo), 2)))*Math.pow(( + 500), 2));
+//	    			
+//	    			Y_rimbalzo = simulation.getRightPanel().proportionY(y_rimbalzo);
+//	            }
+//	            
+//	            x++;
+//	            
+//				if (x > MyConstants.ASSE_X) // || y > MyConstants.ASSE_Y) 
+//				{
+//					simulation.getRightPanel().resetTail();
+//					x = 0;
+//					y_rimbalzo = 0;
+//				}
+				
+				// INIZIO SIMULAZIONE MOTO PARABOLICO DEL CORPO
+				
+				// Aggiorna le componenti del vettore velocità per l'istante t
+				double v_x = v*Math.cos(a);
+				
+				double v_y = v*Math.sin(a) - MyConstants.GRAVITY*t_sim;
+				
+				vel_vector.put(t_sim, new Vector2d(v_x, v_y));
+				
+				
+				// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
+				x_sim = v*Math.cos(a)*t_sim;
+				
+				y_sim = v*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
+				
+				// Calcola le proporzioni per la rappresentazione grafica
+				double X_sim = simulation.getRightPanel().proportionX(x_sim);
+				double Y_sim = simulation.getRightPanel().proportionY(y_sim);
+
+				// Aggiorna le posizioni nella rappresentazione grafica (corpo + coda)
+    			simulation.getRightPanel().getPeso().setFrame(
+    					MyConstants.BORDER_X+X_sim -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_sim - 1.5, 3, 3);
+    			
+    			if (y_sim >= 0) 
+    				simulation.getRightPanel().getTail().add(
+    						new Vector2d(MyConstants.BORDER_X+X_sim, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_sim));
+    			
+    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+    			{
+    				simulation.getRightPanel().getTail().removeFirst();
+    			}
+				
+//				if (y_sim >= 0) System.out.println("X = " + x_sim + ", Y = " + y_sim);
+				
+				if (y_sim > 0)
 				{
-					simulation.getRightPanel().resetTail();
-					x = 0;
-					y_rimbalzo = 0;
+					gittata = 2*v*Math.cos(a)*v*Math.sin(a)/MyConstants.GRAVITY;	// gittata
+					h_max = ( Math.pow(v, 2)*Math.pow(Math.sin(a), 2) ) / (2*MyConstants.GRAVITY);	// altezza massima
+					v_rim_sim = Math.sqrt( (2*MyConstants.GRAVITY*(h_max-diametro/2)) );	// velocità di rimbalzo (nel caso in cui il corpo sia elastico, es: palla da tennis)
+					
+					if (x_sim > MyConstants.ASSE_X)	// RESETTA IL LANCIO
+					{
+						x_sim = 0;
+						y_sim = 0;
+						t_sim = 0;
+						vel_vector.clear();
+						x_rim_sim = 0;
+						y_rim_sim = 0;
+						t_rim_sim = 0;
+						gittata = 0;
+						h_max = 0;
+						v_rim_sim = 0;
+					}
 				}
+				
+				// Aggiorna il tempo t
+				t_sim += 0.04;
+				
+				// Controllo x e y per resettare il lancio (x > asse_X) o per effettuare il rimbalzo (y = 0)
+				if (MyConstants.SETTINGS_VALUES[MyConstants.SIM_PHYSICS])
+				{
+					if (y_sim < 0)	// RIMBALZA
+					{
+	//					System.out.println("VELOCITA_RIMBALZO = " + v_rim + " vs V_0 = " + v);
+						x_rim_sim = v_rim_sim*Math.cos(a)*t_rim_sim + gittata;
+						y_rim_sim = v_rim_sim*Math.sin(a)*t_rim_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_rim_sim, 2);
+						double X_rim_sim = simulation.getRightPanel().proportionX(x_rim_sim);
+						double Y_rim_sim = simulation.getRightPanel().proportionY(y_rim_sim);
+	
+		    			simulation.getRightPanel().getPeso().setFrame(
+		    					MyConstants.BORDER_X+X_rim_sim -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rim_sim - 1.5, 3, 3);
+		    			
+		    			if (y_rim_sim >= 0)
+		    				simulation.getRightPanel().getTail().add(
+		    					new Vector2d(MyConstants.BORDER_X+X_rim_sim, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rim_sim));
+		    			
+		    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+		    			{
+		    				simulation.getRightPanel().getTail().removeFirst();
+		    			}
+		    			
+		    			t_rim_sim += 0.04;
+	
+	//					System.out.println("X = " + x_sim + ", Y = " + y_rim_sim);
+					}
+					if (y_rim_sim < 0)
+					{
+						x_rim_sim = 0;
+						y_rim_sim = 0;
+						t_rim_sim = 0;
+						
+						// aggiorna gittata, altezza massima e velocità di rimbalzo in base all'ultimo rimbalzo
+						gittata += 2*v_rim_sim*Math.cos(a)*v_rim_sim*Math.sin(a)/MyConstants.GRAVITY;	// nuova gittata
+						h_max = ( Math.pow(v_rim_sim, 2)*Math.pow(Math.sin(a), 2) ) / (2*MyConstants.GRAVITY);	// nuova altezza massima
+						v_rim_sim = Math.sqrt( (2*MyConstants.GRAVITY*(h_max-diametro/2)) );	// nuova velocità di rimbalzo
+					}
+					if (x_rim_sim > MyConstants.ASSE_X || Double.isNaN(v_rim_sim))	// RESETTA IL LANCIO
+					{
+	//					System.out.println("Lancia ancora");
+						x_sim = 0;
+						y_sim = 0;
+						t_sim = 0;
+						vel_vector.clear();
+						x_rim_sim = 0;
+						y_rim_sim = 0;
+						t_rim_sim = 0;
+						gittata = 0;
+						h_max = 0;
+						v_rim_sim = 0;
+						simulation.getRightPanel().resetTail();
+					}
+				}
+				else
+				{
+					if (y_sim<0)
+					{
+						t_sim = 0;
+//						System.out.println("ciao");
+					}
+				}
+				// FINE SIMULAZIONE MOTO PARABOLICO DEL CORPO
 				
 				simulation.getRightPanel().repaint();
 			}
@@ -473,6 +647,35 @@ private boolean done;
 				}
 			}
 			
+			if (tabbedPanel.getSelectedIndex() == 3)
+			{
+				JComboBox[] boxes = settings.getOtherSettings().getUpperPanel().getComboBoxes();
+				boolean selected = false;
+				for (int i=0; i<boxes.length; i++)
+				{
+					if (boxes[i].isFocusOwner())
+					{
+						selected = true;
+						settings.getOtherSettings().updateDescription(settings.getOtherSettings().getUpperPanel().getDescriptions()[i]);
+					}
+					if (boxes[i].getSelectedIndex() != selectedOptions[i])
+					{
+//						System.out.println("CAMBIATO");
+						selectedOptions[i] = boxes[i].getSelectedIndex();
+						settings.getOtherSettings().getUpperPanel().updateValue(i, selectedOptions[i]);
+						settings.getOtherSettings().getUpperPanel().saveSettings(settings.getOtherSettings().getUpperPanel().getFilename());
+					}
+				}
+				if(!selected && !settings.getOtherSettings().getDescription().getText().equals(""))
+					settings.getOtherSettings().updateDescription("");
+				
+				if(settings.getLeftPanel().getList().getSelectedIndex() != prevSelectedSettingsIndex)
+				{
+					prevSelectedSettingsIndex = settings.getLeftPanel().getList().getSelectedIndex();
+					settings.repaint();
+				}
+			}
+			
 			long endTime = System.currentTimeMillis() - startTime;
 			long waitTime = (MyConstants.MILLISECOND/MyConstants.FPS) - endTime/MyConstants.MILLISECOND;
 
@@ -487,6 +690,44 @@ private boolean done;
 
 		}
 	}
+	
+	/// SIMULAZIONE MOTO PROIETTILE ///
+	
+	
+	public void simulate()
+	{
+		double t_sim = 0;
+		double x_sim = 0;
+		double y_sim = 0;
+		
+		// Mappa rappresentante il vettore velocità: ad ogni istante t è associata una coppia di valori ( v_x(t) = v0x , v_y(t) )
+		Map<Double, Vector2d> vel_vector = new HashMap<Double, Vector2d> ();
+		
+		
+		// Aggiorna le componenti del vettore velocità per l'istante t
+		double v_x = v0*Math.cos(a);
+		
+		double v_y = v0*Math.sin(a) - MyConstants.GRAVITY*t_sim;
+		
+		vel_vector.put(t_sim, new Vector2d(v_x, v_y));
+		
+		
+		// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
+		x_sim = v0*Math.cos(a)*t_sim;
+		
+		y_sim = v0*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
+		
+		
+		// Aggiorna il tempo t
+		t_sim += 0.04;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	/// START DA INTERFACCIA NUOVA ///
 	
@@ -528,9 +769,9 @@ private boolean done;
 //		   lookupThread.interrupt();
 		   EnvConstant.STOP_EPOCH = true;
 		   
-			 simulation.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
-			 simulation.getLeftPanel().getOptionsPanel().getGC().gridx = 0;
-			 simulation.getLeftPanel().getOptionsPanel().getGC().gridy = 3;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_END;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().gridx = 1;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().gridy = 2;
 			 simulation.getLeftPanel().getOptionsPanel().add(simulation.getLeftPanel().getOptionsPanel().getLoadBtn(), simulation.getLeftPanel().getOptionsPanel().getGC());
 			 
 			 simulation.getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
@@ -627,7 +868,7 @@ private boolean done;
 		 {
 			Neat u_neat = new Neat();
 			u_neat.initbase();
-			rc = u_neat.readParam(MyConstants.PARAMETRI_NOMEFILE);
+			rc = u_neat.readParam("parameters");
 		 
 			if (!rc)
 			{
@@ -755,7 +996,7 @@ private boolean done;
 			//point to organism
 			   Organism organism = ((Organism) itr_organism.next());
 			   
-				fixedPool.submit(new OrganismRunnableFirst(organism));	//// VERSIONE PARALLELA
+				fixedPool.submit(new OrganismRunnable(organism));	//// VERSIONE PARALLELA
 				
 //			//// VERSIONE SERIALE
 //			//evaluate 
@@ -1426,4 +1667,9 @@ private boolean done;
 			 organism.setWinner(false);
 			 return false;
 		  }
+	   
+	   public boolean[] getOtherSettingsValues()
+	   {
+		   return settings.getOtherSettings().getUpperPanel().getValues();
+	   }
 }

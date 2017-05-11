@@ -214,7 +214,7 @@ public class OrganismRunnableFirst implements Runnable
 					   double maxY = 80;
 					   double minM = 1;
 					   double maxM = 2;
-					   double massa = minM + rm.nextDouble()*maxM;	// 2kg
+					   double massa = minM + rm.nextDouble()*maxM;	// 1-3kg
 					   double v = 0;
 					   double minF = 15;	// forza minima
 					   double maxF = 60;	// forza massima

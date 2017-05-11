@@ -50,7 +50,7 @@ public class Net extends JPanel implements ActionListener
 //		setBorder(BorderFactory.createTitledBorder("Current net"));
 		
 		leftPanel = new NetLeftPanel(frame);
-		leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
+//		leftPanel.getOptionsPanel().getAutodrawf().addActionListener(this);
 		
 		rightPanel = new NetGraphPanel(frame);
 		
@@ -163,7 +163,7 @@ public class Net extends JPanel implements ActionListener
 			    
 				///GENERAZIONE
 				leftPanel.getOptionsPanel().getGenerationList().addItem(o.getGeneration());
-				if (autodraw) 
+				if (MyConstants.SETTINGS_VALUES[MyConstants.NET_AUTO_DRAW_INDEX]) 
 					leftPanel.getOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());;
 		   }
 
@@ -172,18 +172,18 @@ public class Net extends JPanel implements ActionListener
 		{
 			 JButton p = (JButton) e.getSource();
 			 
-			 if (p.getActionCommand().equals("Auto-draw: OFF")) 
-			 {
-				 autodraw = false;
-				 
-				 leftPanel.getOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
-			 } 
-			 
-			 else if (p.getActionCommand().equals("Auto-draw: ON")) 
-			 {
-				 autodraw = true;
-				 
-				 leftPanel.getOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
-			 } 
+//			 if (p.getActionCommand().equals("Auto-draw: OFF")) 
+//			 {
+//				 autodraw = false;
+//				 
+//				 leftPanel.getOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
+//			 } 
+//			 
+//			 else if (p.getActionCommand().equals("Auto-draw: ON")) 
+//			 {
+//				 autodraw = true;
+//				 
+//				 leftPanel.getOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
+//			 } 
 		}
 }

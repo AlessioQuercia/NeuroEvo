@@ -38,6 +38,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -63,10 +65,11 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 	
 	private MainPanel mainPanel;
 	private SimulationLeftPanel leftPanel;
-	private ThrowPanel rightPanel;
+	private ThrowPanel throwPanel;
+//	private SettingsPanel settingsPanel;
 	
-	 String mask6d;
-	 DecimalFormat fmt6d;
+	private String mask6d;
+	private DecimalFormat fmt6d;
 
 	private boolean start;
 	
@@ -76,6 +79,8 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 	
 	private boolean autodraw;
 	
+	private GridBagConstraints gc;
+
 	public SimulationPanel(JFrame frame, MainPanel mainPanel) 
 	{
 		this.frame = frame;
@@ -97,23 +102,27 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
     {   
     	setLayout(new GridBagLayout());
     	
-    	GridBagConstraints gc = new GridBagConstraints();
+    	gc = new GridBagConstraints();
     	
 //    	OptionsPanel options = new OptionsPanel();
     	
     	leftPanel = new SimulationLeftPanel(frame);
     	leftPanel.getOptionsPanel().getStartBtn().addActionListener(this);
-    	leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
-    	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
+//    	leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
+//    	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getLoadBtn().addActionListener(this);
+//    	leftPanel.getOptionsPanel().getSettingsBtn().addActionListener(this);
     	leftPanel.getInputPanel().getLoadInputBtn().addActionListener(this);
+    	
     	leftPanel.getInputPanel().getLoadInputBtn().addKeyListener(this);
     	leftPanel.getInputPanel().getxArea().addKeyListener(this);
     	leftPanel.getInputPanel().getyArea().addKeyListener(this);
 
  
     	
-    	rightPanel = new ThrowPanel(frame);
+    	throwPanel = new ThrowPanel(frame);
+//    	settingsPanel = new SettingsPanel(frame);
+    	
     	
 //    	JTextArea info = new JTextArea();
 
@@ -137,7 +146,8 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
     	
 		gc.gridx = 1;
 		gc.gridy = 0;
-    	add(rightPanel, gc);
+    	add(throwPanel, gc);
+//    	add(settingsPanel, gc);
     	
     	
     	
@@ -189,7 +199,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
     
     public ThrowPanel getRightPanel()
     {
-    	return rightPanel;
+    	return throwPanel;
     }
     
 
@@ -201,7 +211,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 		    
 			///GENERAZIONE
 			leftPanel.getOptionsPanel().getGenerationList().addItem(o.getGeneration());
-			if (autodraw) 
+			if (MyConstants.SETTINGS_VALUES[MyConstants.SIM_AUTO_DRAW_INDEX]) 
 				leftPanel.getOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());;
 			
 ////			System.out.println(leftPanel.getOptionsPanel().getGenerationList().getSelectedItem());
@@ -363,33 +373,65 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 				 loadInputsPressed();
 			 }
 			 
-			 else if (p.getActionCommand().equals("Auto-draw: OFF")) 
-			 {
-				 autodraw = false;
-				 
-				 getLeftPanel().getOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
-			 } 
+//			 else if (p.getActionCommand().equals("Auto-draw: OFF")) 
+//			 {
+//				 autodraw = false;
+//				 
+//				 getLeftPanel().getOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
+//			 } 
+//			 
+//			 else if (p.getActionCommand().equals("Auto-draw: ON")) 
+//			 {
+//				 autodraw = true;
+//				 
+//				 getLeftPanel().getOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
+//			 } 
 			 
-			 else if (p.getActionCommand().equals("Auto-draw: ON")) 
-			 {
-				 autodraw = true;
-				 
-				 getLeftPanel().getOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
-			 } 
+//			 else if (p.getActionCommand().equals("Hide best")) 
+//			 {
+//				 getRightPanel().setShowBest(false);
+//				 
+//				 getLeftPanel().getOptionsPanel().getShowBestBtn().setText("Show best");
+//			 } 
+//			 
+//			 else if (p.getActionCommand().equals("Show best")) 
+//			 {
+//				 getRightPanel().setShowBest(true);
+//				 
+//				 getLeftPanel().getOptionsPanel().getShowBestBtn().setText("Hide best");
+//			 } 
 			 
-			 else if (p.getActionCommand().equals("Show best: OFF")) 
-			 {
-				 getRightPanel().setShowBest(false);
-				 
-				 getLeftPanel().getOptionsPanel().getShowBestBtn().setText("Show best: ON");
-			 } 
+//			 else if (p.getActionCommand().equals("Settings")) 
+//			 {
+//				 remove(throwPanel);
+//				 remove(settingsPanel);
+//				 gc.weightx = 0.5;
+//				 gc.weighty = 0.5;
+//		    	 gc.fill = GridBagConstraints.BOTH;
+//		    	 
+//				 gc.gridx = 1;
+//				 gc.gridy = 0;
+//		    	 add(settingsPanel, gc); 
+//		    	 repaint();
+//				 
+//				 getLeftPanel().getOptionsPanel().getSettingsBtn().setText("Lancio");
+//			 } 
 			 
-			 else if (p.getActionCommand().equals("Show best: ON")) 
-			 {
-				 getRightPanel().setShowBest(true);
-				 
-				 getLeftPanel().getOptionsPanel().getShowBestBtn().setText("Show best: OFF");
-			 } 
+//			 else if (p.getActionCommand().equals("Lancio")) 
+//			 {
+//				 remove(throwPanel);
+//				 remove(settingsPanel);
+//				 gc.weightx = 0.5;
+//				 gc.weighty = 0.5;
+//		    	 gc.fill = GridBagConstraints.BOTH;
+//		    	 
+//				 gc.gridx = 1;
+//				 gc.gridy = 0;
+//		    	 add(throwPanel, gc); 
+//				 repaint();
+//				 
+//				 getLeftPanel().getOptionsPanel().getSettingsBtn().setText("Settings");
+//			 } 
 		}
 		
 		public boolean serializeOnFile(Organism o)
@@ -717,6 +759,10 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 		public void setLoading(boolean loading)
 		{
 			this.loading = loading;
+		}
+		
+		public GridBagConstraints getGc() {
+			return gc;
 		}
 
 		@Override

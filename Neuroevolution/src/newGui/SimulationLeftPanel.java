@@ -350,7 +350,7 @@ public class SimulationLeftPanel extends JPanel
 		gc.gridy = 1;	
 		add(netPanel, gc);
 		
-		gc.weighty = 10;
+		gc.weighty = 20;
 		
 		gc.gridx = 0;
 		gc.gridy = 2;	

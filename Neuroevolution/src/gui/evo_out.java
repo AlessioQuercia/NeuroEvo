@@ -2,6 +2,8 @@ package gui;
 
 public class evo_out 
 {
+	public static String[] outputNames = {"angolo", "forza", "booleano lascia"};
+	
 	   public static int getNumUnit() { return 3; } 
 	   
 	   public static double getTarget(double y_obj) 

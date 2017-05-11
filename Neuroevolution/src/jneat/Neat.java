@@ -12,6 +12,8 @@ import java.lang.reflect.*;
 /** Is a superclass for definition of all parameters , threshold and others values. */
 	public class Neat implements Serializable
 	{
+		public static int p_epoch_number;
+		
    /** Probability  of mutating a single trait param */
 	  public static double p_trait_param_mut_prob;
    
@@ -114,7 +116,7 @@ import java.lang.reflect.*;
    /** number of a trait */
 	  public static int p_num_trait_params;
    
-   
+	  public static String d_epoch_number;
 	  public static String d_trait_param_mut_prob;
 	  public static String d_trait_mutation_power;
 	  public static String d_linktrait_mut_sig;
@@ -162,6 +164,7 @@ import java.lang.reflect.*;
 	  }                                                         
    
 	   public static void initbase() {
+		   p_epoch_number = 1000;
 		 p_trait_param_mut_prob = 0;
 		 p_trait_mutation_power = 0;
 		 p_linktrait_mut_sig = 0;
@@ -199,6 +202,7 @@ import java.lang.reflect.*;
 	  //
 	  // setting the description  of all parameters
 	  //
+		 d_epoch_number = "The number of epochs to run";
 		 d_trait_param_mut_prob = "Prob. of mutating a single trait param";
 		 d_trait_mutation_power = "Power of mutation on a single trait param";
 		 d_linktrait_mut_sig = 
@@ -321,6 +325,7 @@ import java.lang.reflect.*;
 			   //skip comment
 			   
 				  s1 = st.nextToken();
+				  
 			   // real value
 				  s1 = st.nextToken();
 			   
@@ -424,11 +429,11 @@ import java.lang.reflect.*;
 			   Field f1 = c.getField("p_" + xkey);
 			   Object fty = f1.getType();
 			
-			   if (fty.toString().equals("double")) {
+			   if (fty.toString().equals("double") && !xval.contains("_")) {
 				  double n1 = Double.parseDouble(xval);
 				  f1.set(c, (new Double(n1)));
 			   }
-			   if (fty.toString().equals("int")) {
+			   if (fty.toString().equals("int") && !xval.contains("_")) {
 				  int n1 = Integer.parseInt(xval);
 				  f1.set(c, (new Integer(n1)));
 			   }

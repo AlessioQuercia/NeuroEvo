@@ -1,5 +1,7 @@
 package newGui;
 
+import java.util.ArrayList;
+
 public class MyConstants 
 {
 	public static String TITLE = "New NEAT GUI";
@@ -40,7 +42,7 @@ public class MyConstants
 	public static String DATA_DIR = "data\\";
 	public static String RESULTS_DIR = "results\\";
 	public static String PARAMETRI_NOMEFILE = "parametri";
-	public static String GENOMA_NOMEFILE = DATA_DIR +"genome_3in_4hid_3out";
+	public static String GENOMA_NOMEFILE = DATA_DIR +"genome_5in_4hid_3out";
 	public static String POP_NOMEFILE = DATA_DIR + "primitive";
 	
 	////GESTIONE UPDATE E RENDER
@@ -59,4 +61,33 @@ public class MyConstants
 	public static double LOADED_X;
 	public static double LOADED_Y;
 	public static boolean LOADED_INPUTS = false;
+	
+	////COSTANTI SETTINGS
+	public static final String OTHER_SETTINGS = "otherSettings";
+	public static final String DEFAULT_OTHER_SETTINGS = "defaultOtherSettings";
+	public static boolean[] SETTINGS_VALUES = null;
+	public static final int SIM_AUTO_DRAW_INDEX = 0;
+	public static final int SIM_SHOW_BEST_INDEX = 1;
+	public static final int SIM_PHYSICS = 2;
+	public static final int GRAPHS_AUTO_DRAW_INDEX = 3;
+	public static final int GRAPHS_GRID_INDEX = 4;
+	public static final int NET_AUTO_DRAW_INDEX = 5;
+	
+	////COSTANTI ID NODI
+	public static ArrayList<Integer> INPUT_NODES_ID = new ArrayList<Integer>();
+	public static ArrayList<Integer> BIAS_NODES_ID = new ArrayList<Integer>();
+	public static ArrayList<Integer> OUTPUT_NODES_ID = new ArrayList<Integer>();
+	
+	////INDICI PER LA SIMULAZIONE DI LANCIO DELLA RETE (da salvare nell'array tgt[][])
+	public static int SIM_X_TGT_INDEX = 0;
+	public static int SIM_Y_TGT_INDEX = 1;
+	public static int SIM_VEL_INDEX = 2;
+	public static int SIM_MASSA_INDEX = 3;
+	public static int SIM_ANGOLO_INDEX = 4;
+	public static int SIM_FORZA_INDEX = 5;
+	public static int SIM_ACCELERAZIONE_INDEX = 6;
+	public static int SIM_TEMPO = 7;
+	public static int SIM_DISTANZA_MINIMA = 8;
+	public static int SIM_X_MIGLIORE = 9;
+	public static int SIM_Y_MIGLIORE = 10;
 }

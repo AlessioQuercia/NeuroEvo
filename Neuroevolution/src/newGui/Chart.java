@@ -52,6 +52,8 @@ public class Chart extends JPanel
 
 	private boolean startFromFirst;
 	
+	private int larghezzaNumeri;
+	
 	public Chart(JFrame frame) 
 	{
 		this.frame = frame;
@@ -156,7 +158,7 @@ public class Chart extends JPanel
 			Line2D line = new Line2D.Double(ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y,
 					ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y + ChartConstants.HYPHEN_WIDTH);
 			g2d.draw(line);	// DISEGNA I TRATTINI
-			if (grid)	// DISEGNA LA GRIGLIA
+			if (MyConstants.SETTINGS_VALUES[MyConstants.GRAPHS_GRID_INDEX])	// DISEGNA LA GRIGLIA
 			{
 				Line2D horizontalGrid = new Line2D.Double(ChartConstants.BORDER_X + stepX + i, getHeight() - y_axis - ChartConstants.BORDER_Y,
 						ChartConstants.BORDER_X + stepX + i, getHeight() - y_axis - ChartConstants.BORDER_Y - altezza);
@@ -179,7 +181,7 @@ public class Chart extends JPanel
 			Line2D line = new Line2D.Double(x_axis + ChartConstants.BORDER_X, getHeight() - ChartConstants.BORDER_Y - i,
 					 x_axis + ChartConstants.BORDER_X - ChartConstants.HYPHEN_WIDTH, getHeight() - ChartConstants.BORDER_Y - i);
 			g2d.draw(line);	// DISEGNA I TRATTINI
-			if (grid)	// DISEGNA LA GRIGLIA
+			if (MyConstants.SETTINGS_VALUES[MyConstants.GRAPHS_GRID_INDEX])	// DISEGNA LA GRIGLIA
 			{
 				Line2D verticalGrid = new Line2D.Double(x_axis + ChartConstants.BORDER_X, getHeight() - ChartConstants.BORDER_Y - i - stepY,
 						 x_axis + ChartConstants.BORDER_X + larghezza, getHeight() - ChartConstants.BORDER_Y - i - stepY);
@@ -193,18 +195,25 @@ public class Chart extends JPanel
 			
 			int sWidth = g2d.getFontMetrics().stringWidth(s);
 			
+			larghezzaNumeri = sWidth;
+			
 			g2d.drawString(s, ChartConstants.BORDER_X + x_axis - sWidth - 15, getHeight() - ChartConstants.BORDER_Y - (int)i + 5);	// DISEGNA I NUMERI
 		}
 	}
 	
 	public void drawDesc(Graphics2D g2d)
 	{
-        g2d.drawString(descX, getWidth() - 70, getHeight() - y_axis + 15);
+		int descXWidth = g2d.getFontMetrics().stringWidth(descX);
+		
+        g2d.drawString(descX, getWidth() - MyConstants.BORDER_X -  descXWidth, getHeight() - y_axis + MyConstants.BORDER_Y);
         
         AffineTransform orig = g2d.getTransform();
         g2d.rotate(Math.toRadians(270));
         
-        g2d.drawString(descY, -70, 15);
+        int descYWidth = g2d.getFontMetrics().stringWidth(descY);
+        
+    	// Per scrivere la descrizione subito a sinistra dei numeri usare: (x_axis - larghezzaNumeri) come componente y (al posto di MyConstants.BORDER_X)
+        g2d.drawString(descY, - MyConstants.BORDER_Y - descYWidth, MyConstants.BORDER_X);
         
         g2d.setTransform(orig);
 	}

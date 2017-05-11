@@ -4,8 +4,12 @@
 
    import java.util.*;
 
-   import java.text.*;
+import gui.evo_in;
+import gui.evo_out;
+
+import java.text.*;
    import jNeatCommon.*;
+import newGui.MyConstants;
 
 
 	public class Genome extends Neat 
@@ -35,6 +39,13 @@
 	  when genomes are readed (if exist : null otherwise);*/
    
 	  public String notes;
+	  
+	  public ArrayList<Integer> inputNodesID;
+	  private ArrayList<Integer> biasNodesID;
+	  public ArrayList<Integer> outputNodesID;
+	  public String[] inputNames;
+	  public String[] outputNames;
+
    
    
 	   public int getGenome_id() {
@@ -2868,6 +2879,10 @@
 		 traits = new Vector(3, 0);
 		 nodes = new Vector(3, 0);
 		 genes = new Vector(3, 0);
+		 
+		 inputNodesID = new ArrayList<Integer>();
+		 biasNodesID = new ArrayList<Integer>();
+		 outputNodesID = new ArrayList<Integer>();
 
 		 
 		 while (!done) 
@@ -2906,7 +2921,15 @@
 			   NNode newnode;
 			   newnode = new NNode(xline, traits);
 			   nodes.addElement(newnode);
-			   if (newnode.getGen_node_label() == NeatConstant.BIAS) nBiasNodes++;	// SE E' UN NODO BIAS, LO CONTA
+			   if (newnode.getGen_node_label() == NeatConstant.INPUT) 
+				   MyConstants.INPUT_NODES_ID.add(newnode.getNode_id());
+			   if (newnode.getGen_node_label() == NeatConstant.BIAS)
+			   {
+				   nBiasNodes++;	// SE E' UN NODO BIAS, LO CONTA
+				   MyConstants.BIAS_NODES_ID.add(newnode.getNode_id());
+			   }
+			   if (newnode.getGen_node_label() == NeatConstant.OUTPUT)
+				   MyConstants.OUTPUT_NODES_ID.add(newnode.getNode_id());
 			   EnvConstant.NR_UNIT_BIAS = nBiasNodes;
 //			   System.err.println(nBiasNodes);
 			
@@ -2919,7 +2942,7 @@
 			}
 		 
 		 }
-	  
+		 
 	  }
 	   public void print_to_file(IOseq xFile) 
 	  {
@@ -3262,4 +3285,53 @@
 		 xFile.IOseqCloseW();
 	  
 	  
-	  }}
+	  }
+	   
+	   public ArrayList<Integer> getInputNodesID()
+	   {
+		   return inputNodesID;
+	   }
+	   
+	   public void setInputNodesID(ArrayList<Integer> inputIDs)
+	   {
+		   inputNodesID = inputIDs;
+	   }
+	   
+	   public ArrayList<Integer> getOutputNodesID()
+	   {
+		   return outputNodesID;
+	   }
+	   
+	   public void setOutputNodesID(ArrayList<Integer> outputIDs)
+	   {
+		   outputNodesID = outputIDs;
+	   }
+	   
+	   public String[] getInputNames()
+	   {
+		   return inputNames;
+	   }
+	   
+	   public void setInputNames(String[] inputNames)
+	   {
+		   this.inputNames = inputNames;
+	   }
+	   
+	   public String[] getOutputNames()
+	   {
+		   return outputNames;
+	   }
+	   
+	   public void setOutputNames(String[] outputNames)
+	   {
+		   this.outputNames = outputNames;
+	   }
+	   
+		  public ArrayList<Integer> getBiasNodesID() {
+				return biasNodesID;
+			}
+
+			public void setBiasNodesID(ArrayList<Integer> biasNodesID) {
+				this.biasNodesID = biasNodesID;
+			}
+}

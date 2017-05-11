@@ -49,6 +49,8 @@ public class evo_fit
 	     double prova = 0;
 	     double throwFit = 0;
 	     
+	     double en_cinetica = 0;
+	     
 	     //d[2] = 0.0;
 	     ArrayList<Double> arrayBest = new ArrayList<Double> ();
 	     for (int i = 0; i<MyConstants.INFO_RETE_SIZE; i++)
@@ -138,6 +140,8 @@ public class evo_fit
 	    	 	
 	    	 	vel_error = Math.abs(v - mappa.get(sample + 1).get(1));
 	    	 	
+	    	 	double vel_2_error = Math.abs(Math.pow(v, 2) - mappa.get(sample + 1).get(1));
+	    	 	
 	    	 	a_error = Math.toDegrees(Math.abs(a - mappa.get(sample + 1).get(0)));
 	    	 	
 //	    	 	errorsum += Math.pow(error, 2);		//fitness_somma_quadrati
@@ -150,7 +154,19 @@ public class evo_fit
 
 	    	 	errsum += error;
 	    	 	
+//	    	 	en_cinetica = 0.5*m*Math.pow(v, 2);
+	    	 	
+//	    	 	double best_throw_en_cinetica = 0.5*m*Math.pow(mappa.get(sample+1).get(1), 2);
+	    	 	
+//	    	 	double en_cinetica_error = Math.abs(en_cinetica - best_throw_en_cinetica);
+	    	 	
+//	    	 	System.out.println(Math.pow(vel_error, 2));
+	    	 	
 	    	 	throwFit = (200 - error) * (200 - vel_error);
+	    	 	
+//	    	 	throwFit = (20000 - error) * (20000 - en_cinetica_error);
+	    	 	
+//	    	 	System.out.println(throwFit);
 	    	 	
 	    	 	prova += throwFit;
 	    	 	//TIRO MIGLIORE

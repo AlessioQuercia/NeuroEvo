@@ -34,9 +34,10 @@ public class Graphs extends JPanel implements ActionListener
 	private Chart fitnessChart;
 	private Chart errorChart;
 	private Chart forzaChart;
+	private Chart clonedChart;
 	
 	private GridBagConstraints gc;
-	private boolean fitness, error, forza;
+	private boolean fitness, error, forza, cloned;
 	
 	private boolean autodraw;
 
@@ -47,6 +48,7 @@ public class Graphs extends JPanel implements ActionListener
 		fitness = true;
 		error = false;
 		forza = false;
+		cloned = false;
 		
 		autodraw = true;
 		
@@ -62,8 +64,8 @@ public class Graphs extends JPanel implements ActionListener
     	gc = new GridBagConstraints();
     	
     	leftPanel = new GraphLeftPanel(f);
-    	leftPanel.getOptionsPanel().getGridButton().addActionListener(this);
-    	leftPanel.getForzaOptionsPanel().getAutodrawBtn().addActionListener(this);
+//    	leftPanel.getOptionsPanel().getGridButton().addActionListener(this);
+//    	leftPanel.getForzaOptionsPanel().getAutodrawBtn().addActionListener(this);
     	
 		fitnessChart = new Chart(f, 500, 400000, "Generation", "Fitness", 10, 5);
 		fitnessChart.addLine("Mean fitness", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA
@@ -85,11 +87,19 @@ public class Graphs extends JPanel implements ActionListener
 		forzaChart.setGrid(true);
 		forzaChart.setBorder(BorderFactory.createTitledBorder("Forza chart"));
 		forzaChart.startFromFirst();
+		
+		clonedChart = new Chart(f, 500, 1000, "Generation", "Cloned Organisms", 10, 5);
+//		clonedChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
+		clonedChart.addLine("Organismi clonati", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
+		clonedChart.setGrid(true);
+		clonedChart.setBorder(BorderFactory.createTitledBorder("Cloned organisms chart"));
+		clonedChart.startFromFirst();
 
 		leftPanel.getLegendPanel().setLegend(fitnessChart.getNames(), fitnessChart.getColors());
 		leftPanel.getOptionsPanel().getChartList().addItem("Fitness");
 		leftPanel.getOptionsPanel().getChartList().addItem("Error");
 		leftPanel.getOptionsPanel().getChartList().addItem("Forza");
+		leftPanel.getOptionsPanel().getChartList().addItem("Cloned Organisms");
 		
 		
     	
@@ -110,6 +120,7 @@ public class Graphs extends JPanel implements ActionListener
     	add(fitnessChart, gc);
     	add(errorChart, gc);
     	add(forzaChart, gc);
+    	add(clonedChart, gc);
 //    	setLayout(new GridBagLayout());
 //    	
 //    	GridBagConstraints gc = new GridBagConstraints();
@@ -158,6 +169,11 @@ public class Graphs extends JPanel implements ActionListener
 	{
 		return errorChart;
 	}
+	
+	public Chart getClonedChart()
+	{
+		return clonedChart;
+	}
 
 	public void updateGraphPanel(Organism o, Population pop)
 	{
@@ -167,6 +183,7 @@ public class Graphs extends JPanel implements ActionListener
 		double lowest_error = pop.getLowest_error();
 		double mean_error = pop.getMean_error();
 		double generation = pop.getFinal_gen();
+		double cloned = pop.getCloned();
 		
 //		System.out.println(mean_cloned_fitness);
 //		System.out.println(pop.getCloned());
@@ -178,8 +195,12 @@ public class Graphs extends JPanel implements ActionListener
 //		errorChart.addVector(0, new Vector2d(generation, mean_error));	//TROPPO ALTO
 		errorChart.addVector(0, new Vector2d(generation, lowest_error));
 		
+		clonedChart.addVector(0, new Vector2d(generation, cloned));
+		
 		o.setFitnessLinesChart(fitnessChart.getLines());
 		o.setErrorLinesChart(errorChart.getLines());
+		//TODO Mettere la riga qui sotto
+//		o.setClonedLinesChart(clonedChart.getLines());	// DA METTERE
 	}
 
 	public void updateForzaChart(Organism o, int currSelectedThrow)
@@ -196,6 +217,8 @@ public class Graphs extends JPanel implements ActionListener
 		fitnessChart.setLines(o.getFitnessLinesChart());
 		errorChart.setLines(o.getErrorLinesChart());
 //		forzaChart.setLines(o.getForzaLinesChart());
+		//TODO Mettere la riga qui sotto
+//		clonedChart.setLines(o.getClonedLinesChart());	// DA METTERE
 	}
 	
 	public Chart getForzaChart() {
@@ -213,39 +236,41 @@ public class Graphs extends JPanel implements ActionListener
 	{
 		 JButton p = (JButton) e.getSource();
 		 
-		 if (p.getActionCommand().equals("Grid: OFF")) 
-		 {
-			 fitnessChart.setGrid(false);
-			 errorChart.setGrid(false);
-			 forzaChart.setGrid(false);
-			 
-			 leftPanel.getOptionsPanel().getGridButton().setText("Grid: ON");
-			 repaint();
-		 } 
+//		 if (p.getActionCommand().equals("Grid: OFF")) 
+//		 {
+//			 fitnessChart.setGrid(false);
+//			 errorChart.setGrid(false);
+//			 forzaChart.setGrid(false);
+//			 clonedChart.setGrid(false);
+//			 
+//			 leftPanel.getOptionsPanel().getGridButton().setText("Grid: ON");
+//			 repaint();
+//		 } 
+//		 
+//		 else if (p.getActionCommand().equals("Grid: ON")) 
+//		 {
+//			 fitnessChart.setGrid(true);
+//			 errorChart.setGrid(true);
+//			 forzaChart.setGrid(true);
+//			 clonedChart.setGrid(true);
+//			 
+//			 leftPanel.getOptionsPanel().getGridButton().setText("Grid: OFF");
+//			 repaint();
+//		 } 
 		 
-		 else if (p.getActionCommand().equals("Grid: ON")) 
-		 {
-			 fitnessChart.setGrid(true);
-			 errorChart.setGrid(true);
-			 forzaChart.setGrid(true);
-			 
-			 leftPanel.getOptionsPanel().getGridButton().setText("Grid: OFF");
-			 repaint();
-		 } 
-		 
-		 else if (p.getActionCommand().equals("Auto-draw: OFF"))
-		 {
-			 autodraw = false;
-			 
-			 getLeftPanel().getForzaOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
-		 }
-		 
-		 else if (p.getActionCommand().equals("Auto-draw: ON"))
-		 {
-			 autodraw = true;
-			 
-			 getLeftPanel().getForzaOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
-		 }
+//		 else if (p.getActionCommand().equals("Auto-draw: OFF"))
+//		 {
+//			 autodraw = false;
+//			 
+//			 getLeftPanel().getForzaOptionsPanel().getAutodrawBtn().setText("Auto-draw: ON");
+//		 }
+//		 
+//		 else if (p.getActionCommand().equals("Auto-draw: ON"))
+//		 {
+//			 autodraw = true;
+//			 
+//			 getLeftPanel().getForzaOptionsPanel().getAutodrawBtn().setText("Auto-draw: OFF");
+//		 }
 	}
 	
 	@Override
@@ -268,12 +293,14 @@ public class Graphs extends JPanel implements ActionListener
 			 remove(errorChart);
 			 remove(fitnessChart);
 			 remove(forzaChart);
+			 remove(clonedChart);
 	    	 add(errorChart, gc);
 //	    	 add(fitnessChart, gc);
 //	       	 add(forzaChart, gc);
 			 error = true;
 			 fitness = false;
 			 forza = false;
+			 cloned = false;
 		 } 
 		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Fitness") && !fitness)
 		 {
@@ -291,12 +318,14 @@ public class Graphs extends JPanel implements ActionListener
 			 remove(errorChart);
 			 remove(fitnessChart);
 			 remove(forzaChart);
+			 remove(clonedChart);
 			 add(fitnessChart, gc);
 //		     add(errorChart, gc);
 //		     add(forzaChart, gc);
 			 fitness = true;
 			 error = false;
 			 forza = false;
+			 cloned = false;
 		 }
 		 
 		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Forza") && !forza)
@@ -312,20 +341,48 @@ public class Graphs extends JPanel implements ActionListener
 			 gc.gridy = 0;
 			 remove(errorChart);
 			 remove(fitnessChart);
+			 remove(clonedChart);
 			 remove(forzaChart);
 	    	 add(forzaChart, gc);
 //	    	 add(errorChart, gc);
 //	    	 add(fitnessChart, gc);
 			 fitness = false;
 			 error = false;
+			 cloned = false;
 			 forza = true;
+		 }
+		 
+		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Cloned Organisms") && !cloned)
+		 {
+			 if (leftPanel.getForzaPanel())
+			 {
+				 leftPanel.setNormalPanel();
+			 }
+			 
+			 leftPanel.getLegendPanel().setLegend(clonedChart.getNames(), clonedChart.getColors());
+			 gc.fill = GridBagConstraints.BOTH;
+			 gc.weightx = 0.5;
+			 gc.weighty = 0.5;
+			 gc.gridx = 1;
+			 gc.gridy = 0;
+			 remove(errorChart);
+			 remove(fitnessChart);
+			 remove(forzaChart);
+			 remove(clonedChart);
+			 add(clonedChart, gc);
+//		     add(errorChart, gc);
+//		     add(forzaChart, gc);
+			 fitness = false;
+			 error = false;
+			 forza = false;
+			 cloned = true;
 		 }
 	}
 
 	public void updateForzaOptionsPanel(Organism o) 
 	{
 		leftPanel.getForzaOptionsPanel().getGenerationList().addItem(o.getGeneration());
-		if (autodraw) 
+		if (MyConstants.SETTINGS_VALUES[MyConstants.GRAPHS_AUTO_DRAW_INDEX]) 
 			leftPanel.getForzaOptionsPanel().getGenerationList().setSelectedItem(o.getGeneration());
 	}
 	

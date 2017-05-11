@@ -11,7 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.evo_in;
+import gui.evo_out;
 import jNeatCommon.EnvConstant;
+import jneat.Genome;
 import jneat.Organism;
 
 public class NetLeftPanel extends JPanel
@@ -54,7 +57,7 @@ public class NetLeftPanel extends JPanel
 		gc.gridy = 0;		
 		add(optionsPanel, gc);
 		
-		gc.weighty = 10;
+		gc.weighty = 20;
 		gc.gridx = 0;
 		gc.gridy = 1;		
 		add(detailsPanel, gc);
@@ -77,6 +80,11 @@ public class NetLeftPanel extends JPanel
 	
 	public void updateInfoRete(Organism o)
 	{
+//		System.out.println(MyConstants.INPUT_NODES_ID.get(0) + " " + evo_in.inputNames[0]);
+//		System.out.println(MyConstants.INPUT_NODES_ID.get(1) + " " + evo_in.inputNames[1]);
+//		System.out.println(MyConstants.INPUT_NODES_ID.get(2) + " " + evo_in.inputNames[2]);
+		
+		
 		int numNodes = o.getGenome().getNodes().size();
 		int inputNodes = EnvConstant.NR_UNIT_INPUT;
 		int outputNodes = EnvConstant.NR_UNIT_OUTPUT;
@@ -87,15 +95,28 @@ public class NetLeftPanel extends JPanel
 				"nodi bias:  " + biasNodes + "\n" +
 				"nodi di input:  " + inputNodes + "\n" +
 				"nodi hidden:  " + hiddenNodes + "\n" +
-				"nodi di output:  " + outputNodes + "\n" +
-				"\n" + "Lista input:  " + "\n" + 
-				"- id_1 = x_target" + "\n" +
-				"- id_2 = y_target" + "\n" +
-				"- id_3 = velocità" + "\n" +
-				"\n" + "Lista output:  " + "\n" + 
-				"- id_9 = angolo" + "\n" +
-				"- id_10 = forza" + "\n" +
-				"- id_11 = lascia" + "\n";
+				"nodi di output:  " + outputNodes + "\n" + 
+				"\n" + "Lista input:  " + "\n";
+		
+		for (int i=0; i<MyConstants.INPUT_NODES_ID.size(); i++)
+		{
+			info_rete += "- id_" + MyConstants.INPUT_NODES_ID.get(i) + " = " + evo_in.inputNames[i] + "\n";
+		}
+
+//				"- id_1 = " + evo_in.inputNames[0] + "\n" +
+//				"- id_2 = " + evo_in.inputNames[1] + "\n" +
+//				"- id_3 = " + evo_in.inputNames[2] + "\n" +
+		
+		info_rete += "\n" + "Lista output:  " + "\n";
+		
+		for (int i=0; i<MyConstants.OUTPUT_NODES_ID.size(); i++)
+		{
+			info_rete += "- id_" + MyConstants.OUTPUT_NODES_ID.get(i) + " = " + evo_out.outputNames[i] + "\n";
+		}
+		
+//				"- id_9 = " + evo_out.outputNames[0] + "\n" +
+//				"- id_10 = " + evo_out.outputNames[1] + "\n" +
+//				"- id_11 = " + evo_out.outputNames[2] + "\n";
 
 			
 			detailsPanel.getInfoRete().setText(info_rete);

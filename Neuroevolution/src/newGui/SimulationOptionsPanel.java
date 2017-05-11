@@ -28,9 +28,11 @@ public class SimulationOptionsPanel extends JPanel
 
 	private JButton startBtn;
 	private JButton loadBtn;
-	private JButton autodrawBtn;
-	private JButton showBestBtn;
-	
+//	private JButton autodrawBtn;
+//	private JButton showBestBtn;
+//	private JButton settingsBtn;
+//	private JButton physicsBtn;
+
 	GridBagConstraints gc;
 
 	public SimulationOptionsPanel(JFrame frame) 
@@ -86,19 +88,41 @@ public class SimulationOptionsPanel extends JPanel
 //		list.addItem("1.5");
 //		list.setSelectedIndex(4);
 		
-		autodrawBtn = new JButton("Auto-draw: OFF");
+//		autodrawBtn = new JButton("Auto-draw: OFF");
 		
-		showBestBtn = new JButton("Show best: ON");
+//		showBestBtn = new JButton("Show best");
+		
 		
 		startBtn = new JButton("Start");
+		Dimension size = startBtn.getSize();
+		size.width = 105;
+		size.height = 25;
+		startBtn.setMinimumSize(size);
+		startBtn.setPreferredSize(size);
+		startBtn.setMaximumSize(size);
 		
 		loadBtn = new JButton("Load");
+		loadBtn.setMinimumSize(size);
+		loadBtn.setPreferredSize(size);
+		loadBtn.setMaximumSize(size);
+		
+		generationList.setMinimumSize(size);
+		generationList.setPreferredSize(size);
+		generationList.setMaximumSize(size);
+		
+		throwList.setMinimumSize(size);
+		throwList.setPreferredSize(size);
+		throwList.setMaximumSize(size);
+		
+//		settingsBtn = new JButton("Settings");
+		
+//		physicsBtn = new JButton("Physics");
 		
 		gc = new GridBagConstraints();
 		
 		////// First column ////////
-		gc.anchor = GridBagConstraints.LINE_END;
-		gc.fill = GridBagConstraints.HORIZONTAL;
+		gc.anchor = GridBagConstraints.LINE_START;
+//		gc.fill = GridBagConstraints.HORIZONTAL;
 		gc.weighty = 0.5;
 		
 		gc.gridx = 0;
@@ -110,7 +134,7 @@ public class SimulationOptionsPanel extends JPanel
 		add(throwLabel, gc);
 		
 		////// Second column ////////
-		gc.anchor = GridBagConstraints.LINE_START;
+		gc.anchor = GridBagConstraints.LINE_END;
 		gc.gridx = 1;
 		gc.gridy = 0;	
 		add(generationList, gc);
@@ -128,20 +152,30 @@ public class SimulationOptionsPanel extends JPanel
 		add(startBtn, gc);
 		
 		gc.weightx = 0.5;
-		gc.anchor = GridBagConstraints.LINE_START;
+		gc.anchor = GridBagConstraints.LINE_END;
 		gc.gridx = 1;
 		gc.gridy = 2;
-		add(autodrawBtn, gc);
-		
-		gc.anchor = GridBagConstraints.LINE_START;
-		gc.gridx = 0;
-		gc.gridy = 3;
 		add(loadBtn, gc);
 		
-		gc.anchor = GridBagConstraints.LINE_START;
-		gc.gridx = 1;
-		gc.gridy = 3;
-		add(showBestBtn, gc);
+//		gc.anchor = GridBagConstraints.LINE_START;
+//		gc.gridx = 0;
+//		gc.gridy = 3;
+//		add(loadBtn, gc);
+//		
+//		gc.anchor = GridBagConstraints.LINE_START;
+//		gc.gridx = 1;
+//		gc.gridy = 3;
+//		add(showBestBtn, gc);
+//		
+//		gc.anchor = GridBagConstraints.LINE_START;
+//		gc.gridx = 0;
+//		gc.gridy = 4;
+//		add(settingsBtn, gc);
+//		
+//		gc.anchor = GridBagConstraints.LINE_START;
+//		gc.gridx = 1;
+//		gc.gridy = 4;
+//		add(physicsBtn, gc);
 		
 
 		
@@ -178,20 +212,40 @@ public class SimulationOptionsPanel extends JPanel
 		return startBtn;
 	}
 	
-	public JButton getAutodrawBtn()
-	{
-		return autodrawBtn;
-	}
-	
-	public JButton getShowBestBtn()
-	{
-		return showBestBtn;
-	}
+//	public JButton getAutodrawBtn()
+//	{
+//		return autodrawBtn;
+//	}
+//	
+//	public JButton getShowBestBtn()
+//	{
+//		return showBestBtn;
+//	}
 
 	public JButton getLoadBtn() 
 	{
 		return loadBtn;
 	}
+	
+//	public JButton getSettingsBtn()
+//	{
+//		return settingsBtn;
+//	}
+//
+//	public void setSettingsBtn(JButton settingsBtn) 
+//	{
+//		this.settingsBtn = settingsBtn;
+//	}
+//
+//	public JButton getPhysicsBtn()
+//	{
+//		return physicsBtn;
+//	}
+//
+//	public void setPhysicsBtn(JButton physicsBtn) 
+//	{
+//		this.physicsBtn = physicsBtn;
+//	}
 
 	public GridBagConstraints getGC() 
 	{

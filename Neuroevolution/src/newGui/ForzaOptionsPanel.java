@@ -1,5 +1,6 @@
 package newGui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -17,7 +18,7 @@ public class ForzaOptionsPanel extends JPanel
 	private JComboBox generationList;
 	private JComboBox throwList;
 
-	private JButton autodrawBtn;
+//	private JButton autodrawBtn;
 	
 	public ForzaOptionsPanel(JFrame frame)
 	{
@@ -63,22 +64,32 @@ public class ForzaOptionsPanel extends JPanel
 		
 //		String[] prova = { "7000", "2", "1", "10", "670" };
 		generationList = new JComboBox();
+		Dimension size = generationList.getSize();
+		size.width = 120;
+		size.height = 25;
+		generationList.setMinimumSize(size);
+		generationList.setPreferredSize(size);
+		generationList.setMaximumSize(size);
 //		generationList.setSelectedIndex(4);
 		
 //		String[] prova2 = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Best"};
 		throwList = new JComboBox();
+		throwList.setMinimumSize(size);
+		throwList.setPreferredSize(size);
+		throwList.setMaximumSize(size);
 
 		//list.setSelectedItem("Best");
 //		list.addItem("1.5");
 //		list.setSelectedIndex(4);
 		
-		autodrawBtn = new JButton("Auto-draw: OFF");
+//		autodrawBtn = new JButton("Auto-draw: OFF");
 		
 		GridBagConstraints gc = new GridBagConstraints();
 		
 		////// First column ////////
-		gc.anchor = GridBagConstraints.LINE_END;
-		gc.fill = GridBagConstraints.HORIZONTAL;
+		gc.anchor = GridBagConstraints.LINE_START;
+//		gc.fill = GridBagConstraints.HORIZONTAL;
+		gc.weightx = 0.5;
 		gc.weighty = 0.5;
 		
 		gc.gridx = 0;
@@ -90,7 +101,7 @@ public class ForzaOptionsPanel extends JPanel
 		add(throwLabel, gc);
 		
 		////// Second column ////////
-		gc.anchor = GridBagConstraints.LINE_START;
+		gc.anchor = GridBagConstraints.LINE_END;
 		gc.gridx = 1;
 		gc.gridy = 0;	
 		add(generationList, gc);
@@ -102,11 +113,11 @@ public class ForzaOptionsPanel extends JPanel
 		// Final row
 //		gc.weighty = 10;
 		
-		gc.weightx = 0.5;
-		gc.anchor = GridBagConstraints.LINE_START;
-		gc.gridx = 1;
-		gc.gridy = 2;
-		add(autodrawBtn, gc);
+//		gc.weightx = 0.5;
+//		gc.anchor = GridBagConstraints.LINE_START;
+//		gc.gridx = 1;
+//		gc.gridy = 2;
+//		add(autodrawBtn, gc);
 		
 
 		
@@ -138,8 +149,8 @@ public class ForzaOptionsPanel extends JPanel
 		return throwList;
 	}
 	
-	public JButton getAutodrawBtn()
-	{
-		return autodrawBtn;
-	}
+//	public JButton getAutodrawBtn()
+//	{
+//		return autodrawBtn;
+//	}
 }

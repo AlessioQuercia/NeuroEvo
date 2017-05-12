@@ -746,6 +746,7 @@ private boolean done;
 					 graphs.getErrorChart().reset();
 					 graphs.getFitnessChart().reset();
 					 graphs.getForzaChart().reset();
+					 graphs.getClonedChart().reset();
 					 graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().removeAllItems();
 					 graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().removeAllItems();
 					 net.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();

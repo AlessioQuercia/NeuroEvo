@@ -331,7 +331,25 @@
 		 Organism o = (Organism)organisms.firstElement();
 		 setFinal_gen(o.getGeneration());
 		 
-		 currentPop_highest_Fitness = o.getOrig_fitness();
+		 double best = -1;
+		 Organism bestOrg = null;
+		 for (int i = 0; i<organisms.size(); i++)
+		 {
+			 Organism org = (Organism)organisms.get(i);
+			 if (org.orig_fitness > best)
+			 {
+				 best = org.orig_fitness;
+				 bestOrg = org;
+			 }
+		 }
+		 
+		 currentPop_highest_Fitness = bestOrg.getOrig_fitness();
+		 
+//		 // RISERVA ALCUNI FIGLI AL MIGLIORE DELLA POPOLAZIONE (ASSICURANDO LA CLONAZIONE DEL MIGLIORE DI OGNI GENERAZIONE)
+//		 Organism popBestOrg = (Organism)organisms.firstElement();
+//		 popBestOrg.setSuper_champ_offspring(10);
+//		 Species bestSpecie = (Species)species.firstElement();
+//		 bestSpecie.expected_offspring += popBestOrg.super_champ_offspring;
 	  
 	  //Now compute expected number of offspring for each individual organism
 	  //
@@ -698,10 +716,6 @@
 	  System.out.print("\n Start reproduction of species ....");
 	  */   	
 		 
-		 
-//		 // RISERVA ALCUNI FIGLI AL MIGLIORE DELLA POPOLAZIONE (ASSICURANDO LA CLONAZIONE DEL MIGLIORE DI OGNI GENERAZIONE)
-//		 Organism popBestOrg = (Organism)organisms.firstElement();
-//		 popBestOrg.setSuper_champ_offspring(p_pop_size/100);
 		 
 		 
 		 boolean rc = false;

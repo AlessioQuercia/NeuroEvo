@@ -182,8 +182,10 @@ public class Graphs extends JPanel implements ActionListener
 		double mean_cloned_fitness = pop.getMean_cloned_fitness();
 		double lowest_error = pop.getLowest_error();
 		double mean_error = pop.getMean_error();
-		double generation = pop.getFinal_gen();
-		double cloned = pop.getCloned();
+		int generation = pop.getFinal_gen();
+		int cloned = pop.getCloned();
+		
+		System.out.println("Clonati: " + cloned);
 		
 //		System.out.println(mean_cloned_fitness);
 //		System.out.println(pop.getCloned());

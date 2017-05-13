@@ -913,7 +913,7 @@ private boolean done;
 			
 //			   u_pop.verify();
 			   
-			   EnvConstant.NUMBER_OF_EPOCH = 1000;
+			   EnvConstant.NUMBER_OF_EPOCH = u_neat.p_epoch_number;
 			   
 			// start ............
 			   for (gen = 1; gen <= EnvConstant.NUMBER_OF_EPOCH; gen++) 

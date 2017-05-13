@@ -455,7 +455,13 @@
    */
 	   public boolean reproduce(int generation, Population pop, Vector sorted_species) 
 	  {
-	  
+		   this.clone = false;
+		   this.cloned = 0;
+		   this.mean_cloned_fitness = 0;
+		   this.cloned_fitness = 0;
+		   
+		   
+		   
 		 boolean found; //When a Species is found
 		 boolean champ_done = false; //Flag the preservation of the champion  
 	  
@@ -498,18 +504,22 @@
 		 thechamp = (Organism) organisms.firstElement();
 	  
 	  
-//		 // RISERVA ALCUNI FIGLI AL MIGLIORE DELLA POPOLAZIONE (ASSICURANDO LA CLONAZIONE DEL MIGLIORE DI OGNI GENERAZIONE)
+		 // RISERVA ALCUNI FIGLI AL MIGLIORE DELLA POPOLAZIONE (ASSICURANDO LA CLONAZIONE DEL MIGLIORE DI OGNI GENERAZIONE)
 //		 Organism popBestOrg = (Organism)pop.organisms.firstElement();
-//		 popBestOrg.setSuper_champ_offspring(pop.p_pop_size/100);
-		 
+//		 System.out.println(pop.getCurrentPop_highest_Fitness() + "  " + thechamp.orig_fitness);
+		 if (pop.getCurrentPop_highest_Fitness() == thechamp.orig_fitness)
+		 {
+			 thechamp.setSuper_champ_offspring(1);
+		 }
 		 
 	  //Create the designated number of offspring for the Species
 	  //one at a time
 		 boolean outside = false;
+//		 System.out.println(thechamp.super_champ_offspring);
 	  
 		 for (count = 0; count < expected_offspring; count++) 
 		 {
-		 
+//		 System.out.println(expected_offspring);
 			mut_struct_baby = false;
 			mate_baby = false;
 			outside = false;
@@ -525,6 +535,8 @@
 		 //  System.out.print("\n verifica select....");
 			if (thechamp.super_champ_offspring > 0) 
 			{
+//				System.out.println(thechamp.super_champ_offspring);
+//				System.out.println("Population champion at generation: " + pop.final_gen);
 			//		 	System.out.print("\n analysis of champion #"+count);
 			// save in mom current champ;
 			   mom = thechamp;
@@ -550,6 +562,7 @@
 				   clone = true; 	// in questa specie viene clonato almeno un organismo
 				   cloned++;	// aumenta il contatore degli organismi clonati in questa specie
 				   cloned_fitness+= mom.getOrig_fitness();
+//				   System.out.println("Cloned pop champion!");
 				  if (thechamp.pop_champ) 
 				  {
 				  //			   		System.out.print("\n The new org baby's (champion) genome is : "+baby.genome.getGenome_id());
@@ -566,6 +579,7 @@
 			else if ((!champ_done) && (expected_offspring > 5)) 	//originale 5
 			{
 //				System.out.println(expected_offspring + " " + generation);
+//				System.out.println("Specie Champion at generation: " + pop.final_gen);
 				
 			   mom = thechamp; //Mom is the champ
 			   new_genome = mom.genome.duplicate(count);

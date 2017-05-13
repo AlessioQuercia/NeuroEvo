@@ -85,7 +85,7 @@ public class Parabola
 	public static void prova()
 	{
 		double delta_t = 0.04;
-		double delta_F = 5;
+		double delta_F = -5;
 		
 		double F = 0;
 		double m = 1;
@@ -96,6 +96,7 @@ public class Parabola
 		for(int i=0; i<50; i++)
 		{
 			F += delta_F;
+			if (F < -75) F = -75;
 			if (F > 75) F = 75;
 			acc = F/m;
 			double delta_v = acc*delta_t;

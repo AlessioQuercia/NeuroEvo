@@ -185,7 +185,7 @@ public class Graphs extends JPanel implements ActionListener
 		int generation = pop.getFinal_gen();
 		int cloned = pop.getCloned();
 		
-		System.out.println("Clonati: " + cloned);
+//		System.out.println("Clonati: " + cloned);
 		
 //		System.out.println(mean_cloned_fitness);
 //		System.out.println(pop.getCloned());

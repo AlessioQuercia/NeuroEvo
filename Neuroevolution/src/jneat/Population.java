@@ -546,7 +546,7 @@
 			_specie.expected_offspring = half_pop;
 			_specie.age_of_last_improvement = _specie.age;
 			
-			System.out.println(((Organism)_specie.organisms.firstElement()).super_champ_offspring);
+//			System.out.println(((Organism)_specie.organisms.firstElement()).super_champ_offspring);
 		 
 			if (itr_specie.hasNext()) 
 			{

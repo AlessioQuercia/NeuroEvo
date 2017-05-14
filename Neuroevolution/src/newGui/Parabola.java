@@ -85,7 +85,7 @@ public class Parabola
 	public static void prova()
 	{
 		double delta_t = 0.04;
-		double delta_F = -5;
+		double delta_F = 10;
 		
 		double F = 0;
 		double m = 1;
@@ -102,8 +102,8 @@ public class Parabola
 			double delta_v = acc*delta_t;
 			v += delta_v;
 		}
-		System.out.println(F);
-		System.out.println(v);
+		System.out.println("Forza: " + F);
+		System.out.println("Velocità: " + v);
 	}
 				
 }

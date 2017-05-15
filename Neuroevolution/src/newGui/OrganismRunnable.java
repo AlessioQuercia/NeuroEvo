@@ -220,14 +220,14 @@ public class OrganismRunnable implements Runnable
 					   double maxF = 150;	// forza massima
 					   double maxA = 1.5708;
 					   double minV = 0;
-					   double maxV = 142.2;
+					   double maxV = 145.8;
 					   
 					   double d_minA = -0.031416;
 					   double d_maxA = 0.062832;
 //					   double d_minA = 0;
 //					   double d_maxA = 0.031416;	   
-					   double d_minF = -10;
-					   double d_maxF = 20;
+					   double d_minF = -20;
+					   double d_maxF = 40;
 					   		   
 					   double massa = minM + rm.nextDouble()*maxM;	// 2kg
 					   double v = 0;

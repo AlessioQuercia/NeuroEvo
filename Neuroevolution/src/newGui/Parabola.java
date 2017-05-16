@@ -96,8 +96,8 @@ public class Parabola
 		for(int i=0; i<50; i++)
 		{
 			F += delta_F;
-			if (F < -75) F = -75;
-			if (F > 75) F = 75;
+			if (F < -300) F = -300;
+			if (F > 300) F = 300;
 			acc = F/m;
 			double delta_v = acc*delta_t;
 			v += delta_v;

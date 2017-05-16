@@ -81,7 +81,7 @@ public class Graphs extends JPanel implements ActionListener
 		errorChart.setBorder(BorderFactory.createTitledBorder("Error chart"));
 		errorChart.startFromFirst();
 		
-		forzaChart = new Chart(f, 50, 75, "Step", "Forza", 10, 5);
+		forzaChart = new Chart(f, 50, 300, "Step", "Forza", 10, 5);
 //		forzaChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
 		forzaChart.addLine("Forza", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		forzaChart.setGrid(true);

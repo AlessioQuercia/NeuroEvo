@@ -15,7 +15,7 @@ import jneat.NNode;
 import jneat.Network;
 import jneat.Organism;
 
-public class OrganismRunnableLoaded implements Runnable
+public class OrganismRunnableSecondLoaded implements Runnable
 {
 	private Organism o;
 	private double x_tgt;
@@ -29,7 +29,7 @@ public class OrganismRunnableLoaded implements Runnable
 		  Object ObjRet_fit;
 
 	
-	public OrganismRunnableLoaded(Organism o, double x_tgt, double y_tgt, int selectedThrow) 
+	public OrganismRunnableSecondLoaded(Organism o, double x_tgt, double y_tgt, int selectedThrow) 
 	{
 		this.o = o;
 		this.x_tgt = x_tgt;
@@ -198,11 +198,11 @@ public class OrganismRunnableLoaded implements Runnable
 					 
 					 HashMap<Integer,ArrayList<Double>> mappa= new HashMap<Integer,ArrayList<Double>>();
 					 
-					 ArrayList<Double> arrayForza = new ArrayList<Double> ();
+					   ArrayList<Double> arrayForza = new ArrayList<Double> ();
 //					   y = Math.random()*maxY;
 //					   input[count] = y;
-				  //plist_in[0] = count;
-			   // first activation from sensor to first next level of neurons
+					  //plist_in[0] = count;
+				   // first activation from sensor to first next level of neurons
 //					  for (int j = 0; j < EnvConstant.NR_UNIT_INPUT; j++) 
 //					  {
 //						 //plist_in[1] = j;
@@ -211,90 +211,118 @@ public class OrganismRunnableLoaded implements Runnable
 //						 double v1 = Double.parseDouble(ObjRet_inp.toString());
 //						 in[j] = v1;
 //					  }
-				   
-
-				   ///IMPLEMENTAZIONE DECISIONE DI LANCIO   
-				   
-				   double delta_t = 0.04;
-				   double current_time = 0;
-				   double minX = 20;
-				   double maxX = 80;
-				   double minY = 20;
-				   double maxY = 80;
-				   double minM = 1;
-				   double maxM = 2;
-				   double massa = minM + rm.nextDouble()*maxM;	// 2kg
-				   double v = 0;
-				   double minF = 15;	// forza minima
-				   double maxF = 60;	// forza massima
-				   double maxA = 1.5708;
-				   double minV = 0;
-				   double maxV = 150;
-				   
-
-				   in[0] = (x_tgt - minX)/maxX;
-				   in[1] = (y_tgt - minY)/maxY;
-				   in[2] = v;
-				   
-				   tgt[count][0] = in[0];
-				   tgt[count][1] = in[1];
-				   tgt[count][2] = in[2];
-				   tgt[count][3] = massa;
-				   
-				   for (int i = 0; i<50; i++)
-				   {
-					   current_time += delta_t;
 					   
-					   // load sensor   
-					   _net.load_sensors(in);
+
+					   ///IMPLEMENTAZIONE DECISIONE DI LANCIO   
 					   
-					   if (EnvConstant.ACTIVATION_PERIOD == EnvConstant.MANUAL)
+					   double delta_t = 0.04;
+					   double current_time = 0;
+					   double minX = 20;
+					   double maxX = 80;
+					   double minY = 20;
+					   double maxY = 80;
+					   double minM = 1;
+					   double maxM = 2;
+					   double minF = -300;	// forza minima
+					   double maxF = 600;	// forza massima
+					   double maxA = 1.5708;
+					   double minV = 0;
+					   double maxV = 516;
+					   
+					   double d_minA = -0.031416;
+					   double d_maxA = 0.062832;
+//					   double d_minA = 0;
+//					   double d_maxA = 0.031416;	   
+					   double d_minF = -20;
+					   double d_maxF = 40;
+					   		   
+					   double massa = minM + rm.nextDouble()*maxM;	// 2kg
+					   double v = 0;
+					   double a = 0;
+					   double F = 0;
+					   
+					   in[0] = (x_tgt - minX)/maxX;
+					   in[1] = (y_tgt - minY)/maxY;
+					   in[2] = v;
+					   in[3] = a;
+					   in[4] = F;
+					   
+					   tgt[count][0] = in[0];
+					   tgt[count][1] = in[1];
+					   tgt[count][2] = in[2];
+//					   tgt[count][3] = in[3];
+//					   tgt[count][4] = in[4];
+					   tgt[count][3] = massa;
+					   
+					   for (int i = 0; i<50; i++)
 					   {
-						   for (int relax = 0; relax < EnvConstant.ACTIVATION_TIMES; relax++)
+						   current_time += delta_t;
+						   
+						   // load sensor   
+						   _net.load_sensors(in);
+						   
+						   if (EnvConstant.ACTIVATION_PERIOD == EnvConstant.MANUAL)
 						   {
-							   success = _net.activate();
+							   for (int relax = 0; relax < EnvConstant.ACTIVATION_TIMES; relax++)
+							   {
+								   success = _net.activate();
+							   }
 						   }
-					   }
-					   else
-					   {   	            
-						   //first activation from sensor to next layer....
-						 success = _net.activate();
-						 
-					  // next activation while last level is reached !
-					  // use depth to ensure relaxation
-						 for (int relax = 0; relax <= net_depth; relax++)
-						 {
+						   else
+						   {   	            
+							   //first activation from sensor to next layer....
 							 success = _net.activate();
-						 }
-					   }
-					   
-					   //output
-					   for( int j=0; j < EnvConstant.NR_UNIT_OUTPUT; j++)
-					   {
-						   out[count][j] = ((NNode) _net.getOutputs().elementAt(j)).getActivation();
-					   }
-					   
-					   // clear net		 
-					   _net.flush();
-					   
-					   double a = out[count][0]*maxA;
-					   double F = minF + out[count][1]*maxF;
-					   double lascia = out[count][2];
-					   
-					   double acc = F/massa;
-					   double delta_v = acc*delta_t;
-					   
-					   v += delta_v;
-					   
-					   double V = (v - minV)/maxV;
-					   
-					   in[2] = V;
-					   tgt[count][2] = v;
-					   tgt[count][4] = a;
-					   tgt[count][5] = F;
-					   tgt[count][6] = acc;
-					   tgt[count][7] = current_time;
-					   
+							 
+						  // next activation while last level is reached !
+						  // use depth to ensure relaxation
+							 for (int relax = 0; relax <= net_depth; relax++)
+							 {
+								 success = _net.activate();
+							 }
+						   }
+						   
+						   //output
+						   for( int j=0; j < EnvConstant.NR_UNIT_OUTPUT; j++)
+						   {
+							   out[count][j] = ((NNode) _net.getOutputs().elementAt(j)).getActivation();
+						   }
+						   
+						   // clear net		 
+						   _net.flush();
+						   
+						   double delta_a = d_minA + out[count][0]*d_maxA;
+						   double delta_F = d_minF + out[count][1]*d_maxF;
+						   double lascia = out[count][2];
+						   
+						   a += delta_a;
+						   F += delta_F;
+						   
+						   if (F<-300) F = -300;
+						   else if (F>300) F = 300;
+						   else if (a<0) a = 0;
+						   else if (a>1.5708) a = 1.5708;
+						   
+						   
+						   double acc = F/massa;
+						   double delta_v = acc*delta_t;
+						   
+						   v += delta_v;
+						   
+						   if (v < 0) v = 0; 
+						   
+						   double V = (v - minV)/maxV;
+						   double A = (a)/maxA;
+						   double Freal = (F - minF)/maxF;
+						   
+						   in[2] = V;
+						   in[3] = A;
+						   in[4] = Freal;
+						   tgt[count][MyConstants.SIM_VEL_INDEX] = v;
+						   tgt[count][MyConstants.SIM_ANGOLO_INDEX] = a;
+						   tgt[count][MyConstants.SIM_FORZA_INDEX] = F;
+						   tgt[count][MyConstants.SIM_TEMPO] = current_time;
+						   tgt[count][MyConstants.SIM_ACCELERAZIONE_INDEX] = acc;
+						   
 //						   double x_tgt = minX + tgt[count][0]*maxX;
 //						   double y_tgt = minY + tgt[count][1]*maxY;
 //						   
@@ -304,19 +332,18 @@ public class OrganismRunnableLoaded implements Runnable
 //						   
 //						   in[0] = X;
 //						   tgt[count][0] = in[0];
-					   
-					   arrayForza.add(F);
-					   
-					   if (lascia >= 0.5) 
-					   {
-						   break;
+						   
+						   arrayForza.add(F);
+						   
+						   if (lascia >= 0.5) 
+						   {
+							   break;
+						   }
 					   }
-				   }
-				   
-				   o.getForzaMap().put(count, arrayForza);
-				   
-				   
-		 ///IMPLEMENTAZIONE VECCHIA  				   
+					   
+					   o.getForzaMap().put(count, arrayForza);
+					   
+			 ///IMPLEMENTAZIONE VECCHIA  				   
 //					   
 ////				   in[0] = inputX[count];
 ////				   in[1] = inputY[count];
@@ -399,7 +426,7 @@ public class OrganismRunnableLoaded implements Runnable
 //				   
 //				   // clear net		 
 //					  _net.flush();
-				} 
+				   }
 				
 					catch (Exception e2) 
 				   {
@@ -410,6 +437,7 @@ public class OrganismRunnableLoaded implements Runnable
 				   }
 			 
 			 }  
+
 		  
 		  //success = true;
 		  

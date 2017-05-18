@@ -123,6 +123,8 @@ import org.joml.Vector2d;
 	private ArrayList<ArrayList<Vector2d>> errorLinesChart;
 
 	private ArrayList<ArrayList<Vector2d>> forzaLinesChart;
+	
+	private ArrayList<ArrayList<Vector2d>> clonedLinesChart;
 
 	private Map<Integer, Vector2d> bestPoints;
 	  
@@ -394,5 +396,15 @@ public ArrayList<ArrayList<Vector2d>> getForzaLinesChart()
 public Map<Integer, Vector2d> getBestPoints() 
 {
 	return bestPoints;
+}
+
+public void setClonedLinesChart(ArrayList<ArrayList<Vector2d>> lines)
+{
+	clonedLinesChart = lines;
+}
+
+public ArrayList<ArrayList<Vector2d>> getClonedLinesChart() 
+{
+	return clonedLinesChart;
 }
    }

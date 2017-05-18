@@ -15,7 +15,7 @@ import jneat.NNode;
 import jneat.Network;
 import jneat.Organism;
 
-public class OrganismRunnable implements Runnable
+public class OrganismRunnableSecond implements Runnable
 {
 	private Organism o;
 	
@@ -25,7 +25,7 @@ public class OrganismRunnable implements Runnable
 		  Method Method_fit;
 		  Object ObjRet_fit;
 	
-	public OrganismRunnable(Organism o) 
+	public OrganismRunnableSecond(Organism o) 
 	{
 		this.o = o;
 		

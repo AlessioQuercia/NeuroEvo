@@ -37,16 +37,6 @@ public class SettingsPanel extends JPanel implements ActionListener
 	
 	private GridBagConstraints gc;
 	
-	private JTree tree;
-	
-	private vectTableModel model;
-	private JTable parameter_table;
-	private JTable other_table;
-	private TablePanel tablePanel;
-	private JScrollPane scrollPanel;
-	private ThrowDetailsPanel prova;
-	private SettingsRightPanel rightPanel;
-	
 	public SettingsPanel(JFrame frame) 
 	{
 		this.frame = frame;
@@ -59,7 +49,6 @@ public class SettingsPanel extends JPanel implements ActionListener
 		setLayout(new GridBagLayout());	
 		
 		leftPanel = new SettingsLeftPanel(frame);
-		rightPanel = new SettingsRightPanel(frame);
 //		sessionSettings = new SessionSettings(frame);
 		parameterSettings = new ParameterSettings(frame);
 		otherSettings = new OtherSettings(frame);

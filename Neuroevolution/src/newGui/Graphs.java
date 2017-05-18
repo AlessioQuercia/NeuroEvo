@@ -86,14 +86,14 @@ public class Graphs extends JPanel implements ActionListener
 		forzaChart.addLine("Forza", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		forzaChart.setGrid(true);
 		forzaChart.setBorder(BorderFactory.createTitledBorder("Forza chart"));
-		forzaChart.startFromFirst();
+//		forzaChart.startFromFirst();
 		
 		clonedChart = new Chart(f, 500, 1000, "Generation", "Cloned Organisms", 10, 5);
 //		clonedChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
 		clonedChart.addLine("Organismi clonati", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		clonedChart.setGrid(true);
 		clonedChart.setBorder(BorderFactory.createTitledBorder("Cloned organisms chart"));
-		clonedChart.startFromFirst();
+//		clonedChart.startFromFirst();
 
 		leftPanel.getLegendPanel().setLegend(fitnessChart.getNames(), fitnessChart.getColors());
 		leftPanel.getOptionsPanel().getChartList().addItem("Fitness");
@@ -202,14 +202,15 @@ public class Graphs extends JPanel implements ActionListener
 		o.setFitnessLinesChart(fitnessChart.getLines());
 		o.setErrorLinesChart(errorChart.getLines());
 		//TODO Mettere la riga qui sotto
-//		o.setClonedLinesChart(clonedChart.getLines());	// DA METTERE
+		o.setClonedLinesChart(clonedChart.getLines());	// DA METTERE
 	}
 
 	public void updateForzaChart(Organism o, int currSelectedThrow)
 	{
 		if (forzaChart.getLines().size() > 0) forzaChart.reset();
+		forzaChart.addVector(0, new Vector2d(0, 0.0));
 		for (int i=0; i<o.getForzaMap().get(currSelectedThrow).size(); i++)
-			forzaChart.addVector(0, new Vector2d(i, o.getForzaMap().get(currSelectedThrow).get(i)));
+			forzaChart.addVector(0, new Vector2d(i+1, o.getForzaMap().get(currSelectedThrow).get(i)));
 		
 //		o.setForzaLinesChart(forzaChart.getLines());
 	}
@@ -220,7 +221,7 @@ public class Graphs extends JPanel implements ActionListener
 		errorChart.setLines(o.getErrorLinesChart());
 //		forzaChart.setLines(o.getForzaLinesChart());
 		//TODO Mettere la riga qui sotto
-//		clonedChart.setLines(o.getClonedLinesChart());	// DA METTERE
+		clonedChart.setLines(o.getClonedLinesChart());	// DA METTERE
 	}
 	
 	public Chart getForzaChart() {

@@ -85,7 +85,7 @@ public class Parabola
 	public static void prova()
 	{
 		double delta_t = 0.04;
-		double delta_F = 20;
+		double delta_F = 300;
 		
 		double F = 0;
 		double m = 1;

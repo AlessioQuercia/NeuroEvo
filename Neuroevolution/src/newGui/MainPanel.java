@@ -283,7 +283,7 @@ private boolean done;
 				
 				fixedPool = Executors.newFixedThreadPool(1);	//// VERSIONE PARALLELA
 				
-				fixedPool.submit(new OrganismRunnableLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
+				fixedPool.submit(new OrganismRunnableSecondLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
 				fixedPool.shutdown();							//// VERSIONE PARALLELA
 				
 				simulation.getLeftPanel().updateInfoRete(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
@@ -694,33 +694,33 @@ private boolean done;
 	/// SIMULAZIONE MOTO PROIETTILE ///
 	
 	
-	public void simulate()
-	{
-		double t_sim = 0;
-		double x_sim = 0;
-		double y_sim = 0;
-		
-		// Mappa rappresentante il vettore velocità: ad ogni istante t è associata una coppia di valori ( v_x(t) = v0x , v_y(t) )
-		Map<Double, Vector2d> vel_vector = new HashMap<Double, Vector2d> ();
-		
-		
-		// Aggiorna le componenti del vettore velocità per l'istante t
-		double v_x = v0*Math.cos(a);
-		
-		double v_y = v0*Math.sin(a) - MyConstants.GRAVITY*t_sim;
-		
-		vel_vector.put(t_sim, new Vector2d(v_x, v_y));
-		
-		
-		// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
-		x_sim = v0*Math.cos(a)*t_sim;
-		
-		y_sim = v0*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
-		
-		
-		// Aggiorna il tempo t
-		t_sim += 0.04;
-	}
+//	public void simulate()
+//	{
+//		double t_sim = 0;
+//		double x_sim = 0;
+//		double y_sim = 0;
+//		
+//		// Mappa rappresentante il vettore velocità: ad ogni istante t è associata una coppia di valori ( v_x(t) = v0x , v_y(t) )
+//		Map<Double, Vector2d> vel_vector = new HashMap<Double, Vector2d> ();
+//		
+//		
+//		// Aggiorna le componenti del vettore velocità per l'istante t
+//		double v_x = v0*Math.cos(a);
+//		
+//		double v_y = v0*Math.sin(a) - MyConstants.GRAVITY*t_sim;
+//		
+//		vel_vector.put(t_sim, new Vector2d(v_x, v_y));
+//		
+//		
+//		// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
+//		x_sim = v0*Math.cos(a)*t_sim;
+//		
+//		y_sim = v0*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
+//		
+//		
+//		// Aggiorna il tempo t
+//		t_sim += 0.04;
+//	}
 	
 	
 	
@@ -1000,7 +1000,7 @@ private boolean done;
 			//point to organism
 			   Organism organism = ((Organism) itr_organism.next());
 			   
-				fixedPool.submit(new OrganismRunnable(organism));	//// VERSIONE PARALLELA
+				fixedPool.submit(new OrganismRunnableSecond(organism));	//// VERSIONE PARALLELA
 				
 //			//// VERSIONE SERIALE
 //			//evaluate 

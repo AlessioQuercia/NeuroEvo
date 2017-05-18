@@ -276,6 +276,8 @@ public class OrganismRunnableFirst implements Runnable
 						   
 						   v += delta_v;
 						   
+						   if (v < 0) v = 0;
+						   
 						   double V = (v - minV)/maxV;
 						   
 						   in[2] = V;

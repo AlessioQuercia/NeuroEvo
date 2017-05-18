@@ -50,7 +50,6 @@
    /** If  too high, leads to delta coding process. */
 	  int highest_last_changed;
 
-	  private Organism currentPop_bestOrganism;
 	  private double currentPop_highest_Fitness;
 	  private double mean_cloned_fitness;
 	  private double lowest_error;
@@ -183,15 +182,7 @@
    
 	   public void setHighest_last_changed(int highest_last_changed) {
 		 this.highest_last_changed = highest_last_changed;
-	  }         
-	   
-		  public Organism getCurrentPop_bestOrganism() {
-				return currentPop_bestOrganism;
-			}
-
-			public void setCurrentPop_bestOrganism(Organism currentPop_bestOrganism) {
-				this.currentPop_bestOrganism = currentPop_bestOrganism;
-			}
+	  }            
    
 	   public Population(Genome g, int size) 
 	  {
@@ -353,7 +344,6 @@
 		 }
 		 
 		 currentPop_highest_Fitness = bestOrg.getOrig_fitness();
-		 currentPop_bestOrganism = bestOrg;
 		 
 //		 // RISERVA ALCUNI FIGLI AL MIGLIORE DELLA POPOLAZIONE (ASSICURANDO LA CLONAZIONE DEL MIGLIORE DI OGNI GENERAZIONE)
 //		 Organism popBestOrg = (Organism)organisms.firstElement();

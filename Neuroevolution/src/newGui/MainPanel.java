@@ -1045,24 +1045,15 @@ private boolean done;
 		 // Only print to file every print_every generations /// WRITE TO FILE ///
 			String cause1 = " ";
 			String cause2 = " ";
-			if (_neat.p_print_every != 0 && (((generation % _neat.p_print_every) == 0) || (win))) 
+			if (((generation % _neat.p_print_every) == 0) || (win)) 
 			{
 			   if ((generation % _neat.p_print_every) == 0)
 				  cause1 = " request";
 			   if (win)
 				  cause2 = " winner";
 			
-			   // Salva su file l'intera popolazione per poter ricominciare da lì (implementazione originale)
-//			   String name_of_specie = EnvRoutine.getJneatFileData(filename) + generation;
-//			   pop.print_to_file_by_species(name_of_specie);
-			   
-			   // Salva su file il migliore della popolazione ogni print_every generazioni
-			   Organism bestPopOrg = pop.getCurrentPop_bestOrganism();
-			   if (bestPopOrg != null)
-			   {
-				   simulation.storeBestNet(bestPopOrg);
-				   simulation.serializeOnFile(bestPopOrg);
-			   }
+			   String name_of_specie = EnvRoutine.getJneatFileData(filename) + generation;
+			   pop.print_to_file_by_species(name_of_specie);
 			
 			}
 		 

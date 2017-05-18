@@ -216,11 +216,11 @@ public class OrganismRunnableFirst implements Runnable
 					   double maxM = 2;
 					   double massa = minM + rm.nextDouble()*maxM;	// 1-3kg
 					   double v = 0;
-					   double minF = -300;	// forza minima
-					   double maxF = 600;	// forza massima
+					   double minF = 15;	// forza minima
+					   double maxF = 60;	// forza massima
 					   double maxA = 1.5708;
 					   double minV = 0;
-					   double maxV = 600;
+					   double maxV = 150;
 					   
 					   in[0] = rx.nextDouble();
 					   in[1] = ry.nextDouble();
@@ -275,8 +275,6 @@ public class OrganismRunnableFirst implements Runnable
 						   double delta_v = acc*delta_t;
 						   
 						   v += delta_v;
-						   
-						   if (v < 0) v = 0;
 						   
 						   double V = (v - minV)/maxV;
 						   

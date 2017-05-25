@@ -539,6 +539,7 @@ private boolean done;
 						gittata = 0;
 						h_max = 0;
 						v_rim_sim = 0;
+//						simulation.getRightPanel().resetTail();
 						targetPos = 0;
 						t_charge = 0;
 					}
@@ -630,7 +631,7 @@ private boolean done;
 						gittata = 0;
 						h_max = 0;
 						v_rim_sim = 0;
-						simulation.getRightPanel().resetTail();
+//						simulation.getRightPanel().resetTail();
 						targetPos = 0;
 						t_charge = 0;
 					}

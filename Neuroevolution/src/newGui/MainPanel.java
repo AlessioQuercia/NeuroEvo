@@ -615,12 +615,24 @@ private boolean done;
 						t_charge = 0;
 					}
 				}
-				else
+				else	// Se il rimbalzo (collisione con il terreno) è disabilitato, allora quando tocca l'asse delle x (y = 0) resetta il lancio
 				{
 					if (y_sim<0)
 					{
+//						t_sim = 0;
+						x_sim = 0;
+						y_sim = 0;
 						t_sim = 0;
-//						System.out.println("ciao");
+						vel_vector.clear();
+						x_rim_sim = 0;
+						y_rim_sim = 0;
+						t_rim_sim = 0;
+						gittata = 0;
+						h_max = 0;
+						v_rim_sim = 0;
+						simulation.getRightPanel().resetTail();
+						targetPos = 0;
+						t_charge = 0;
 					}
 				}
 				// FINE SIMULAZIONE MOTO PARABOLICO DEL CORPO

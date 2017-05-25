@@ -399,7 +399,7 @@ private boolean done;
 				simGen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism o = winners.get(simGen);
 //				ArrayList<Double> bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES+1);
-				ArrayList<Double> bestThrow = evo_fit.computeMinVel(x_tgt, y_tgt);
+				ArrayList<Double> bestThrow = evo_fit.computeMinVel(prova_x, prova_y);
 //				System.out.println(bestThrow.get(1));
 				
 				simulation.getRightPanel().setA(bestThrow.get(0));

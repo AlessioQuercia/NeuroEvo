@@ -3,6 +3,7 @@
    package jneat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.joml.Vector2d;
@@ -127,9 +128,15 @@ import org.joml.Vector2d;
 	private ArrayList<ArrayList<Vector2d>> clonedLinesChart;
 
 	private Map<Integer, Vector2d> bestPoints;
+
+	private HashMap<Integer, ArrayList<Vector2d>> targetMap;
 	  
 	  ///////////////////////////////////
    
+
+	public HashMap<Integer, ArrayList<Vector2d>> getTargetMap() {
+		return targetMap;
+	}
 
 	public void setBestPoints(Map<Integer, Vector2d> bestPoints)
 	{
@@ -406,5 +413,10 @@ public void setClonedLinesChart(ArrayList<ArrayList<Vector2d>> lines)
 public ArrayList<ArrayList<Vector2d>> getClonedLinesChart() 
 {
 	return clonedLinesChart;
+}
+
+public void setTargetMap(HashMap<Integer, ArrayList<Vector2d>> targetMap) 
+{
+	this.targetMap = targetMap;
 }
    }

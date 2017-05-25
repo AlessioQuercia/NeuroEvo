@@ -199,6 +199,7 @@ public class OrganismRunnableSecondLoaded implements Runnable
 					 HashMap<Integer,ArrayList<Double>> mappa= new HashMap<Integer,ArrayList<Double>>();
 					 
 					   ArrayList<Double> arrayForza = new ArrayList<Double> ();
+					   ArrayList<Vector2d> arrayTarget = new ArrayList<Vector2d> ();
 //					   y = Math.random()*maxY;
 //					   input[count] = y;
 					  //plist_in[0] = count;
@@ -253,6 +254,10 @@ public class OrganismRunnableSecondLoaded implements Runnable
 //					   tgt[count][3] = in[3];
 //					   tgt[count][4] = in[4];
 					   tgt[count][3] = massa;
+					   
+					   double x_tgt = minX + in[0]*maxX;
+					   double y_tgt = minY + in[1]*maxY;
+					   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
 					   
 					   for (int i = 0; i<50; i++)
 					   {
@@ -342,6 +347,7 @@ public class OrganismRunnableSecondLoaded implements Runnable
 					   }
 					   
 					   o.getForzaMap().put(count, arrayForza);
+					   o.getTargetMap().put(count, arrayTarget);
 					   
 			 ///IMPLEMENTAZIONE VECCHIA  				   
 //					   

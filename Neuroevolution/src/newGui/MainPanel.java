@@ -250,6 +250,9 @@ private boolean done;
 		double gittata = 0;
 		double diametro = 0.05;	// Il diametro del corpo lanciato è di 50 mm (5 cm)
 		
+		int targetPos = 0;
+		double t_charge = 0;
+		
 		// Mappa rappresentante il vettore velocità: ad ogni istante t è associata una coppia di valori ( v_x(t) = v0x , v_y(t) )
 		Map<Double, Vector2d> vel_vector = new HashMap<Double, Vector2d> ();
 		
@@ -283,7 +286,7 @@ private boolean done;
 				
 				fixedPool = Executors.newFixedThreadPool(1);	//// VERSIONE PARALLELA
 				
-				fixedPool.submit(new OrganismRunnableSecondLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
+				fixedPool.submit(new OrganismRunnableMovementLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
 				fixedPool.shutdown();							//// VERSIONE PARALLELA
 				
 				simulation.getLeftPanel().updateInfoRete(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
@@ -365,6 +368,8 @@ private boolean done;
 					v_rim_sim = 0;
 					h_max = 0;
 					gittata = 0;
+					targetPos = 0;
+					t_charge = 0;
 					
 					simulation.getLeftPanel().updateInfoRete(selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
 					simulation.getLeftPanel().updateInfoLancio(infoLancio);
@@ -375,8 +380,17 @@ private boolean done;
 					repaint();
 				}
 				
-	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
-	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
+				if (targetPos >= selectedOrg.getTargetMap().get(selectedThrow).size())
+					targetPos--;
+				
+				double prova_x = selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).x;
+				double prova_y = selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).y;
+				
+	            double X_tgt = simulation.getRightPanel().proportionX(prova_x);
+	            double Y_tgt = simulation.getRightPanel().proportionY(prova_y);
+				
+//	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
+//	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
 	            
 				
 				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
@@ -525,11 +539,24 @@ private boolean done;
 						gittata = 0;
 						h_max = 0;
 						v_rim_sim = 0;
+						targetPos = 0;
+						t_charge = 0;
 					}
 				}
 				
-				// Aggiorna il tempo t
-				t_sim += 0.04;
+				// Aggiorna il tempo t e la posizione del target(l'indice dell'array delle posizioni del target)
+				if (t_charge == o.getMap().get(selectedThrow).get(MyConstants.TEMPO_INDEX))
+				{
+					t_sim += 0.04;
+					targetPos++;
+				}
+				if (t_charge < o.getMap().get(selectedThrow).get(MyConstants.TEMPO_INDEX)) 
+				{
+					t_charge += 0.04;
+					targetPos++;
+				}
+				
+//				System.out.println(o.getTargetMap().get(selectedThrow).get(0).x + " " + o.getTargetMap().get(selectedThrow).get(o.getTargetMap().get(selectedThrow).size()-1).x);
 				
 				// Controllo x e y per resettare il lancio (x > asse_X) o per effettuare il rimbalzo (y = 0)
 				if (MyConstants.SETTINGS_VALUES[MyConstants.SIM_PHYSICS])
@@ -554,6 +581,7 @@ private boolean done;
 		    				simulation.getRightPanel().getTail().removeFirst();
 		    			}
 		    			
+						// Aggiorna il tempo t della parabola di rimbalzo
 		    			t_rim_sim += 0.04;
 	
 	//					System.out.println("X = " + x_sim + ", Y = " + y_rim_sim);
@@ -583,6 +611,8 @@ private boolean done;
 						h_max = 0;
 						v_rim_sim = 0;
 						simulation.getRightPanel().resetTail();
+						targetPos = 0;
+						t_charge = 0;
 					}
 				}
 				else
@@ -1000,7 +1030,7 @@ private boolean done;
 			//point to organism
 			   Organism organism = ((Organism) itr_organism.next());
 			   
-				fixedPool.submit(new OrganismRunnableSecond(organism));	//// VERSIONE PARALLELA
+				fixedPool.submit(new OrganismRunnableMovement(organism));	//// VERSIONE PARALLELA
 				
 //			//// VERSIONE SERIALE
 //			//evaluate 

@@ -15,7 +15,7 @@ import jneat.NNode;
 import jneat.Network;
 import jneat.Organism;
 
-public class OrganismRunnableSecond implements Runnable
+public class OrganismRunnableMovement implements Runnable
 {
 	private Organism o;
 	
@@ -25,7 +25,7 @@ public class OrganismRunnableSecond implements Runnable
 		  Method Method_fit;
 		  Object ObjRet_fit;
 	
-	public OrganismRunnableSecond(Organism o) 
+	public OrganismRunnableMovement(Organism o) 
 	{
 		this.o = o;
 		
@@ -193,7 +193,7 @@ public class OrganismRunnableSecond implements Runnable
 					 
 					 HashMap<Integer,ArrayList<Double>> mappa= new HashMap<Integer,ArrayList<Double>>();
 					 HashMap<Integer,ArrayList<Vector2d>> targetMap= new HashMap<Integer,ArrayList<Vector2d>>();
-//					   Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
+					   Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
 					 
 				   for (count = 0; count < EnvConstant.NUMBER_OF_SAMPLES; count++) 
 				   {
@@ -257,11 +257,11 @@ public class OrganismRunnableSecond implements Runnable
 					   double x_tgt = minX + in[0]*maxX;
 					   double y_tgt = minY + in[1]*maxY;
 					   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
-//					   double d_x_tgt = 0.4;
-//					   double d_y_tgt = 0.4;
-//					   double x0_tgt = x_tgt;
-//					   double y0_tgt = y_tgt;
-//					   double v_ret = 5;
+					   double d_x_tgt = 0.4;
+					   double d_y_tgt = 0.4;
+					   double x0_tgt = x_tgt;
+					   double y0_tgt = y_tgt;
+					   double v_ret = 5;
 					   
 					   for (int i = 0; i<50; i++)
 					   {
@@ -322,18 +322,18 @@ public class OrganismRunnableSecond implements Runnable
 //						   x_tgt += d_x_tgt;
 //						   y_tgt += d_y_tgt;
 						   
-//						   //MOTO RETTILINEO UNIFORME
-//						   x_tgt = x0_tgt + v_ret*current_time;
-//						   y_tgt = y0_tgt + v_ret*current_time;
+						   //MOTO RETTILINEO UNIFORME
+						   x_tgt = x0_tgt + v_ret*current_time;
+						   y_tgt = y0_tgt + v_ret*current_time;
 						   
 						   double V = (v - minV)/maxV;
 						   double A = (a)/maxA;
 						   double Freal = (F - minF)/maxF;
-//						   double X_tgt = (x_tgt - minX)/maxX;
-//						   double Y_tgt = (y_tgt - minY)/maxY;
-//						   
-//						   in[0] = X_tgt;
-//						   in[1] = Y_tgt;
+						   double X_tgt = (x_tgt - minX)/maxX;
+						   double Y_tgt = (y_tgt - minY)/maxY;
+						   
+						   in[0] = X_tgt;
+						   in[1] = Y_tgt;
 						   in[2] = V;
 						   in[3] = A;
 						   in[4] = Freal;
@@ -354,7 +354,7 @@ public class OrganismRunnableSecond implements Runnable
 //						   tgt[count][0] = in[0];
 						   
 						   arrayForza.add(F);
-//						   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
+						   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
 						   
 						   if (lascia >= 0.5) 
 						   {
@@ -362,80 +362,76 @@ public class OrganismRunnableSecond implements Runnable
 						   }
 					   }
 					   
-//					   // SPOSTATO IN OrganismRunnableMovement !!!
-//					   // SIMULAZIONE DEL MOTO PARABOLICO DEL PROIETTILE E DEL MOTO RETTILINEO DEL BERSAGLIO (UNA VOLTA LANCIATO IL PROIETTILE)
-//
-//					   double x_sim = 0;
-//					   double y_sim = 0;
-//					   double t_sim = 0;
-//					   Vector2d target = new Vector2d(x_tgt, y_tgt);
-//					   Vector2d proiettile = new Vector2d(x_sim, y_sim);
-//					   Vector2d bestPoint = proiettile;
-//					   Vector2d bestTarget = target;
-//					   double distanza = -1;
-//					   double distanzaMinima = target.distance(proiettile);
-//					   
-//					   double delta_x_tgt = v_ret*0.04;
-//					   double delta_x_sim = v*Math.cos(a)*0.04;
-//					   
-////					   for (int i = (int)arrayTarget.get(arrayTarget.size()-1).x; i<150; i++) // i++ è sbagliato, dovrebbe essere i+=delta_X
-//					   for (double i = arrayTarget.get(arrayTarget.size()-1).x; i<150; i+=delta_x_tgt) // i++ è sbagliato, dovrebbe essere i+=delta_X
-////					   for (double i = x_sim; i<100; i+=delta_x_sim) // i++ è sbagliato, dovrebbe essere i+=delta_X
-////					   for (int i = arrayTarget.size(); i<150; i++)
-//					   {
-////						   x_tgt += d_x_tgt;
-////						   y_tgt += d_y_tgt;
-//						   
-//						   //aggiorna tempi
-//						   current_time += 0.04;
-//						   t_sim += 0.04;
-//						   
-//						   //MOTO RETTILINEO UNIFORME TARGET
-//						   x_tgt = x0_tgt + v_ret*current_time;
-//						   y_tgt = y0_tgt + v_ret*current_time;
-//						   
-//						   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
-//						   
-//						   //MOTO PARABOLICO PROIETTILE
-//							// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
-//							x_sim = v*Math.cos(a)*t_sim;
-//							
-//							y_sim = v*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
-//						   
-//						 //CALCOLA DISTANZA MINIMA TRA DUE PUNTI (TARGET AL TEMPO T e PARABOLA AL TEMPO T)
-//							target = new Vector2d(x_tgt, y_tgt);
-//							proiettile = new Vector2d(x_sim, y_sim);
-//							distanza = target.distance(proiettile);
-//							
-//							if(distanza < distanzaMinima)
-//							{
-//								distanzaMinima = distanza;
-//								bestPoint = proiettile;
-//								bestTarget = target;
-////								bestPoints.put(count, bestPoint);
-////								tgt[count][0] = bestTarget.x;
-////								tgt[count][1] = bestTarget.y;
-////								tgt[count][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-////								tgt[count][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-////								tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
-//							}
-//					   }
+					   
+					   // SIMULAZIONE DEL MOTO PARABOLICO DEL PROIETTILE E DEL MOTO RETTILINEO DEL BERSAGLIO (UNA VOLTA LANCIATO IL PROIETTILE)
+
+					   double x_sim = 0;
+					   double y_sim = 0;
+					   double t_sim = 0;
+					   Vector2d target = new Vector2d(x_tgt, y_tgt);
+					   Vector2d proiettile = new Vector2d(x_sim, y_sim);
+					   Vector2d bestPoint = proiettile;
+					   Vector2d bestTarget = target;
+					   double distanza = -1;
+					   double distanzaMinima = target.distance(proiettile);
+					   
+					   double delta_x_tgt = v_ret*0.04;
+					   double delta_x_sim = v*Math.cos(a)*0.04;
+					   
+//					   for (int i = (int)arrayTarget.get(arrayTarget.size()-1).x; i<150; i++) // i++ è sbagliato, dovrebbe essere i+=delta_X
+					   for (double i = arrayTarget.get(arrayTarget.size()-1).x; i<150; i+=delta_x_tgt) // i++ è sbagliato, dovrebbe essere i+=delta_X
+//					   for (double i = x_sim; i<100; i+=delta_x_sim) // i++ è sbagliato, dovrebbe essere i+=delta_X
+//					   for (int i = arrayTarget.size(); i<150; i++)
+					   {
+//						   x_tgt += d_x_tgt;
+//						   y_tgt += d_y_tgt;
+						   
+						   //aggiorna tempi
+						   current_time += 0.04;
+						   t_sim += 0.04;
+						   
+						   //MOTO RETTILINEO UNIFORME TARGET
+						   x_tgt = x0_tgt + v_ret*current_time;
+						   y_tgt = y0_tgt + v_ret*current_time;
+						   
+						   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
+						   
+						   //MOTO PARABOLICO PROIETTILE
+							// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
+							x_sim = v*Math.cos(a)*t_sim;
+							
+							y_sim = v*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
+						   
+						 //CALCOLA DISTANZA MINIMA TRA DUE PUNTI (TARGET AL TEMPO T e PARABOLA AL TEMPO T)
+							target = new Vector2d(x_tgt, y_tgt);
+							proiettile = new Vector2d(x_sim, y_sim);
+							distanza = target.distance(proiettile);
+							
+							if(distanza < distanzaMinima)
+							{
+								distanzaMinima = distanza;
+								bestPoint = proiettile;
+								bestTarget = target;
+//								bestPoints.put(count, bestPoint);
+//								tgt[count][0] = bestTarget.x;
+//								tgt[count][1] = bestTarget.y;
+//								tgt[count][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
+//								tgt[count][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
+//								tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
+							}
+					   }
 					   
 					   mappa.put(count, arrayForza);
 					   targetMap.put(count, arrayTarget);
 					   o.setForzaMap(mappa);
 					   o.setTargetMap(targetMap);
 					   
-					   //SPOSTATO IN OrganismRunnableMovement
-//					   o.setTargetMap(targetMap);
-//					   bestPoints.put(count, bestPoint);
-//					   tgt[count][0] = (bestTarget.x - minX)/maxX;
-//					   tgt[count][1] = (bestTarget.y - minY)/maxY;
-//					   tgt[count][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-//					   tgt[count][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-//					   tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
-					   
-					   
+					   bestPoints.put(count, bestPoint);
+					   tgt[count][0] = (bestTarget.x - minX)/maxX;
+					   tgt[count][1] = (bestTarget.y - minY)/maxY;
+					   tgt[count][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
+					   tgt[count][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
+					   tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
 					   
 //					   o.setBestPoints(bestPoints);
 					   
@@ -524,8 +520,8 @@ public class OrganismRunnableSecond implements Runnable
 //				   // clear net		 
 //					  _net.flush();
 				   }
-				   //SPOSTATO IN OrganismRunnableMovement
-//				   o.setBestPoints(bestPoints);
+				   
+				   o.setBestPoints(bestPoints);
 				} 
 				
 					catch (Exception e2) 
@@ -544,7 +540,7 @@ public class OrganismRunnableSecond implements Runnable
 		  // control the result 
 			 if (success) 
 			 {
-				 Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
+//				 Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
 				try 
 				{
 					//SIMULAZIONE DI LANCIO PER CALCOLO DISTANZA MINIMA TRAIETTORIA-BERSAGLIO
@@ -553,12 +549,12 @@ public class OrganismRunnableSecond implements Runnable
 //					double minY = 20;
 //					double maxY = 100;
 //					
-					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
-					{
-						bestPoints.put(i, computeMinDistance(o, i, tgt));
-					}
-					
-					o.setBestPoints(bestPoints);
+//					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
+//					{
+//						bestPoints.put(i, computeMinDistanceMovement(o, i, tgt));
+//					}
+//					
+//					o.setBestPoints(bestPoints);
 					
 					
 				   Method_fit = Class_fit.getMethod("computeFitness", params);
@@ -969,3 +965,4 @@ public class OrganismRunnableSecond implements Runnable
 			return bestPoint;
 		}
 }
+

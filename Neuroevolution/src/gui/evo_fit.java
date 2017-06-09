@@ -93,8 +93,20 @@ public class evo_fit
 	    	 	
 //	    	 	System.out.println(F);
 	    	 	
+	    	 	// CONSIDERA IL BERSAGLIO IN POSIZIONE INIZIALE (ovvero nella prima posizione in cui esso compare)
+//	    	 	mappa.put(sample+1, computeMinVel(x_obj, y_obj));
 	    	 	
-	    	 	mappa.put(sample+1, computeMinVel(x_obj, y_obj));
+	    	 	// CONSIDERA IL BERSAGLIO NELLA POSIZIONE DELL'ISTANTE DI LANCIO (ovvero la posizione del target nel momento in cui il proiettile si stacca da terra)
+	    	 	mappa.put(sample+1, computeMinVel(tgt[j][MyConstants.SIM_X0_TARGET_INDEX], tgt[j][MyConstants.SIM_Y0_TARGET_INDEX]));
+	    	 	
+	    	 	// CONSIDERA IL BERSAGLIO IN POSIZIONE MENO DISTANTE DAL PROIETTILE (ovvero quando il proiettile è già stato lanciato - sbagliato??)
+//	    	 	double prova_x = tgt[j][MyConstants.SIM_BEST_TARGET_X_INDEX];
+//	    	 	double prova_y = tgt[j][MyConstants.SIM_BEST_TARGET_Y_INDEX];
+//	    	 	if (prova_x < 0) prova_x = 0;
+//	    	 	if (prova_y < 0) prova_y = 0;
+//	    	 	mappa.put(sample+1, computeMinVel(prova_x, prova_y));
+	    	 	
+	    	 	
 //IMPLEMENTAZIONE VECCHIA		     
 ////		     array.add(0.0);
 ////		     for (int i = 0; i<7; i++)
@@ -186,6 +198,12 @@ public class evo_fit
 		    	 	arrayBest.set(MyConstants.TEMPO_INDEX, t);
 		    	 	arrayBest.set(MyConstants.ACCELERAZIONE_INDEX, acc);
 		    	 	arrayBest.set(MyConstants.MASSA_INDEX, m);
+		    	 	arrayBest.set(MyConstants.X_MIGLIORE_INDEX, tgt[j][MyConstants.SIM_X_MIGLIORE_INDEX]);
+		    	 	arrayBest.set(MyConstants.Y_MIGLIORE_INDEX, tgt[j][MyConstants.SIM_Y_MIGLIORE_INDEX]);
+		    	 	arrayBest.set(MyConstants.BEST_TARGET_X_INDEX, tgt[j][MyConstants.SIM_BEST_TARGET_X_INDEX]);
+		    	 	arrayBest.set(MyConstants.BEST_TARGET_Y_INDEX, tgt[j][MyConstants.SIM_BEST_TARGET_Y_INDEX]);
+		    	 	arrayBest.set(MyConstants.VEL_RET_X_INDEX, tgt[j][MyConstants.SIM_VEL_RET_X_INDEX]);
+		    	 	arrayBest.set(MyConstants.VEL_RET_Y_INDEX, tgt[j][MyConstants.SIM_VEL_RET_Y_INDEX]);
 	    	 	}
 	    	 	fitness2 += 1/(error+k);
 	    	 	//fitness += 1/(errorsum+k);		//FITNESS VECCHIA
@@ -214,8 +232,12 @@ public class evo_fit
 	    	 	array.set(MyConstants.TEMPO_INDEX, t);
 	    	 	array.set(MyConstants.ACCELERAZIONE_INDEX, acc);
 	    	 	array.set(MyConstants.MASSA_INDEX, m);
-	    	 	array.set(MyConstants.X_MIGLIORE_INDEX, tgt[j][9]);
-	    	 	array.set(MyConstants.Y_MIGLIORE_INDEX, tgt[j][10]);
+	    	 	array.set(MyConstants.X_MIGLIORE_INDEX, tgt[j][MyConstants.SIM_X_MIGLIORE_INDEX]);
+	    	 	array.set(MyConstants.Y_MIGLIORE_INDEX, tgt[j][MyConstants.SIM_Y_MIGLIORE_INDEX]);
+	    	 	array.set(MyConstants.BEST_TARGET_X_INDEX, tgt[j][MyConstants.SIM_BEST_TARGET_X_INDEX]);
+	    	 	array.set(MyConstants.BEST_TARGET_Y_INDEX, tgt[j][MyConstants.SIM_BEST_TARGET_Y_INDEX]);
+	    	 	array.set(MyConstants.VEL_RET_X_INDEX, tgt[j][MyConstants.SIM_VEL_RET_X_INDEX]);
+	    	 	array.set(MyConstants.VEL_RET_Y_INDEX, tgt[j][MyConstants.SIM_VEL_RET_Y_INDEX]);
 	    	 	mappa.put(j, array);
 	        } 
 //	     System.out.println("VEL: " + velsum + "    " + "ERR: " + errorsum);

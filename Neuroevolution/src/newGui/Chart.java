@@ -27,12 +27,26 @@ public class Chart extends JPanel
 	
 	private int x_axis;
 	private int y_axis;
+	
+	private double x_axis_length;
+	private double y_axis_length;
 
 	private String descX;
 	private String descY;
 	
+	private double minX;
+	private double minY;
 	private double maxX;
 	private double maxY;
+	
+	private int factor_x;
+	private int factor_y;
+	
+	private double tran_x;
+	private double tran_y;
+	
+	private boolean shifted_x;
+	private boolean shifted_y;
 	
 //	private double prevX;
 //	private double prevY;
@@ -69,6 +83,8 @@ public class Chart extends JPanel
 		startFromMax = false;
 		startFromFirst = false;
     	
+		setMinX(0);
+		setMinY(0);
 		setMaxX(1000);
 		setMaxY(100000);
 		
@@ -92,6 +108,33 @@ public class Chart extends JPanel
 //		currX = 0;
 //		currY = 0;
     	
+		setMinX(0);
+		setMinY(0);
+		setMaxX(maxX);
+		setMaxY(maxY);
+		
+		setHyphens_x(hyphensX);
+		setHyphens_y(hyphensY);
+		
+//		descX = new JLabel("Prova");
+//		descY = new JLabel("Prova");
+		this.descX = descX;
+		this.descY = descY;
+		
+		init();
+	}
+	
+	public Chart(JFrame frame, int minX, int minY, int maxX, int maxY, String descX, String descY, int hyphensX, int hyphensY) 
+	{
+		this.frame = frame;
+		
+//		prevX = 0;
+//		prevY = 0;
+//		currX = 0;
+//		currY = 0;
+    	
+		setMinX(minX);
+		setMinY(minY);
 		setMaxX(maxX);
 		setMaxY(maxY);
 		
@@ -112,6 +155,14 @@ public class Chart extends JPanel
 		
 		setX_axis(55);
 		setY_axis(30);
+		
+		factor_x = 1;
+		factor_y = 1;
+		tran_x = 0;
+		tran_y = 0;
+		
+		shifted_x = false;
+		shifted_y = false;
 		
 //    	GridBagConstraints gc = new GridBagConstraints();
     	
@@ -144,16 +195,16 @@ public class Chart extends JPanel
 		//ASSE X
 		double larghezza = (getWidth()-ChartConstants.BORDER_X) - (x_axis + ChartConstants.BORDER_X);
 		double stepX = larghezza/hyphens_x;
-		double numeroX = getMaxX()/hyphens_x;
+		double numeroX = (Math.abs(getMinX()) + Math.abs(getMaxX()))/hyphens_x;
 		
 		//ASSE Y
 		double altezza = (getHeight()-ChartConstants.BORDER_Y - y_axis) - (ChartConstants.BORDER_Y);
 		double stepY = altezza/hyphens_y;
-		double numeroY = getMaxY()/hyphens_y;
+		double numeroY = (Math.abs(getMinY()) + Math.abs(getMaxY()))/hyphens_y;
 		
 		// DISEGNA LUNGO L'ASSE X
 		double i = x_axis;
-		for (int j = 0; j<=getMaxX(); i+=stepX, j+=numeroX)
+		for (int j = (int)getMinX(); j<=getMaxX(); i+=stepX, j+=numeroX)
 		{
 			Line2D line = new Line2D.Double(ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y,
 					ChartConstants.BORDER_X + i, getHeight() - y_axis - ChartConstants.BORDER_Y + ChartConstants.HYPHEN_WIDTH);
@@ -176,7 +227,7 @@ public class Chart extends JPanel
 		
 		// DISEGNA LUNGO L'ASSE Y
 		i = y_axis;
-		for (int j = 0; j<=getMaxY(); i+=stepY, j+=numeroY)
+		for (int j = (int)getMinY(); j<=getMaxY(); i+=stepY, j+=numeroY)
 		{
 			Line2D line = new Line2D.Double(x_axis + ChartConstants.BORDER_X, getHeight() - ChartConstants.BORDER_Y - i,
 					 x_axis + ChartConstants.BORDER_X - ChartConstants.HYPHEN_WIDTH, getHeight() - ChartConstants.BORDER_Y - i);
@@ -242,6 +293,10 @@ public class Chart extends JPanel
 		double prevY = 0;
 		double currX = 0;
 		double currY = 0;
+		
+		if (shifted_x) tran_x = ((getWidth()-ChartConstants.BORDER_X) - (x_axis + ChartConstants.BORDER_X))/factor_x; 
+		if (shifted_y) tran_y = ((getHeight()-ChartConstants.BORDER_Y - y_axis) - (ChartConstants.BORDER_Y))/factor_y;
+		
 		if (startFromMax)
 		{
 			prevY = proportionY(getMaxY());
@@ -260,8 +315,8 @@ public class Chart extends JPanel
 			currX = proportionX(punto.x);
 			currY = proportionY(punto.y);
 			
-			Line2D segment = new Line2D.Double(x_axis + ChartConstants.BORDER_X + prevX + 1, getHeight() - y_axis - ChartConstants.BORDER_Y - prevY - 1
-					, x_axis + ChartConstants.BORDER_X + currX + 1, getHeight() - y_axis - ChartConstants.BORDER_Y - currY - 1);
+			Line2D segment = new Line2D.Double(tran_x + x_axis + ChartConstants.BORDER_X + prevX + 1, getHeight() - tran_y - y_axis - ChartConstants.BORDER_Y - prevY - 1
+					, tran_x + x_axis + ChartConstants.BORDER_X + currX + 1, getHeight() - tran_y - y_axis - ChartConstants.BORDER_Y - currY - 1);
 //			Stroke s = g2d.getStroke();
 			Color c = g2d.getColor();
 //			g2d.setStroke(new BasicStroke(2));
@@ -304,6 +359,7 @@ public class Chart extends JPanel
 	public double proportionX(double x)
 	{
 		int larghezza = (getWidth()-ChartConstants.BORDER_X) - (x_axis + ChartConstants.BORDER_X);
+		if (shifted_x) larghezza = larghezza/factor_x;
         double X = x*larghezza/maxX;	///PROPORZIONI X
         return X;
 	}
@@ -311,6 +367,7 @@ public class Chart extends JPanel
 	public double proportionY(double y)
 	{
 		int altezza = (getHeight()-ChartConstants.BORDER_Y - y_axis) - (ChartConstants.BORDER_Y);
+		if (shifted_y) altezza = altezza/factor_y;
         double Y = y*altezza/maxY;	///PROPORZIONI Y
         return Y;
 	}
@@ -434,5 +491,38 @@ public class Chart extends JPanel
 	{
 		this.lines = lines;
 	}
+	
+	public double getMinX() {
+		return minX;
+	}
+
+	public void setMinX(double minX) {
+		this.minX = minX;
+	}
+
+	public double getMinY() {
+		return minY;
+	}
+
+	public void setMinY(double minY) {
+		this.minY = minY;
+	}
+	
+	public void setNegativeMinX()
+	{
+		this.minX = -maxX;
+		this.factor_x = 2;
+		this.tran_x = x_axis_length/2;
+		shifted_x = true;
+	}
+	
+	public void setNegativeMinY()
+	{
+		this.minY = -maxY;
+		this.factor_y = 2;
+		this.tran_y = y_axis_length/2;
+		shifted_y = true;
+	}
+	
 	
 }

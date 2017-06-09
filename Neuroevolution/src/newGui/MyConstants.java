@@ -1,6 +1,7 @@
 package newGui;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MyConstants 
 {
@@ -25,25 +26,31 @@ public class MyConstants
 	public static int MASSA_INDEX = 10;
 	public static int X_MIGLIORE_INDEX = 11;
 	public static int Y_MIGLIORE_INDEX = 12;
+	public static int BEST_TARGET_X_INDEX = 13;
+	public static int BEST_TARGET_Y_INDEX = 14;
+	public static int VEL_RET_X_INDEX = 15;
+	public static int VEL_RET_Y_INDEX = 16;
 	
 	/////INDICI DELLE INFORMAZIONI SULLA RETE
-	public static int ERRORE_TOTALE_INDEX = 13;
-	public static int FITNESS_TOTALE_INDEX = 14;
-	public static int FITNESS_VECCHIA_INDEX = 15;
-	public static int LANCIO_MIGLIORE_INDEX = 16;
-	public static int WIN_INDEX = 17;
+	public static int ERRORE_TOTALE_INDEX = 17;
+	public static int FITNESS_TOTALE_INDEX = 18;
+	public static int FITNESS_VECCHIA_INDEX = 19;
+	public static int LANCIO_MIGLIORE_INDEX = 20;
+	public static int WIN_INDEX = 21;
 	
 	/////NUMERO INDICI
-	public static int INFO_LANCIO_SIZE = 13;
-	public static int INFO_RETE_SIZE = 18;
+	public static int INFO_LANCIO_SIZE = 17;
+	public static int INFO_RETE_SIZE = 22;
 	
 	
 	/////INFORMAZIONI PER START
 	public static String DATA_DIR = "data\\";
 	public static String RESULTS_DIR = "results\\";
+	public static String POPULATIONS_DIR = "populations\\";
 	public static String PARAMETRI_NOMEFILE = "parametri";
 	public static String GENOMA_NOMEFILE = DATA_DIR +"genome_5in_4hid_3out";
 	public static String POP_NOMEFILE = DATA_DIR + "primitive";
+	public static String POPULATION_FILENAME = "population_0";
 	
 	////GESTIONE UPDATE E RENDER
 	public static long MILLISECOND = 1000L;
@@ -86,8 +93,24 @@ public class MyConstants
 	public static int SIM_ANGOLO_INDEX = 4;
 	public static int SIM_FORZA_INDEX = 5;
 	public static int SIM_ACCELERAZIONE_INDEX = 6;
-	public static int SIM_TEMPO = 7;
-	public static int SIM_DISTANZA_MINIMA = 8;
-	public static int SIM_X_MIGLIORE = 9;
-	public static int SIM_Y_MIGLIORE = 10;
+	public static int SIM_TEMPO_INDEX = 7;
+	public static int SIM_DISTANZA_MINIMA_INDEX = 8;
+	public static int SIM_X_MIGLIORE_INDEX = 9;
+	public static int SIM_Y_MIGLIORE_INDEX = 10;
+	public static int SIM_VEL_RET_X_INDEX = 11;
+	public static int SIM_VEL_RET_Y_INDEX = 12;
+	public static int SIM_X0_TARGET_INDEX = 13;
+	public static int SIM_Y0_TARGET_INDEX = 14;
+	public static int SIM_T0_TARGET_INDEX = 15;
+	public static int SIM_BEST_TARGET_X_INDEX = 16;
+	public static int SIM_BEST_TARGET_Y_INDEX = 17;
+	public static int SIM_FIRST_X_TGT_INDEX = 18;
+	public static int SIM_FIRST_Y_TGT_INDEX = 19;
+	
+	//// NUMERO INDICI PER LA SIMULAZIONE (OLTRE AGLI INPUT)
+	public static int SIM_TGT_OTHER_INFO_SIZE = 15;
+	
+	//// RANDOM PER I COEFFICIENTI ANGOLARI DEL MOTO RETTILINEO DEL TARGET
+	public static Random RANDOM_VX = new Random((long) (Math.random()*900));
+	public static Random RANDOM_VY = new Random((long) (Math.random()*4000));
 }

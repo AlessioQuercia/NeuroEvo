@@ -74,18 +74,19 @@ public class Graphs extends JPanel implements ActionListener
 		fitnessChart.setGrid(true);
 		fitnessChart.setBorder(BorderFactory.createTitledBorder("Fitness chart"));
 		
-		errorChart = new Chart(f, 500, 300, "Generation", "Error", 10, 10);
+		errorChart = new Chart(f, 500, 500, "Generation", "Error", 10, 10);
 //		errorChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
 		errorChart.addLine("Lowest error", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		errorChart.setGrid(true);
 		errorChart.setBorder(BorderFactory.createTitledBorder("Error chart"));
 		errorChart.startFromFirst();
 		
-		forzaChart = new Chart(f, 50, 300, "Step", "Forza", 10, 5);
+		forzaChart = new Chart(f, 50, 300, "Step", "Forza", 10, 6);
 //		forzaChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
 		forzaChart.addLine("Forza", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		forzaChart.setGrid(true);
 		forzaChart.setBorder(BorderFactory.createTitledBorder("Forza chart"));
+		forzaChart.setNegativeMinY();
 //		forzaChart.startFromFirst();
 		
 		clonedChart = new Chart(f, 500, 1000, "Generation", "Cloned Organisms", 10, 5);

@@ -21,6 +21,10 @@ import myGui.myGuiConstants;
 
 public class SimulationOptionsPanel extends JPanel
 {
+	public JButton getStartFromBtn() {
+		return startFromBtn;
+	}
+
 	private JFrame frame;
 	
 	private JComboBox generationList;
@@ -28,6 +32,7 @@ public class SimulationOptionsPanel extends JPanel
 
 	private JButton startBtn;
 	private JButton loadBtn;
+	private JButton startFromBtn;
 //	private JButton autodrawBtn;
 //	private JButton showBestBtn;
 //	private JButton settingsBtn;
@@ -106,6 +111,11 @@ public class SimulationOptionsPanel extends JPanel
 		loadBtn.setPreferredSize(size);
 		loadBtn.setMaximumSize(size);
 		
+		startFromBtn = new JButton("Start from...");
+//		loadBtn.setMinimumSize(size);
+//		loadBtn.setPreferredSize(size);
+//		loadBtn.setMaximumSize(size);
+		
 		generationList.setMinimumSize(size);
 		generationList.setPreferredSize(size);
 		generationList.setMaximumSize(size);
@@ -157,11 +167,12 @@ public class SimulationOptionsPanel extends JPanel
 		gc.gridy = 2;
 		add(loadBtn, gc);
 		
-//		gc.anchor = GridBagConstraints.LINE_START;
-//		gc.gridx = 0;
-//		gc.gridy = 3;
-//		add(loadBtn, gc);
-//		
+		gc.anchor = GridBagConstraints.LINE_START;
+		gc.fill = GridBagConstraints.HORIZONTAL;
+		gc.gridx = 0;
+		gc.gridy = 3;
+		add(startFromBtn, gc);
+		
 //		gc.anchor = GridBagConstraints.LINE_START;
 //		gc.gridx = 1;
 //		gc.gridy = 3;

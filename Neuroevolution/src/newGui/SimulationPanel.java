@@ -111,6 +111,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 //    	leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
 //    	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
     	leftPanel.getOptionsPanel().getLoadBtn().addActionListener(this);
+    	leftPanel.getOptionsPanel().getStartFromBtn().addActionListener(this);
 //    	leftPanel.getOptionsPanel().getSettingsBtn().addActionListener(this);
     	leftPanel.getInputPanel().getLoadInputBtn().addActionListener(this);
     	
@@ -292,13 +293,15 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			 EnvConstant.TYPE_OF_SIMULATION = EnvConstant.SIMULATION_FROM_CLASS;
-			 EnvConstant.FORCE_RESTART = false;
-			 EnvConstant.STOP_EPOCH = false;
 			 JButton p = (JButton) e.getSource();
 			 
 			 if (p.getActionCommand().equals("Start")) 
 			 {
+				 EnvConstant.TYPE_OF_SIMULATION = EnvConstant.SIMULATION_FROM_CLASS;
+				 EnvConstant.TYPE_OF_START = EnvConstant.START_FROM_GENOME;
+				 EnvConstant.FORCE_RESTART = false;
+				 EnvConstant.STOP_EPOCH = false;
+				 
 //				 System.out.println("start");
 				 start = true;
 				 getRightPanel().setDraw(true);
@@ -307,6 +310,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 				 mainPanel.startProcessAsync();
 				 
 				 getLeftPanel().getOptionsPanel().remove(getLeftPanel().getOptionsPanel().getLoadBtn());
+				 getLeftPanel().getOptionsPanel().remove(getLeftPanel().getOptionsPanel().getStartFromBtn());
 				 
 				 getLeftPanel().setNormalLayout();
 				 
@@ -338,7 +342,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 				 boolean temp2 = load;
 				 start = false;
 				 load = false;
-				 FileDialog fd = new FileDialog(frame, "load file parameter", FileDialog.LOAD);
+				 FileDialog fd = new FileDialog(frame, "Load a network", FileDialog.LOAD);
 				 fd.setVisible(true);
 			 
 				 String tmp1 = fd.getDirectory();
@@ -371,6 +375,59 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 			 else if (p.getActionCommand().equals("Load inputs"))
 			 {
 				 loadInputsPressed();
+			 }
+			 
+			 else if (p.getActionCommand().equals("Start from..."))
+			 {
+				 EnvConstant.TYPE_OF_SIMULATION = EnvConstant.SIMULATION_FROM_CLASS;
+				 EnvConstant.TYPE_OF_START = EnvConstant.START_FROM_EXISTING_POPULATION;
+				 EnvConstant.FORCE_RESTART = false;
+				 EnvConstant.STOP_EPOCH = false;
+				 
+				 FileDialog fd = new FileDialog(frame, "Choose a population to start from", FileDialog.LOAD);
+				 fd.setVisible(true);
+			 
+				 String tmp1 = fd.getDirectory();
+				 String tmp2 = fd.getFile();
+				 
+				 if (tmp1 != null && tmp2 != null) 
+				 {
+					 String name = tmp1 + tmp2;
+					 MyConstants.POPULATION_FILENAME = tmp2;
+					 
+					 String generation = MyConstants.POPULATION_FILENAME.substring(
+							 MyConstants.POPULATION_FILENAME.indexOf('_') + 1, MyConstants.POPULATION_FILENAME.length());
+					 
+					 // Carica il miglior organismo dell'ultima generazione e ricomincia da quelle statistiche (da sistemare!!)
+//					 String filename = MyConstants.POPULATIONS_DIR + "infoLastNet_" + generation;
+					 
+//					 MyConstants.GENERATION_START = Integer.parseInt(generation) + 1;
+					 
+//					 readSerializedFile(filename);
+					 
+					 try 
+					 {
+//						 loading = true;
+						 start = true;
+						 getRightPanel().setDraw(true);
+						 EnvConstant.FORCE_RESTART = false;
+						 mainPanel.startProcessAsync();
+						 
+						 getLeftPanel().getOptionsPanel().remove(getLeftPanel().getOptionsPanel().getLoadBtn());
+						 getLeftPanel().getOptionsPanel().remove(getLeftPanel().getOptionsPanel().getStartFromBtn());
+						 
+						 getLeftPanel().setNormalLayout();
+						 
+						 getLeftPanel().getOptionsPanel().getStartBtn().setText("Stop");
+						 
+						 System.out.println("file letto");
+					 }
+					 catch (Exception exc) 
+					 {
+						 System.out.println("File: " + name + "is not a population file!");
+						 exc.printStackTrace();
+					 }
+				 }
 			 }
 			 
 //			 else if (p.getActionCommand().equals("Auto-draw: OFF")) 
@@ -434,7 +491,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 //			 } 
 		}
 		
-		public boolean serializeOnFile(Organism o)
+		public boolean serializeOnFile(String filename, Organism o)
 		{
 			boolean success = false;
 			FileOutputStream fileOutputStream = null;
@@ -442,7 +499,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 			
 			try 
 			{
-				fileOutputStream = new FileOutputStream(MyConstants.RESULTS_DIR + "prova_" + o.getGeneration());
+				fileOutputStream = new FileOutputStream(filename);
 				objectOutputStream = new ObjectOutputStream(fileOutputStream);
 				objectOutputStream.writeObject(o);
 				objectOutputStream.close();

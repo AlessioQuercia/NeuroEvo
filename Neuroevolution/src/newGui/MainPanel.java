@@ -46,6 +46,7 @@ import jGraph.chartXY;
 import jNeatCommon.EnvConstant;
 import jNeatCommon.EnvRoutine;
 import jNeatCommon.IOseq;
+import jNeatCommon.NeatConstant;
 import jneat.Genome;
 import jneat.NNode;
 import jneat.Neat;
@@ -216,6 +217,12 @@ private boolean done;
 		
 		int prevSelectedSettingsIndex = -1;
 		
+		int prevSelectedGraph = -1;
+		int currSelectedGraph = 0;
+		
+		int prevSelectedSettings = -1;
+		int currSelectedSettings = 0;
+		
 		double x = 0;
 		double a = 0;
 		double v = 0;
@@ -273,6 +280,8 @@ private boolean done;
 				v_rim_sim = 0;
 				h_max = 0;
 				gittata = 0;
+				targetPos = 0;
+				t_charge = 0;
 				
 				Organism organism = winners.get(
 						simulation.getLeftPanel().getOptionsPanel().
@@ -289,15 +298,16 @@ private boolean done;
 				fixedPool.submit(new OrganismRunnableMovementLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
 				fixedPool.shutdown();							//// VERSIONE PARALLELA
 				
-				simulation.getLeftPanel().updateInfoRete(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
-				simulation.getLeftPanel().updateInfoLancio(organism.getMap().get(selectedThrow));
-				
 				try {
 					fixedPool.awaitTermination(1, TimeUnit.DAYS);
+					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	//// VERSIONE PARALLELA
+				
+				simulation.getLeftPanel().updateInfoRete(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
+				simulation.getLeftPanel().updateInfoLancio(organism.getMap().get(selectedThrow));
 				
 				MyConstants.LOADED_INPUTS = false;
 			}
@@ -383,8 +393,10 @@ private boolean done;
 				if (targetPos >= selectedOrg.getTargetMap().get(selectedThrow).size())
 					targetPos--;
 				
-				double prova_x = selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).x;
-				double prova_y = selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).y;
+//				double prova_x = selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).x;
+//				double prova_y = selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).y;
+				double prova_x = x_tgt + infoLancio.get(MyConstants.VEL_RET_X_INDEX)*(t_charge + t_sim);
+				double prova_y = y_tgt + infoLancio.get(MyConstants.VEL_RET_Y_INDEX)*(t_charge + t_sim);
 				
 	            double X_tgt = simulation.getRightPanel().proportionX(prova_x);
 	            double Y_tgt = simulation.getRightPanel().proportionY(prova_y);
@@ -392,13 +404,30 @@ private boolean done;
 //	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
 //	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
 	            
+	            double bestTgt_x = simulation.getRightPanel().proportionX(infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
+	            double bestTgt_y = simulation.getRightPanel().proportionY(infoLancio.get(MyConstants.BEST_TARGET_Y_INDEX));
+	            double bestShot_x = simulation.getRightPanel().proportionX(infoLancio.get(MyConstants.X_MIGLIORE_INDEX));
+	            double bestShot_y = simulation.getRightPanel().proportionY(infoLancio.get(MyConstants.Y_MIGLIORE_INDEX));
+	            
+//	            System.out.println(targetPos);
+//	            System.out.println(selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).x + " vs " + infoLancio.get(MyConstants.X_TARGET_INDEX));
+//	            System.out.println(infoLancio.get(MyConstants.X_MIGLIORE_INDEX)+ " vs " + infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
+//	            System.out.println(infoLancio.get(MyConstants.Y_MIGLIORE_INDEX) + " vs " + infoLancio.get(MyConstants.BEST_TARGET_Y_INDEX));
 				
 				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
 						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt - 2.5, 5, 5);
 				
+				simulation.getRightPanel().getBestTarget().setFrame(MyConstants.BORDER_X + bestTgt_x - 2.5, 
+						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestTgt_y - 2.5, 5, 5);
+				
+				simulation.getRightPanel().getBestShot().setFrame(MyConstants.BORDER_X + bestShot_x - 1.5, 
+						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestShot_y - 1.5, 3, 3);
+				
+				
 				simGen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism o = winners.get(simGen);
 //				ArrayList<Double> bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES+1);
+//				ArrayList<Double> bestThrow = evo_fit.computeMinVel(x_tgt, y_tgt);
 				ArrayList<Double> bestThrow = evo_fit.computeMinVel(prova_x, prova_y);
 //				System.out.println(bestThrow.get(1));
 				
@@ -509,6 +538,22 @@ private boolean done;
 				// Aggiorna le posizioni nella rappresentazione grafica (corpo + coda)
     			simulation.getRightPanel().getPeso().setFrame(
     					MyConstants.BORDER_X+X_sim -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_sim - 1.5, 3, 3);
+    			
+//				System.out.println(new Vector2d(simulation.getRightPanel().getTarget().getCenterX(), 
+//												simulation.getRightPanel().getTarget().getCenterY()).distance(
+//								   new Vector2d(simulation.getRightPanel().getPeso().getCenterX(),
+//										   		simulation.getRightPanel().getPeso().getCenterY()))
+//								   <= infoLancio.get(MyConstants.ERRORE_INDEX));
+    			
+//				System.out.println(new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim))
+//								   <= infoLancio.get(MyConstants.ERRORE_INDEX));
+    			
+				if(new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim)) < infoLancio.get(MyConstants.ERRORE_INDEX))
+				{
+					System.out.println("ERR: " + new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim)) + " vs " + infoLancio.get(MyConstants.ERRORE_INDEX));
+					System.out.println("ANG: " + infoLancio.get(MyConstants.ANGOLO_INDEX));
+					System.out.println("VEL: " + infoLancio.get(MyConstants.VELOCITA_INDEX));
+				}
     			
     			if (y_sim >= 0) 
     				simulation.getRightPanel().getTail().add(
@@ -641,39 +686,57 @@ private boolean done;
 				simulation.getRightPanel().repaint();
 			}
 			
-			if (tabbedPanel.getSelectedIndex() == 1 && (simulation.getStart() || simulation.getLoad()) && winners.size()>0
-					&& graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getItemCount()>0)
+			if (tabbedPanel.getSelectedIndex() == 1)
 			{	
-				currForzaGen = graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getSelectedIndex();
-				Organism selectedOrg = winners.get(currForzaGen);
-				currSelectedThrow = graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().getSelectedIndex();
-				if (currSelectedThrow == EnvConstant.NUMBER_OF_SAMPLES)
-					currSelectedThrow = selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue();
-				if (graphs.getLeftPanel().getForzaPanel())
-					graphs.updateForzaChart(selectedOrg, currSelectedThrow);
 				
-				if (prevForzaGen != currForzaGen)
+				currSelectedGraph = graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedIndex();
+				if (prevSelectedGraph != currSelectedGraph)
 				{
-					prevForzaGen = currForzaGen;
-					
-//					graphs.repaint();
+					graphs.getFitnessChart().revalidate();
+					graphs.getFitnessChart().repaint();
+					graphs.getErrorChart().revalidate();
+					graphs.getErrorChart().repaint();
+					graphs.getForzaChart().revalidate();
+					graphs.getForzaChart().repaint();
+					graphs.getClonedChart().revalidate();
+					graphs.getClonedChart().repaint();
 				}
 				
-				if (prevSelectedThrow != currSelectedThrow)
+				if ((simulation.getStart() || simulation.getLoad()) && winners.size()>0
+						&& graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getItemCount()>0)
 				{
-					prevSelectedThrow = currSelectedThrow;
+					currForzaGen = graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getSelectedIndex();
+					Organism selectedOrg = winners.get(currForzaGen);
+					currSelectedThrow = graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().getSelectedIndex();
+					if (currSelectedThrow == EnvConstant.NUMBER_OF_SAMPLES)
+						currSelectedThrow = selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue();
+					if (graphs.getLeftPanel().getForzaPanel())
+						graphs.updateForzaChart(selectedOrg, currSelectedThrow);
 					
-//					graphs.repaint();
+					if (prevForzaGen != currForzaGen)
+					{
+						prevForzaGen = currForzaGen;
+						
+	//					graphs.repaint();
+					}
+					
+					if (prevSelectedThrow != currSelectedThrow)
+					{
+						prevSelectedThrow = currSelectedThrow;
+						
+	//					graphs.repaint();
+					}
 				}
+				
 				graphs.repaint();
 			}
 			
-			if (tabbedPanel.getSelectedIndex() == 1 && (!simulation.getStart() && !simulation.getLoad()) && !graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString().equals(prevSelectedChart))
-			{
-				prevSelectedChart = graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString();
-				
-				graphs.repaint();
-			}
+//			if (tabbedPanel.getSelectedIndex() == 1 && (!simulation.getStart() && !simulation.getLoad()) && !graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString().equals(prevSelectedChart))
+//			{
+//				prevSelectedChart = graphs.getLeftPanel().getOptionsPanel().getChartList().getSelectedItem().toString();
+//				
+//				graphs.repaint();
+//			}
 			
 			if (tabbedPanel.getSelectedIndex() == 2 && (simulation.getStart() || simulation.getLoad()) && winners.size() > 0
 					&& net.getLeftPanel().getOptionsPanel().getGenerationList().getItemCount()>0)
@@ -692,6 +755,15 @@ private boolean done;
 			
 			if (tabbedPanel.getSelectedIndex() == 3)
 			{
+				currSelectedSettings = settings.getLeftPanel().getList().getSelectedIndex();
+				if (prevSelectedSettings != currSelectedSettings)
+				{
+					settings.getParameterSettings().revalidate();
+					settings.getParameterSettings().repaint();
+					settings.getOtherSettings().revalidate();
+					settings.getOtherSettings().repaint();
+				}
+				
 				JComboBox[] boxes = settings.getOtherSettings().getUpperPanel().getComboBoxes();
 				boolean selected = false;
 				for (int i=0; i<boxes.length; i++)
@@ -801,6 +873,10 @@ private boolean done;
 					 simulation.setLoad(false);
 					 done = false;
 					
+					 if (EnvConstant.TYPE_OF_START == EnvConstant.START_FROM_EXISTING_POPULATION)
+					 {
+						 graphs.getFitnessChart().startFromFirst();
+					 }
 				  EnvRoutine.getSession();
 			   
 				  startProcess();
@@ -809,7 +885,6 @@ private boolean done;
 		 lookupThread = new Thread(lookupRun," looktest" );
 		 lookupThread.start();  
 	  } 
-	   
 	   
 	   public void stopProcessAsync()
 	  {
@@ -820,6 +895,12 @@ private boolean done;
 			 simulation.getLeftPanel().getOptionsPanel().getGC().gridx = 1;
 			 simulation.getLeftPanel().getOptionsPanel().getGC().gridy = 2;
 			 simulation.getLeftPanel().getOptionsPanel().add(simulation.getLeftPanel().getOptionsPanel().getLoadBtn(), simulation.getLeftPanel().getOptionsPanel().getGC());
+			 
+			 simulation.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().fill = GridBagConstraints.HORIZONTAL;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().gridx = 0;
+			 simulation.getLeftPanel().getOptionsPanel().getGC().gridy = 3;
+			 simulation.getLeftPanel().getOptionsPanel().add(simulation.getLeftPanel().getOptionsPanel().getStartFromBtn(), simulation.getLeftPanel().getOptionsPanel().getGC());
 			 
 			 simulation.getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
 	  } 
@@ -954,8 +1035,17 @@ private boolean done;
 	 
 			for (expcount = 0; expcount < u_neat.p_num_runs; expcount++) 
 			{
-			   if (!EnvConstant.FORCE_RESTART )
+//			   if (!EnvConstant.FORCE_RESTART )
+//				  u_pop = new Population(u_genome, u_neat.p_pop_size);
+			   
+			   if ((EnvConstant.TYPE_OF_START  == EnvConstant.START_FROM_GENOME) &&  (!EnvConstant.FORCE_RESTART ))
 				  u_pop = new Population(u_genome, u_neat.p_pop_size);
+			
+//			   if ((EnvConstant.TYPE_OF_START  == EnvConstant.START_FROM_NEW_RANDOM_POPULATION) && (!EnvConstant.FORCE_RESTART ))
+//				  u_pop = new Population(u_neat.p_pop_size, (u_inp_unit+1), u_out_unit, u_max_unit, u_recurrent, u_prb_link);
+			
+			   if (( EnvConstant.TYPE_OF_START  == EnvConstant.START_FROM_EXISTING_POPULATION))
+				  u_pop = new Population(MyConstants.POPULATIONS_DIR + MyConstants.POPULATION_FILENAME);   		
 			
 //			   u_pop.verify();
 			   
@@ -984,6 +1074,14 @@ private boolean done;
 
 //		 // before exit save last population
 //			u_pop.print_to_file_by_species(EnvRoutine.getJneatFileData(EnvConstant.NAME_CURR_POPULATION));
+			String filename = "Population_" + u_pop.getFinal_gen();
+			u_pop.print_to_file_by_species(MyConstants.POPULATIONS_DIR + filename);
+			
+			// salva il migliore organismo dell'ultima popolazione
+//			Organism bestPopOrg = u_pop.getCurrentPop_bestOrganism();
+//			String nomefile = MyConstants.POPULATIONS_DIR + "infoLastNet_" + bestPopOrg.getGeneration();
+//			boolean prova = simulation.serializeOnFile(nomefile, bestPopOrg);
+			
 		 
 		 }
 		 
@@ -997,7 +1095,7 @@ private boolean done;
 		 return true;
 	  }
 	   
-	   public boolean epoch
+	public boolean epoch
 	   (
 	   Neat _neat, 
 	   Population pop, 
@@ -1104,7 +1202,8 @@ private boolean done;
 			   if (bestPopOrg != null)
 			   {
 				   simulation.storeBestNet(bestPopOrg);
-				   simulation.serializeOnFile(bestPopOrg);
+				   String name = MyConstants.RESULTS_DIR + "prova_" + bestPopOrg.getGeneration();
+				   simulation.serializeOnFile(name, bestPopOrg);
 			   }
 			
 			}
@@ -1191,7 +1290,8 @@ private boolean done;
 				   
 				   winners.add(o);
 				   simulation.storeBestNet(o);
-				   simulation.serializeOnFile(o);
+				   String nomefile = MyConstants.RESULTS_DIR + "prova_" + o.getGeneration();
+				   simulation.serializeOnFile(nomefile, o);
 				   simulation.updateSimulationPanel(o);
 				   graphs.updateForzaOptionsPanel(o);
 				   net.updateNetPanel(o);

@@ -92,7 +92,7 @@ public class OrganismRunnableFirst implements Runnable
 			 //double tgt[][] = null;
 			 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 			 double tgt[][] = null;
-			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + 8];
+			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + MyConstants.SIM_TGT_OTHER_INFO_SIZE];
 			 
 		  
 			 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);
@@ -308,6 +308,13 @@ public class OrganismRunnableFirst implements Runnable
 							   break;
 						   }
 					   }
+					   
+					   tgt[count][MyConstants.SIM_X0_TARGET_INDEX] = x_tgt;
+					   tgt[count][MyConstants.SIM_Y0_TARGET_INDEX] = y_tgt;
+			    	   tgt[count][MyConstants.SIM_BEST_TARGET_X_INDEX] = x_tgt;
+			    	   tgt[count][MyConstants.SIM_BEST_TARGET_Y_INDEX] = y_tgt;
+					   tgt[count][MyConstants.SIM_FIRST_X_TGT_INDEX] = x_tgt;
+					   tgt[count][MyConstants.SIM_FIRST_Y_TGT_INDEX] = y_tgt;
 					   
 					   mappa.put(count, arrayForza);
 					   targetMap.put(count, arrayTarget);
@@ -689,8 +696,8 @@ public class OrganismRunnableFirst implements Runnable
 		
 //		tgt[i][8] = minDist;
 		tgt[i][8] = distanzaMinima;
-		tgt[i][9] = bestPoint.x;
-		tgt[i][10] = bestPoint.y;
+		tgt[i][MyConstants.SIM_X_MIGLIORE_INDEX] = bestPoint.x;
+		tgt[i][MyConstants.SIM_Y_MIGLIORE_INDEX] = bestPoint.y;
 		
 		return bestPoint;
 	}

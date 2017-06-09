@@ -100,7 +100,7 @@ public class OrganismRunnableFirstLoaded implements Runnable
 			 //double tgt[][] = null;
 			 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 			 double tgt[][] = null;
-			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + 8];
+			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + MyConstants.SIM_TGT_OTHER_INFO_SIZE];
 			 
 		  
 			 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);
@@ -317,6 +317,13 @@ public class OrganismRunnableFirstLoaded implements Runnable
 						   break;
 					   }
 				   }
+				   
+				   tgt[count][MyConstants.SIM_X0_TARGET_INDEX] = x_tgt;
+				   tgt[count][MyConstants.SIM_Y0_TARGET_INDEX] = y_tgt;
+		    	   tgt[count][MyConstants.SIM_BEST_TARGET_X_INDEX] = x_tgt;
+		    	   tgt[count][MyConstants.SIM_BEST_TARGET_Y_INDEX] = y_tgt;
+				   tgt[count][MyConstants.SIM_FIRST_X_TGT_INDEX] = x_tgt;
+				   tgt[count][MyConstants.SIM_FIRST_Y_TGT_INDEX] = y_tgt;
 				   
 				   o.getForzaMap().put(count, arrayForza);
 				   o.getTargetMap().put(count, arrayTarget);

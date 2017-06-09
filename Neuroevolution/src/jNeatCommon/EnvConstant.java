@@ -73,6 +73,7 @@ public class EnvConstant {
 	public static int SIMULATION_FROM_FILE = 1;
 	public static int START_FROM_GENOME = 1;
 	public static int START_FROM_OLD_POPULATION = 3;
+	public static int START_FROM_EXISTING_POPULATION = 4;
 	public static int TYPE_OF_SIMULATION = 0;
 	public static int TYPE_OF_START = 0;
 	public static int NUMBER_OF_EPOCH = 0;

@@ -94,7 +94,7 @@ public class OrganismRunnableSecond implements Runnable
 			 //double tgt[][] = null;
 			 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 			 double tgt[][] = null;
-			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + 8];
+			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + MyConstants.SIM_TGT_OTHER_INFO_SIZE];
 			 
 		  
 			 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);
@@ -160,9 +160,9 @@ public class OrganismRunnableSecond implements Runnable
 				try 
 				{
 					double minX = 20;
-					double maxX = 100;
+					double maxX = 80;
 					double minY = 20;
-					double maxY = 100;
+					double maxY = 80;
 				   //int plist_in[] = new int[2];
 				   //Class[] params_inp = {int[].class};
 				   //Object[] paramsObj_inp = new Object[] {plist_in};
@@ -254,8 +254,8 @@ public class OrganismRunnableSecond implements Runnable
 //					   tgt[count][4] = in[4];
 					   tgt[count][3] = massa;
 					   
-					   double x_tgt = minX + in[0]*maxX;
-					   double y_tgt = minY + in[1]*maxY;
+					   double x_tgt = minX + tgt[count][0]*maxX;
+					   double y_tgt = minY + tgt[count][1]*maxY;
 					   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
 //					   double d_x_tgt = 0.4;
 //					   double d_y_tgt = 0.4;
@@ -308,7 +308,7 @@ public class OrganismRunnableSecond implements Runnable
 						   
 						   if (F<-300) F = -300;
 						   else if (F>300) F = 300;
-						   else if (a<0) a = 0;
+						   if (a<0) a = 0;
 						   else if (a>1.5708) a = 1.5708;
 						   
 						   
@@ -340,7 +340,7 @@ public class OrganismRunnableSecond implements Runnable
 						   tgt[count][MyConstants.SIM_VEL_INDEX] = v;
 						   tgt[count][MyConstants.SIM_ANGOLO_INDEX] = a;
 						   tgt[count][MyConstants.SIM_FORZA_INDEX] = F;
-						   tgt[count][MyConstants.SIM_TEMPO] = current_time;
+						   tgt[count][MyConstants.SIM_TEMPO_INDEX] = current_time;
 						   tgt[count][MyConstants.SIM_ACCELERAZIONE_INDEX] = acc;
 						   
 //						   double x_tgt = minX + tgt[count][0]*maxX;
@@ -420,6 +420,13 @@ public class OrganismRunnableSecond implements Runnable
 ////								tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
 //							}
 //					   }
+					   
+					   tgt[count][MyConstants.SIM_X0_TARGET_INDEX] = x_tgt;
+					   tgt[count][MyConstants.SIM_Y0_TARGET_INDEX] = y_tgt;
+			    	   tgt[count][MyConstants.SIM_BEST_TARGET_X_INDEX] = x_tgt;
+			    	   tgt[count][MyConstants.SIM_BEST_TARGET_Y_INDEX] = y_tgt;
+					   tgt[count][MyConstants.SIM_FIRST_X_TGT_INDEX] = x_tgt;
+					   tgt[count][MyConstants.SIM_FIRST_Y_TGT_INDEX] = y_tgt;
 					   
 					   mappa.put(count, arrayForza);
 					   targetMap.put(count, arrayTarget);
@@ -726,7 +733,7 @@ public class OrganismRunnableSecond implements Runnable
 				if (dist < distanzaMinima)
 				{
 					distanzaMinima = dist;	
-					bestPoint = temp;
+					bestPoint = new Vector2d(temp);
 				}
 			}
 			
@@ -782,9 +789,9 @@ public class OrganismRunnableSecond implements Runnable
 //			tgt[i][8] = minDist;
 			
 			
-			tgt[i][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-			tgt[i][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-			tgt[i][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
+			tgt[i][MyConstants.SIM_DISTANZA_MINIMA_INDEX] = distanzaMinima;
+			tgt[i][MyConstants.SIM_X_MIGLIORE_INDEX] = bestPoint.x;
+			tgt[i][MyConstants.SIM_Y_MIGLIORE_INDEX] = bestPoint.y;
 			
 			return bestPoint;
 		}
@@ -960,11 +967,11 @@ public class OrganismRunnableSecond implements Runnable
 			
 //			tgt[i][8] = minDist;
 			
-			tgt[i][0] = bestX_tgt;
-			tgt[i][1] = bestY_tgt;
-			tgt[i][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-			tgt[i][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-			tgt[i][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
+//			tgt[i][0] = bestX_tgt;
+//			tgt[i][1] = bestY_tgt;
+			tgt[i][MyConstants.SIM_DISTANZA_MINIMA_INDEX] = distanzaMinima;
+			tgt[i][MyConstants.SIM_X_MIGLIORE_INDEX] = bestPoint.x;
+			tgt[i][MyConstants.SIM_Y_MIGLIORE_INDEX] = bestPoint.y;
 			
 			return bestPoint;
 		}

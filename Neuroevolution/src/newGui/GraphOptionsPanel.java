@@ -18,7 +18,7 @@ public class GraphOptionsPanel extends JPanel
 	
 	private JLabel chartLabel;
 	private JComboBox chartList;
-//	private JButton gridButton;
+	private JButton gridButton;
 
 	public GraphOptionsPanel(JFrame frame)
 	{

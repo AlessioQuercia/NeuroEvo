@@ -41,7 +41,7 @@ import newGui.MyConstants;
 	  public String notes;
 	  
 	  public ArrayList<Integer> inputNodesID;
-	  private ArrayList<Integer> biasNodesID;
+	  public ArrayList<Integer> biasNodesID;
 	  public ArrayList<Integer> outputNodesID;
 	  public String[] inputNames;
 	  public String[] outputNames;
@@ -203,6 +203,38 @@ import newGui.MyConstants;
 		 genes = g;
 		 notes = null;
 		 phenotype = null;
+		 
+		 inputNodesID = new ArrayList<Integer>();
+		 biasNodesID = new ArrayList<Integer>();
+		 outputNodesID = new ArrayList<Integer>();
+		 
+		 Iterator itr_nodes = n.iterator();
+		 
+		 while (itr_nodes.hasNext())
+		 {
+			 NNode node = ((NNode)itr_nodes.next());
+			 
+			 if (node.getGen_node_label() == NeatConstant.INPUT)
+			 {
+				 inputNodesID.add(node.getNode_id());
+			 }
+			 else if (node.getGen_node_label() == NeatConstant.BIAS)
+			 {
+				 biasNodesID.add(node.getNode_id());
+			 }
+			 else if (node.getGen_node_label() == NeatConstant.OUTPUT)
+			 {
+				 outputNodesID.add(node.getNode_id());
+			 }
+		 }
+		 
+		 if (MyConstants.INPUT_NODES_ID.isEmpty())
+			 MyConstants.INPUT_NODES_ID = inputNodesID;
+		 if (MyConstants.BIAS_NODES_ID.isEmpty())
+			 MyConstants.BIAS_NODES_ID = biasNodesID;
+		 if (MyConstants.OUTPUT_NODES_ID.isEmpty())
+			 MyConstants.OUTPUT_NODES_ID = outputNodesID;
+		 
 	  }         
    
 	   public void mutate_link_weight(double power, double rate, int mutation_type) 
@@ -2683,14 +2715,23 @@ import newGui.MyConstants;
 		 newtrait = new Trait(1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 		 traits.add(newtrait);
 	  
+		 inputNodesID = new ArrayList<Integer>();
+		 biasNodesID = new ArrayList<Integer>();
+		 outputNodesID = new ArrayList<Integer>();
+		 
 	  //Build the input nodes
 		 for (count = 1; count <= i; count++) 
 		 {
 			if (count < i)
+			{
 			   newnode = new NNode(NeatConstant.SENSOR, count, NeatConstant.INPUT);
+			   inputNodesID.add(newnode.getNode_id());
+			}
 			else
+			{
 			   newnode = new NNode(NeatConstant.SENSOR, count, NeatConstant.BIAS);
-		 
+			   biasNodesID.add(newnode.getNode_id());
+			}
 			newnode.nodetrait = newtrait;
 		 //Add the node to the list of nodes
 			nodes.add(newnode);
@@ -2711,10 +2752,16 @@ import newGui.MyConstants;
 		 {
 			newnode = new NNode(NeatConstant.NEURON, count, NeatConstant.OUTPUT);
 			newnode.nodetrait = newtrait;
+			
+			outputNodesID.add(newnode.getNode_id());
 		 
 		 //Add the node to the list of nodes
 			nodes.add(newnode);
 		 }
+		 
+		   MyConstants.INPUT_NODES_ID = inputNodesID;
+		   MyConstants.BIAS_NODES_ID = biasNodesID;
+		   MyConstants.OUTPUT_NODES_ID = outputNodesID;
 	  
 		 boolean done = false;
 		 boolean rc1 = false;
@@ -2922,14 +2969,25 @@ import newGui.MyConstants;
 			   newnode = new NNode(xline, traits);
 			   nodes.addElement(newnode);
 			   if (newnode.getGen_node_label() == NeatConstant.INPUT) 
-				   MyConstants.INPUT_NODES_ID.add(newnode.getNode_id());
+			   {
+				   inputNodesID.add(newnode.getNode_id());
+//				   MyConstants.INPUT_NODES_ID.add(newnode.getNode_id());
+			   }
 			   if (newnode.getGen_node_label() == NeatConstant.BIAS)
 			   {
 				   nBiasNodes++;	// SE E' UN NODO BIAS, LO CONTA
-				   MyConstants.BIAS_NODES_ID.add(newnode.getNode_id());
+				   biasNodesID.add(newnode.getNode_id());
+//				   MyConstants.BIAS_NODES_ID.add(newnode.getNode_id());
 			   }
 			   if (newnode.getGen_node_label() == NeatConstant.OUTPUT)
-				   MyConstants.OUTPUT_NODES_ID.add(newnode.getNode_id());
+			   {
+				   outputNodesID.add(newnode.getNode_id());
+//				   MyConstants.OUTPUT_NODES_ID.add(newnode.getNode_id());
+			   }
+			   
+			   MyConstants.INPUT_NODES_ID = inputNodesID;
+			   MyConstants.BIAS_NODES_ID = biasNodesID;
+			   MyConstants.OUTPUT_NODES_ID = outputNodesID;
 			   EnvConstant.NR_UNIT_BIAS = nBiasNodes;
 //			   System.err.println(nBiasNodes);
 			

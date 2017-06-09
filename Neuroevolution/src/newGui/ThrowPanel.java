@@ -44,6 +44,18 @@ public class ThrowPanel extends JPanel
 	private double v;
 	
 	private boolean showBest;
+	
+	public Ellipse2D getBestTarget() {
+		return bestTarget;
+	}
+
+
+	public Ellipse2D getBestShot() {
+		return bestShot;
+	}
+
+	private Ellipse2D bestTarget;
+	private Ellipse2D bestShot;
 
 	public double getA() {
 		return a;
@@ -98,6 +110,10 @@ public class ThrowPanel extends JPanel
 		draw = false;
 		
 		showBest = false;
+		
+		bestTarget = new Ellipse2D.Double(0, 0, 5, 5);
+		
+		bestShot = new Ellipse2D.Double(0, 0, 3, 3);
 	}
 
 	public void clearPanel()
@@ -212,9 +228,23 @@ public class ThrowPanel extends JPanel
 			if(MyConstants.SETTINGS_VALUES[MyConstants.SIM_SHOW_BEST_INDEX]) 
 				drawBestThrow(g2d);
 			
+			drawDebug(g2d);
+			
 //			drawParabola(g2d, a, v);
 		}
 	}
+
+	private void drawDebug(Graphics2D g2d)
+	{
+        g2d.setColor(Color.BLACK);
+        Line2D distance = new Line2D.Double(bestTarget.getCenterX(), bestTarget.getCenterY(), bestShot.getCenterX(), bestShot.getCenterY());
+        g2d.draw(distance);
+        g2d.setColor(Color.BLUE);
+		g2d.fill(bestTarget);	
+        g2d.setColor(Color.GREEN);
+		g2d.fill(bestShot);
+	}
+
 
 	private void drawBestThrow(Graphics2D g2d) 
 	{

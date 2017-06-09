@@ -14,10 +14,13 @@ import jNeatCommon.EnvConstant;
 import jneat.NNode;
 import jneat.Network;
 import jneat.Organism;
+import myGui.myGuiConstants;
 
 public class OrganismRunnableMovement implements Runnable
 {
 	private Organism o;
+	private Map<Integer, Vector2d> bestTargetPreThrow;
+	private double[] bestDistancePreThrow;
 	
 	// dynamic definition for fitness
 		  Class  Class_fit;
@@ -28,6 +31,10 @@ public class OrganismRunnableMovement implements Runnable
 	public OrganismRunnableMovement(Organism o) 
 	{
 		this.o = o;
+		
+		this.bestDistancePreThrow = new double[EnvConstant.NUMBER_OF_SAMPLES];
+		
+		this.bestTargetPreThrow = new HashMap<Integer, Vector2d> ();
 		
 		Class_fit = evo_fit.class; //Class.forName(EnvConstant.CLASS_FITNESS);
 		try {
@@ -94,7 +101,7 @@ public class OrganismRunnableMovement implements Runnable
 			 //double tgt[][] = null;
 			 //tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_OUTPUT];
 			 double tgt[][] = null;
-			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + 8];
+			 tgt = new double[EnvConstant.NUMBER_OF_SAMPLES][EnvConstant.NR_UNIT_INPUT + MyConstants.SIM_TGT_OTHER_INFO_SIZE];
 			 
 		  
 			 Integer ns = new Integer(EnvConstant.NUMBER_OF_SAMPLES);
@@ -150,6 +157,11 @@ public class OrganismRunnableMovement implements Runnable
 //				 inputX[count] = x;
 //				 inputY[count] = y;
 //			 }
+			 
+				
+			double x0_sim_tgt = 0;
+			double y0_sim_tgt = 0;
+			double t0_sim_tgt = 0;
 		  
 			 if (EnvConstant.TYPE_OF_SIMULATION == EnvConstant.SIMULATION_FROM_CLASS)
 			 {
@@ -160,9 +172,16 @@ public class OrganismRunnableMovement implements Runnable
 				try 
 				{
 					double minX = 20;
-					double maxX = 100;
+					double maxX = 80;
 					double minY = 20;
-					double maxY = 100;
+					double maxY = 80;
+					
+					double minV_x = -5;
+					double maxV_x = 10;
+					double minV_y = -5;
+					double maxV_y = 10;
+					
+					
 				   //int plist_in[] = new int[2];
 				   //Class[] params_inp = {int[].class};
 				   //Object[] paramsObj_inp = new Object[] {plist_in};
@@ -178,6 +197,10 @@ public class OrganismRunnableMovement implements Runnable
 
 					 Random rm = new Random();
 					 
+					 Random rvx = new Random();
+					 
+					 Random rvy = new Random();
+					 
 //					 //***** INPUT RIPETUTI *****//
 //					 rx.setSeed(100);
 //					 ry.setSeed(10000);
@@ -190,6 +213,11 @@ public class OrganismRunnableMovement implements Runnable
 					 ry.setSeed(seedY);
 					 long seedM = (long)(Math.random()*1000);
 					 rm.setSeed(seedM);
+					 
+					 long seedV_x = (long)(Math.random()*900);
+					 rvx.setSeed(seedV_x);
+					 long seedV_y = (long)(Math.random()*4000);
+					 rvy.setSeed(seedV_y);
 					 
 					 HashMap<Integer,ArrayList<Double>> mappa= new HashMap<Integer,ArrayList<Double>>();
 					 HashMap<Integer,ArrayList<Vector2d>> targetMap= new HashMap<Integer,ArrayList<Vector2d>>();
@@ -261,7 +289,35 @@ public class OrganismRunnableMovement implements Runnable
 					   double d_y_tgt = 0.4;
 					   double x0_tgt = x_tgt;
 					   double y0_tgt = y_tgt;
-					   double v_ret = 5;
+					   
+					   double v_ret_x = minV_x + rvx.nextDouble()*maxV_x;
+					   double v_ret_y = minV_y + rvy.nextDouble()*maxV_y;
+					   
+					   boolean done = false;
+					   double sim_time = 15;
+					   
+					   while(!done)
+					   {
+						   double x_t = x0_tgt + v_ret_x*sim_time;
+						   double y_t = y0_tgt + v_ret_y*sim_time;
+						   
+						   if (x_t >= 0 && y_t >= 0)
+							   done = true;
+						   
+						   if (x_t < 0)
+							   v_ret_x = minV_x + rvx.nextDouble()*maxV_x;
+						   
+						   if (y_t < 0) 
+							   v_ret_y = minV_y + rvy.nextDouble()*maxV_y;
+					   }
+					   
+					   tgt[count][MyConstants.SIM_VEL_RET_X_INDEX] = v_ret_x;
+					   tgt[count][MyConstants.SIM_VEL_RET_Y_INDEX] = v_ret_y;
+					   
+					   Vector2d origine = new Vector2d(0.0, 0.0);
+					   
+					   bestTargetPreThrow.put(count, new Vector2d(x_tgt, y_tgt));
+					   bestDistancePreThrow[count] = origine.distance(bestTargetPreThrow.get(count));
 					   
 					   for (int i = 0; i<50; i++)
 					   {
@@ -308,7 +364,7 @@ public class OrganismRunnableMovement implements Runnable
 						   
 						   if (F<-300) F = -300;
 						   else if (F>300) F = 300;
-						   else if (a<0) a = 0;
+						   if (a<0) a = 0;
 						   else if (a>1.5708) a = 1.5708;
 						   
 						   
@@ -323,8 +379,18 @@ public class OrganismRunnableMovement implements Runnable
 //						   y_tgt += d_y_tgt;
 						   
 						   //MOTO RETTILINEO UNIFORME
-						   x_tgt = x0_tgt + v_ret*current_time;
-						   y_tgt = y0_tgt + v_ret*current_time;
+						   x_tgt = x0_tgt + v_ret_x*current_time;
+						   y_tgt = y0_tgt + v_ret_y*current_time;
+						   
+						   Vector2d temp = new Vector2d(x_tgt, y_tgt);
+						   
+						   double dist = origine.distance(temp);
+						   
+						   if(dist < bestDistancePreThrow[count])
+						   {
+							   bestTargetPreThrow.put(count, new Vector2d(x_tgt, y_tgt));
+							   bestDistancePreThrow[count] = dist;
+						   }
 						   
 						   double V = (v - minV)/maxV;
 						   double A = (a)/maxA;
@@ -340,7 +406,7 @@ public class OrganismRunnableMovement implements Runnable
 						   tgt[count][MyConstants.SIM_VEL_INDEX] = v;
 						   tgt[count][MyConstants.SIM_ANGOLO_INDEX] = a;
 						   tgt[count][MyConstants.SIM_FORZA_INDEX] = F;
-						   tgt[count][MyConstants.SIM_TEMPO] = current_time;
+						   tgt[count][MyConstants.SIM_TEMPO_INDEX] = current_time;
 						   tgt[count][MyConstants.SIM_ACCELERAZIONE_INDEX] = acc;
 						   
 //						   double x_tgt = minX + tgt[count][0]*maxX;
@@ -362,77 +428,95 @@ public class OrganismRunnableMovement implements Runnable
 						   }
 					   }
 					   
-					   
-					   // SIMULAZIONE DEL MOTO PARABOLICO DEL PROIETTILE E DEL MOTO RETTILINEO DEL BERSAGLIO (UNA VOLTA LANCIATO IL PROIETTILE)
-
-					   double x_sim = 0;
-					   double y_sim = 0;
-					   double t_sim = 0;
-					   Vector2d target = new Vector2d(x_tgt, y_tgt);
-					   Vector2d proiettile = new Vector2d(x_sim, y_sim);
-					   Vector2d bestPoint = proiettile;
-					   Vector2d bestTarget = target;
-					   double distanza = -1;
-					   double distanzaMinima = target.distance(proiettile);
-					   
-					   double delta_x_tgt = v_ret*0.04;
+					   double delta_x_tgt = v_ret_x*0.04;
+					   double delta_y_tgt = v_ret_y*0.04;
 					   double delta_x_sim = v*Math.cos(a)*0.04;
 					   
-//					   for (int i = (int)arrayTarget.get(arrayTarget.size()-1).x; i<150; i++) // i++ è sbagliato, dovrebbe essere i+=delta_X
-					   for (double i = arrayTarget.get(arrayTarget.size()-1).x; i<150; i+=delta_x_tgt) // i++ è sbagliato, dovrebbe essere i+=delta_X
-//					   for (double i = x_sim; i<100; i+=delta_x_sim) // i++ è sbagliato, dovrebbe essere i+=delta_X
-//					   for (int i = arrayTarget.size(); i<150; i++)
-					   {
-//						   x_tgt += d_x_tgt;
-//						   y_tgt += d_y_tgt;
-						   
-						   //aggiorna tempi
-						   current_time += 0.04;
-						   t_sim += 0.04;
-						   
-						   //MOTO RETTILINEO UNIFORME TARGET
-						   x_tgt = x0_tgt + v_ret*current_time;
-						   y_tgt = y0_tgt + v_ret*current_time;
-						   
-						   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
-						   
-						   //MOTO PARABOLICO PROIETTILE
-							// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
-							x_sim = v*Math.cos(a)*t_sim;
-							
-							y_sim = v*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
-						   
-						 //CALCOLA DISTANZA MINIMA TRA DUE PUNTI (TARGET AL TEMPO T e PARABOLA AL TEMPO T)
-							target = new Vector2d(x_tgt, y_tgt);
-							proiettile = new Vector2d(x_sim, y_sim);
-							distanza = target.distance(proiettile);
-							
-							if(distanza < distanzaMinima)
-							{
-								distanzaMinima = distanza;
-								bestPoint = proiettile;
-								bestTarget = target;
-//								bestPoints.put(count, bestPoint);
-//								tgt[count][0] = bestTarget.x;
-//								tgt[count][1] = bestTarget.y;
-//								tgt[count][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-//								tgt[count][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-//								tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
-							}
-					   }
+					   x0_sim_tgt = x0_tgt;
+					   y0_sim_tgt = y0_tgt;
+					   t0_sim_tgt = current_time;
+					   
+					   tgt[count][MyConstants.SIM_X0_TARGET_INDEX] = x_tgt;
+					   tgt[count][MyConstants.SIM_Y0_TARGET_INDEX] = y_tgt;
+					   tgt[count][MyConstants.SIM_T0_TARGET_INDEX] = current_time;
+					   tgt[count][MyConstants.SIM_FIRST_X_TGT_INDEX] = x0_tgt;
+					   tgt[count][MyConstants.SIM_FIRST_Y_TGT_INDEX] = y0_tgt;
+					   
+//					   bestPoints.put(count, computeMinDistanceMov(organism, count, tgt, x0_sim_tgt, y0_sim_tgt, t0_sim_tgt));
+						
+					   
+					   // SIMULAZIONE DEL MOTO PARABOLICO DEL PROIETTILE E DEL MOTO RETTILINEO DEL BERSAGLIO (UNA VOLTA LANCIATO IL PROIETTILE)
+//
+//					   double x_sim = 0;
+//					   double y_sim = 0;
+//					   double t_sim = 0;
+//					   Vector2d target = new Vector2d(x_tgt, y_tgt);
+//					   Vector2d proiettile = new Vector2d(x_sim, y_sim);
+//					   Vector2d bestPoint = proiettile;
+//					   Vector2d bestTarget = target;
+//					   double distanza = -1;
+//					   double distanzaMinima = target.distance(proiettile);
+//					   
+////					   for (int i = (int)arrayTarget.get(arrayTarget.size()-1).x; i<150; i++) // i++ è sbagliato, dovrebbe essere i+=delta_X
+////					   for (double i = arrayTarget.get(arrayTarget.size()-1).x; i<150; i+=delta_x_tgt) // i++ è sbagliato, dovrebbe essere i+=delta_X
+////					   for (double i = x_sim; i<100; i+=delta_x_sim) // i++ è sbagliato, dovrebbe essere i+=delta_X
+////					   for (int i = arrayTarget.size(); i<200; i++)
+//					   for (double i = 0; i<10; i+=0.04)
+//					   {
+////						   x_tgt += d_x_tgt;
+////						   y_tgt += d_y_tgt;
+//						   
+//						   //aggiorna tempi
+//						   current_time += 0.04;
+//						   t_sim += 0.04;
+//						   
+//						   //MOTO RETTILINEO UNIFORME TARGET
+//						   if (x_tgt >= 0 && y_tgt >= 0)
+//						   {
+//							   x_tgt = x0_tgt + v_ret_x*current_time;
+//							   y_tgt = y0_tgt + v_ret_y*current_time;
+//						   }
+//						   
+////						   System.out.println(x_tgt + " " + y_tgt);
+//						   arrayTarget.add(new Vector2d(x_tgt, y_tgt));
+//						   
+//						   //MOTO PARABOLICO PROIETTILE
+//							// Aggiorna la posizione del corpo utilizzando le equazioni del moto per l'istante t
+//							x_sim = v*Math.cos(a)*t_sim;
+//							
+//							y_sim = v*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
+//						   
+//						 //CALCOLA DISTANZA MINIMA TRA DUE PUNTI (TARGET AL TEMPO T e PARABOLA AL TEMPO T)
+//							target = new Vector2d(x_tgt, y_tgt);
+//							proiettile = new Vector2d(x_sim, y_sim);
+//							distanza = target.distance(proiettile);
+//							
+//							if(distanza < distanzaMinima)
+//							{
+//								distanzaMinima = distanza;
+//								bestPoint = proiettile;
+//								bestTarget = target;
+////								bestPoints.put(count, bestPoint);
+////								tgt[count][0] = bestTarget.x;
+////								tgt[count][1] = bestTarget.y;
+////								tgt[count][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
+////								tgt[count][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
+////								tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
+//							}
+//					   }
 					   
 					   mappa.put(count, arrayForza);
 					   targetMap.put(count, arrayTarget);
 					   o.setForzaMap(mappa);
 					   o.setTargetMap(targetMap);
 					   
-					   bestPoints.put(count, bestPoint);
-					   tgt[count][0] = (bestTarget.x - minX)/maxX;
-					   tgt[count][1] = (bestTarget.y - minY)/maxY;
-					   tgt[count][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-					   tgt[count][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-					   tgt[count][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
-					   
+//					   bestPoints.put(count, bestPoint);
+//					   tgt[count][MyConstants.SIM_BEST_TARGET_X_INDEX] = bestTarget.x;
+//					   tgt[count][MyConstants.SIM_BEST_TARGET_Y_INDEX] = bestTarget.y;
+//					   tgt[count][MyConstants.SIM_DISTANZA_MINIMA_INDEX] = distanzaMinima;
+//					   tgt[count][MyConstants.SIM_X_MIGLIORE_INDEX] = bestPoint.x;
+//					   tgt[count][MyConstants.SIM_Y_MIGLIORE_INDEX] = bestPoint.y;
+//					   
 //					   o.setBestPoints(bestPoints);
 					   
 					   
@@ -521,7 +605,7 @@ public class OrganismRunnableMovement implements Runnable
 //					  _net.flush();
 				   }
 				   
-				   o.setBestPoints(bestPoints);
+//				   o.setBestPoints(bestPoints);
 				} 
 				
 					catch (Exception e2) 
@@ -540,7 +624,7 @@ public class OrganismRunnableMovement implements Runnable
 		  // control the result 
 			 if (success) 
 			 {
-//				 Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
+				 Map<Integer, Vector2d> bestPoints = new HashMap<Integer, Vector2d>();
 				try 
 				{
 					//SIMULAZIONE DI LANCIO PER CALCOLO DISTANZA MINIMA TRAIETTORIA-BERSAGLIO
@@ -548,13 +632,15 @@ public class OrganismRunnableMovement implements Runnable
 //					double maxX = 100;
 //					double minY = 20;
 //					double maxY = 100;
+					
+					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
+					{
+//						System.out.println("Prima: " + tgt[i][0] + " " + i);
+						bestPoints.put(i, computeMinDistanceMov(organism, i, tgt, bestTargetPreThrow.get(i), bestDistancePreThrow[i]));
+//						System.out.println("Dopo: " + tgt[i][0] + " " + i);
+					}
 //					
-//					for (int i=0; i<EnvConstant.NUMBER_OF_SAMPLES; i++)
-//					{
-//						bestPoints.put(i, computeMinDistanceMovement(o, i, tgt));
-//					}
-//					
-//					o.setBestPoints(bestPoints);
+					o.setBestPoints(bestPoints);
 					
 					
 				   Method_fit = Class_fit.getMethod("computeFitness", params);
@@ -778,9 +864,9 @@ public class OrganismRunnableMovement implements Runnable
 //			tgt[i][8] = minDist;
 			
 			
-			tgt[i][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-			tgt[i][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-			tgt[i][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
+			tgt[i][MyConstants.SIM_DISTANZA_MINIMA_INDEX] = distanzaMinima;
+			tgt[i][MyConstants.SIM_X_MIGLIORE_INDEX] = bestPoint.x;
+			tgt[i][MyConstants.SIM_Y_MIGLIORE_INDEX] = bestPoint.y;
 			
 			return bestPoint;
 		}
@@ -958,11 +1044,254 @@ public class OrganismRunnableMovement implements Runnable
 			
 			tgt[i][0] = bestX_tgt;
 			tgt[i][1] = bestY_tgt;
-			tgt[i][MyConstants.SIM_DISTANZA_MINIMA] = distanzaMinima;
-			tgt[i][MyConstants.SIM_X_MIGLIORE] = bestPoint.x;
-			tgt[i][MyConstants.SIM_Y_MIGLIORE] = bestPoint.y;
+			tgt[i][MyConstants.SIM_DISTANZA_MINIMA_INDEX] = distanzaMinima;
+			tgt[i][MyConstants.SIM_X_MIGLIORE_INDEX] = bestPoint.x;
+			tgt[i][MyConstants.SIM_Y_MIGLIORE_INDEX] = bestPoint.y;
 			
 			return bestPoint;
 		}
+		
+		private Vector2d computeMinDistanceMov(Organism o, int i, double[][] tgt, Vector2d bestTargetPreThrow, double bestDistancePreThrow) 
+		{
+			double minX = 20;
+			double maxX = 80;
+			double minY = 20;
+			double maxY = 80;
+			double angle = tgt[i][4];
+			double v = tgt[i][2];
+			
+			double v_ret_x = tgt[i][MyConstants.SIM_VEL_RET_X_INDEX];
+			double v_ret_y = tgt[i][MyConstants.SIM_VEL_RET_Y_INDEX];
+			
+			double t_ret = tgt[i][MyConstants.SIM_T0_TARGET_INDEX];
+			
+			
+//			double x_tgt = minX + tgt[i][0]*maxX;
+//			double y_tgt = minY + tgt[i][1]*maxY;
+//			double x_tgt = minX + tgt[i][0]*maxX;
+//			double y_tgt = minY + tgt[i][1]*maxY;
+			
+			// Fisso un punto P = (x, f(x)) sulla parabola,
+			// creo la funzione distanza d(x) = |P - T|, dove T = (x_tgt, y_tgt) è il target,
+			// calcolo i minimi di d(x) (che è equivalente a calcolare i minimi di d^2(x)
+			
+			double[] coeff_parabola = {-(MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(angle), 2))), Math.tan(angle), 0};
+			Funzione parabola = new Funzione(coeff_parabola);	// funzione f della parabola
+			
+//			System.out.println("f(x) = " + parabola);
+			
+//			Vector2d target = new Vector2d(x_tgt, y_tgt);	// punto T (target)
+//			Vector2d punto = new Vector2d(x, parabola.getValue(x));	// punto P fissato sulla parabola
+			
+			//Distanza tra due punti al quadrato (quindi scompare la radice)
+//			double distance = Math.pow((punto.x-target.x), 2) + 
+//					Math.pow((coeff_parabola[0]*Math.pow(x_tgt, 2) + coeff_parabola[1]*punto.x -target.y), 2);
+			
+			double c0 = coeff_parabola[0];	// (-coeff???)
+			double c1 = coeff_parabola[1];
+			
+			double[] coeff_distanza = {};
+			
+			Funzione distanza = new Funzione(coeff_distanza);		// funzione d(x)
+			
+//			double t = 0;
+			
+			double a = tgt[i][MyConstants.SIM_X0_TARGET_INDEX];
+			double b = v_ret_x;
+			double c = tgt[i][MyConstants.SIM_Y0_TARGET_INDEX];
+			double d = v_ret_y;
+			double e = v*Math.cos(angle);
+			double f = v*Math.sin(angle);
+			double h = 0.5*MyConstants.GRAVITY;
+			
+//			double x_target = a + b*t;	//non serve, è solo per ricordare l'equazione per calcolare la x del target (in moto rettilineo uniforme)
+			
+//			double y_target = c + d*t;	//non serve, è solo per ricordare l'equazione per calcolare la y del target (in moto rettilineo uniforme)
+			
+//			double x_sim = e*t;	//non serve, è solo per ricordare l'equazione per calcolare la x del proiettile (in moto parabolico)
+
+//			double y_sim = f*t + h*Math.pow(t, 2);	//non serve, è solo per ricordare l'equazione per calcolare la y del proiettile (in moto parabolico)
+			
+			double[] coeff_distanzaQuad = {
+					Math.pow(h, 2),																				// a0 (coeff t^4)
+					(-2*f*h + 2*d*h),																			// a1 (coeff t^3)
+					Math.pow(b, 2) + Math.pow(e, 2) - 2*b*e + Math.pow(d, 2) + Math.pow(f, 2) + 2*c*h - 2*d*f,	// a2 (coeff t^2)
+					2*a*b - 2*a*e + 2*c*d - 2*c*f,																// a3 (coeff t^1)
+					Math.pow(a, 2) + Math.pow(c, 2)																// a4 (coeff t^0)
+					};
+			
+			Funzione distanzaQuad = new Funzione(coeff_distanzaQuad);	// funzione d^2(x)
+			
+//			System.out.println("d^2(x) = " + distanzaQuad);
+			
+			Funzione derivata = distanzaQuad.getDerivativeFunction();
+			
+//			System.out.println("d^2(x)' = " + derivata);
+			
+//			double sol = derivata.computeThirdDegreeEquationFormaDepressa();
+			
+//			double distQuad = Math.abs(derivata.getValue(sol));
+			
+//			double dist = Math.sqrt(distQuad);
+			
+			String mask6d;
+			DecimalFormat fmt6d;
+			mask6d = "  0.000000000000";
+			fmt6d = new DecimalFormat(mask6d);
+			
+//			System.out.println(Math.sqrt(distanzaQuad.getValue(sol)));	// Questa è la distanza minima corretta!
+			
+//			System.out.println("distQUad: " + fmt6d.format(distQuad));
+			
+//			System.out.println("dist: " + fmt6d.format(dist));
+			
+			
+			//SBAGLIATA!! Quella corretta è quella successiva!
+//			double minDist = Math.sqrt(derivata.computeEquationFormaDepressa());
+			
+			//il valore ottenuto da computeEquation è il valore della x della funzione derivata della distanza al quadrato
+			// perciò di derivata. Per ottenere la distanza minima al quadrato devo calcolare d^2(x) con il valore della x ottenuto e poi fare
+			// la radice quadrata per ottenere la distanza minima d(x)
+			
+//			double sol = derivata.computeThirdDegreeEquationFormaDepressa();
+			
+			double soluzioni_x[] = derivata.computeThirdDegreeEquationFormaDepressa();
+			
+			double distanzaMinima = Double.POSITIVE_INFINITY;
+			
+			Vector2d bestPoint = new Vector2d();
+			
+			Vector2d bestTarget = new Vector2d();
+			
+			double tempo = 0;
+			
+			for (int j = 0; j<soluzioni_x.length; j++)
+			{
+				double t = soluzioni_x[j];
+				
+				double x_target = a + b*(t);	//equazione per calcolare la x del target (in moto rettilineo uniforme)
+				
+				double y_target = c + d*(t);	//equazione per calcolare la y del target (in moto rettilineo uniforme)
+				
+				Vector2d target = new Vector2d(x_target, y_target);
+						
+				double x_sim = v*Math.cos(angle)*t;	//equazione per calcolare la x del proiettile (in moto parabolico)
+
+				double y_sim = v*Math.sin(angle)*t - 0.5*MyConstants.GRAVITY*Math.pow(t, 2);	//equazione per calcolare la y del proiettile (in moto parabolico)
+				
+				Vector2d proiettile = new Vector2d(x_sim, y_sim);
+				
+//				System.out.println("TARGET: (" + target.x + ", " + target.y + ")" + "\n" +
+//									"PROIETTILE: (" + proiettile.x + ", " + proiettile.y + ")");
+				
+				double dist = proiettile.distance(target);
+				
+				if (dist < distanzaMinima)
+				{
+					distanzaMinima = dist;	
+					bestPoint = proiettile;
+					bestTarget = target;
+					tempo = t;
+//					System.out.println(distanzaMinima);
+				}
+			}
+			
+//			System.out.println(tempo + " " + i);
+			
+			double dista = Math.sqrt(derivata.getValue(tempo));
+			
+//			System.out.println("****************************" + "\n" + 
+//								"TEMPO: " + tempo + "\n" + 
+//								"DISTANZA: " + distanzaMinima + "\n" +
+//								"DIST: " + dista + "\n" + 
+//								"TARGET: (" + bestTarget.x + ", " + bestTarget.y + ")" + "\n" +
+//								"PROIETTILE: (" + bestPoint.x + ", " + bestPoint.y + ")" + "\n" +
+//								"vel = " + v + "\n" + 
+//								"angle = " + angle + "\n" + 
+//								"e = " + e + "\n" + 
+//								"f = " + f + "\n" +
+//								"h = " + h + "\n" +
+//								"****************************");
+			
+//			double minDist = Math.sqrt(distanzaQuad.getValue(sol));		// d(x) minima
+			
+//			System.out.println("minDist = " + minDist);
+			
+			
+//			System.out.println("a = "+ a + " v = "+ v);
+//			double x = sol;
+//			double y = parabola.getValue(x);
+//			y = parabola.getValue(x);
+			
+//			System.out.println("distanza^2 = " + distanza.getValue(x));
+//			System.out.println("distanza = " + Math.sqrt(distanza.getValue(x)));
+//			
+//			System.out.println(derivata.getValue(x));
+//			System.out.println(Math.sqrt(derivata.getValue(x)));
+//			System.out.println(parabola.getValue(x));
+			
+//			Vector2d bestPoint = new Vector2d(x, y);
+			
+//			System.out.println("x :" + bestPoint.x + " y: " + bestPoint.y);
+			
+//			double bestDistance = bestTarget.distance(bestPoint);
+			
+//			System.out.println(bestDistance == minDist);
+			
+//			double y_tiro = Math.tan(angle)*x_tgt - ((MyConstants.GRAVITY/(2*Math.pow(v, 2)*Math.pow(Math.cos(angle), 2)))*Math.pow(x_tgt, 2));
+			
+//			System.out.println(bestDistance <= Math.abs(y_tgt-y_tiro));
+//			System.out.println("bestDistance = " + bestDistance + " minDist = " + minDist + " prevErr = " + Math.abs(y_tgt-y_tiro));
+			
+//			if (distanzaMinima > Math.abs(y_tgt-y_tiro))
+//			{
+//				System.out.println("##### INIZIO #####" + "\n" + 
+//									"DELTA = " + derivata.getDelta() + "\n" + 
+//									"bestPoint = (" + bestPoint.x + " ," + bestPoint.y + ")" + "\n" +
+//									"bestDistance = " + bestDistance + "\n" +
+//									"target = (" + x_tgt + " ," + y_tgt + ")" + "\n" +
+//									"prevPoint = (" + x_tgt + " ," + y_tiro + ")" + "\n" +
+//									"prevDistance = " + Math.abs(y_tgt-y_tiro) + "\n"
+//									);
+//			}
+			
+//			if (distanzaMinima != bestDistance)
+//			{
+//				System.out.println("##### INIZIO #####" + "\n" + 
+//						"DistanzaMinima: " + distanzaMinima + "\n" +
+//									"BestDistance: " + bestDistance + "\n");
+//			}
+			
+//			tgt[i][8] = minDist;
+			
+			if (bestPoint.x <= 0 && bestPoint.y <= 0)
+			{
+				bestPoint.x = 0;
+				bestPoint.y = 0;
+//				bestTarget.x = tgt[i][MyConstants.SIM_FIRST_X_TGT_INDEX];
+//				bestTarget.y = tgt[i][MyConstants.SIM_FIRST_Y_TGT_INDEX];
+//				distanzaMinima = bestPoint.distance(bestTarget);
+			}
+			
+			if (bestDistancePreThrow < distanzaMinima)
+			{
+				bestPoint.x = 0;
+				bestPoint.y = 0;
+				bestTarget.x = bestTargetPreThrow.x;
+				bestTarget.y = bestTargetPreThrow.y;
+				distanzaMinima = bestDistancePreThrow;
+			}
+			
+			tgt[i][MyConstants.SIM_BEST_TARGET_X_INDEX] = bestTarget.x;
+			tgt[i][MyConstants.SIM_BEST_TARGET_Y_INDEX] = bestTarget.y;
+			tgt[i][MyConstants.SIM_DISTANZA_MINIMA_INDEX] = distanzaMinima;
+			tgt[i][MyConstants.SIM_X_MIGLIORE_INDEX] = bestPoint.x;
+			tgt[i][MyConstants.SIM_Y_MIGLIORE_INDEX] = bestPoint.y;
+			
+			return bestPoint;
+		}
+
+
+		
 }
 

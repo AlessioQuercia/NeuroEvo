@@ -31,14 +31,15 @@ public class OtherUpperPanel extends JPanel
 	private JLabel[] options;
 	private JButton defaultSettings;
 	
-	private JComboBox[] comboBoxes;
+	private SettingsComboBox[] comboBoxes;
 	private boolean[] values;
 	private String[] descriptions = 
 		{ 
 			"If enabled, Simulation Panel will be automatically updated when a better net is found.",
-			"If on, best throw's trajectory will be shown in the Simulation Panel. The best throw is the one that has the angle which permits to use the minimum velocity.",
+			"If on, best throw's trajectory will be shown in the Simulation Panel. \n"
+			+ "The best throw is the one that has the angle which permits to use the minimum velocity.",
 			"If enabled, collisions with the x axis will be shown in the Simulation Panel.", 
-			"If enabled, Graphs Panel will be automatically updated when a better net is found, updating the force chart.", 
+			"If enabled, force chart will be automatically updated when a better net is found.", 
 			"If on, charts' grid will be shown in the Graphs Panel.", 
 			"If enabled, Net Panel will be automatically updated when a better net is found."
 		};
@@ -79,7 +80,7 @@ public class OtherUpperPanel extends JPanel
 		
 		loadSettings(filename);
 		
-		comboBoxes = new JComboBox[length];
+		comboBoxes = new SettingsComboBox[length];
 		options = new JLabel[length];
 		defaultSettings = new JButton("Restore default settings");
 		
@@ -99,7 +100,7 @@ public class OtherUpperPanel extends JPanel
 		
 		for (int i=0; i<sim_boxes.length; i++)
 		{
-			comboBoxes[i] = new JComboBox();
+			comboBoxes[i] = new SettingsComboBox(descriptions[i]);
 			comboBoxes[i].setPreferredSize(size);
 			for (int k=0; k<sim_opt[i].length; k++)
 				comboBoxes[i].addItem(sim_opt[i][k]);
@@ -133,7 +134,7 @@ public class OtherUpperPanel extends JPanel
     	
 		for (int i=0; i<graphs_boxes.length; i++)
 		{
-			comboBoxes[index + i] = new JComboBox();
+			comboBoxes[index + i] = new SettingsComboBox(descriptions[i]);
 			comboBoxes[index + i].setPreferredSize(size);
 			for (int k=0; k<graphs_opt[i].length; k++)
 				comboBoxes[index + i].addItem(graphs_opt[i][k]);
@@ -167,7 +168,7 @@ public class OtherUpperPanel extends JPanel
     	
 		for (int i=0; i<net_boxes.length; i++)
 		{
-			comboBoxes[index + i] = new JComboBox();
+			comboBoxes[index + i] = new SettingsComboBox(descriptions[i]);
 			comboBoxes[index + i].setPreferredSize(size);
 			for (int k=0; k<net_opt[i].length; k++)
 				comboBoxes[index + i].addItem(net_opt[i][k]);

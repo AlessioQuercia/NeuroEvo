@@ -3,6 +3,8 @@ package newGui;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -10,13 +12,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class OtherSettings extends JPanel
+public class OtherSettings extends JPanel implements FocusListener
 {
 	private JFrame frame;
 	
 	private OtherUpperPanel upperPanel;
-	private JTextArea description;
+	private static JTextArea description;
 	
+	public void setDescription(JTextArea description) {
+		this.description = description;
+	}
+
 	public OtherSettings(JFrame frame) 
 	{
 		this.frame = frame;
@@ -65,8 +71,23 @@ public class OtherSettings extends JPanel
 		return description;
 	}
 
-	public void updateDescription(String text) 
+	public static void updateDescription(String text) 
 	{
 		description.setText(text);
+		description.validate();
+		description.revalidate();
+		description.repaint();
+	}
+
+	@Override
+	public void focusGained(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

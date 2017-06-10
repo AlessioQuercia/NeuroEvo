@@ -26,12 +26,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.text.Document;
 
 import org.joml.Vector2d;
@@ -387,7 +389,7 @@ private boolean done;
 					x_tgt = infoLancio.get(MyConstants.X_TARGET_INDEX);
 					y_tgt = infoLancio.get(MyConstants.Y_TARGET_INDEX);
 					simulation.getRightPanel().resetTail();
-					repaint();
+					simulation.repaint();
 				}
 				
 				if (targetPos >= selectedOrg.getTargetMap().get(selectedThrow).size())
@@ -766,13 +768,9 @@ private boolean done;
 				
 				JComboBox[] boxes = settings.getOtherSettings().getUpperPanel().getComboBoxes();
 				boolean selected = false;
+				
 				for (int i=0; i<boxes.length; i++)
 				{
-					if (boxes[i].isFocusOwner())
-					{
-						selected = true;
-						settings.getOtherSettings().updateDescription(settings.getOtherSettings().getUpperPanel().getDescriptions()[i]);
-					}
 					if (boxes[i].getSelectedIndex() != selectedOptions[i])
 					{
 //						System.out.println("CAMBIATO");
@@ -781,8 +779,6 @@ private boolean done;
 						settings.getOtherSettings().getUpperPanel().saveSettings(settings.getOtherSettings().getUpperPanel().getFilename());
 					}
 				}
-				if(!selected && !settings.getOtherSettings().getDescription().getText().equals(""))
-					settings.getOtherSettings().updateDescription("");
 				
 				if(settings.getLeftPanel().getList().getSelectedIndex() != prevSelectedSettingsIndex)
 				{

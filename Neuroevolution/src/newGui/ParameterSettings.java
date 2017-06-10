@@ -44,6 +44,10 @@ public class ParameterSettings extends JPanel implements ListSelectionListener
 	
 	private vectTableModel model;
 	private JTable parameter_table;
+	public JTextArea getDescription() {
+		return description;
+	}
+
 	private Neat netx;
 	
 	public ParameterSettings(JFrame frame) 

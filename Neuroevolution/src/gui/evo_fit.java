@@ -91,6 +91,10 @@ public class evo_fit
 	    	 	double acc = tgt[j][6];
 	    	 	double t = tgt[j][7];
 	    	 	
+	    	 	
+	    	 	double x2 = tgt[j][MyConstants.SIM_X0_TARGET_INDEX] + tgt[j][MyConstants.SIM_VEL_RET_X_INDEX]*0.04;
+	    	 	double y2 = tgt[j][MyConstants.SIM_Y0_TARGET_INDEX] + tgt[j][MyConstants.SIM_VEL_RET_Y_INDEX]*0.04;
+	    	 	
 //	    	 	System.out.println(F);
 	    	 	
 	    	 	// CONSIDERA IL BERSAGLIO IN POSIZIONE INIZIALE (ovvero nella prima posizione in cui esso compare)
@@ -105,7 +109,6 @@ public class evo_fit
 //	    	 	if (prova_x < 0) prova_x = 0;
 //	    	 	if (prova_y < 0) prova_y = 0;
 //	    	 	mappa.put(sample+1, computeMinVel(prova_x, prova_y));
-	    	 	
 	    	 	
 //IMPLEMENTAZIONE VECCHIA		     
 ////		     array.add(0.0);
@@ -174,9 +177,13 @@ public class evo_fit
 	    	 	
 //	    	 	System.out.println(Math.pow(vel_error, 2));
 	    	 	
-	    	 	throwFit = (200 - error) * (200 - vel_error);
+	    	 	throwFit = (MyConstants.FITNESS_CONSTANT - error) * (MyConstants.FITNESS_CONSTANT - vel_error);
 	    	 	
 //	    	 	throwFit = (20000 - error) * (20000 - en_cinetica_error);
+	    	 	
+//	    	 	throwFit = (20000 - error) * (20000 - en_cinetica);
+	    	 	
+//	    	 	throwFit = (MyConstants.FITNESS_CONSTANT - error) * (MyConstants.FITNESS_CONSTANT - v);
 	    	 	
 //	    	 	System.out.println(throwFit);
 	    	 	
@@ -279,9 +286,9 @@ public class evo_fit
 		{
 			ArrayList<Double> array = new ArrayList<Double> ();
 			double g = 9.81;
-			double val = y/x;
+			double coeff_ang_tgt = y/x;
 
-			double beta = Math.atan(val);
+			double beta = Math.atan(coeff_ang_tgt);
 			
 //			System.out.println(beta);
 			
@@ -291,6 +298,33 @@ public class evo_fit
 			
 			double numeratore = g*Math.pow(x, 2);
 			double denominatore = 2*(Math.tan(ang)*x - y)*Math.pow(Math.cos(ang), 2);
+			
+//			System.out.println(denominatore);
+			
+			double vel = Math.sqrt(numeratore/denominatore);
+			
+			array.add(ang);
+			array.add(vel);
+			
+			return array;
+		}
+		
+		public static ArrayList<Double> computeMinVelTargetMov(double x1, double y1, double x2, double y2)
+		{
+			ArrayList<Double> array = new ArrayList<Double> ();
+			double g = 9.81;
+			double coeff_ang_tgt = (y2-y1)/(x2-x1);
+
+			double beta = Math.atan(coeff_ang_tgt);
+			
+//			System.out.println(beta);
+			
+			double a = 45 + Math.toDegrees(beta)/2;
+			
+			double ang = Math.toRadians(a);
+			
+			double numeratore = g*Math.pow(x1, 2);
+			double denominatore = 2*(Math.tan(ang)*x1 - y1)*Math.pow(Math.cos(ang), 2);
 			
 //			System.out.println(denominatore);
 			

@@ -676,6 +676,7 @@ public class OrganismRunnableMovement implements Runnable
 					  System.exit(8);
 				   }
 				organism.setFitness(fit_dyn);
+//				organism.setOrig_fitness(fit_dyn);
 				organism.setError(err_dyn);
 				organism.setTotalError(total_err);
 				organism.setAngle(angle);

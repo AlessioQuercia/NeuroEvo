@@ -3385,11 +3385,290 @@ import newGui.MyConstants;
 		   this.outputNames = outputNames;
 	   }
 	   
-		  public ArrayList<Integer> getBiasNodesID() {
-				return biasNodesID;
+	  public ArrayList<Integer> getBiasNodesID() {
+			return biasNodesID;
+		}
+	  
+	   public Genome(int new_id, int i, int o, int n, int nmax, boolean r, double linkprob, boolean between_layer_links, boolean input_to_output_links) 
+	  {
+		 int totalnodes = 0;
+		 int matrixdim = 0;
+		 int maxnode = 0;
+		 int first_output = 0;
+		 int count = 0;
+		 int ccount = 0;
+		 int innov_number = 1;
+		 int col = 0;
+		 int row = 0;
+		 int fnd = 0;
+		 int pointer = 0;
+		 int gene_number = 0;
+	  
+		 boolean flag_recurrent = false;
+		 boolean create_gene = false;
+	  
+		 double new_weight = 0.0;	
+	  
+		 Trait newtrait = null;
+		 NNode newnode = null;
+		 NNode in_node = null;
+		 NNode out_node = null;
+		 Gene newgene = null;
+	  
+		 notes = null;
+	  
+	  
+		 Iterator itr_node;
+	  
+	  
+	  //
+	  //    i i i n n n n n n n n n n n n n n n n . . . . . . . . o o o o
+	  //    |                                   |                 ^     |
+	  //    |<----------- maxnode ------------->|                 |     | 
+	  //    |                                                     |     |
+	  //    |<-----------------------total nodes -----------------|---->|
+	  //                                                          |
+	  //                                                          |
+	  //     first output ----------------------------------------+
+	  //
+	  //
+		 totalnodes = i + o + nmax;
+	  
+		 traits = new Vector(Neat.p_num_trait_params, 0);
+		 nodes = new Vector(totalnodes, 0);
+		 genes = new Vector(totalnodes, 0);
+	  
+		 matrixdim = totalnodes * totalnodes;
+	  
+		 boolean[] cm = new boolean[matrixdim]; //Dimension the connection matrix
+		 boolean[] cmp;
+	  
+		 maxnode = i + n;
+		 first_output = totalnodes - o + 1;
+	  
+	  //Assign the id
+		 genome_id = new_id;
+	  
+	  //Create a dummy trait (this is for future expansion of the system)
+	  
+		 newtrait = new Trait(1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		 traits.add(newtrait);
+	  
+		 inputNodesID = new ArrayList<Integer>();
+		 biasNodesID = new ArrayList<Integer>();
+		 outputNodesID = new ArrayList<Integer>();
+		 
+	  //Build the input nodes
+		 for (count = 1; count <= i; count++) 
+		 {
+			if (count < i)
+			{
+			   newnode = new NNode(NeatConstant.SENSOR, count, NeatConstant.INPUT);
+			   inputNodesID.add(newnode.getNode_id());
 			}
+			else
+			{
+			   newnode = new NNode(NeatConstant.SENSOR, count, NeatConstant.BIAS);
+			   biasNodesID.add(newnode.getNode_id());
+			}
+			newnode.nodetrait = newtrait;
+		 //Add the node to the list of nodes
+			nodes.add(newnode);
+		 }
+	  
+	  //Build the hidden nodes
+		 for (count = i + 1; count <= i + n; count++) 
+		 {
+			newnode = new NNode(NeatConstant.NEURON, count, NeatConstant.HIDDEN);
+			newnode.nodetrait = newtrait;
+		 
+		 //Add the node to the list of nodes
+			nodes.add(newnode);
+		 }
+	  
+	  //Build the output nodes
+		 for (count = first_output; count <= totalnodes; count++) 
+		 {
+			newnode = new NNode(NeatConstant.NEURON, count, NeatConstant.OUTPUT);
+			newnode.nodetrait = newtrait;
+			
+			outputNodesID.add(newnode.getNode_id());
+		 
+		 //Add the node to the list of nodes
+			nodes.add(newnode);
+		 }
+		 
+		   MyConstants.INPUT_NODES_ID = inputNodesID;
+		   MyConstants.BIAS_NODES_ID = biasNodesID;
+		   MyConstants.OUTPUT_NODES_ID = outputNodesID;
+	  
+		 boolean done = false;
+		 boolean rc1 = false;
+		 boolean rc2 = false;
+		 boolean rc3 = false;
+	  
+		 int min_required = i * o;
+		 double forced_probability = 0.5;
+		 int abort = 0;
+	  
+	  
+		 while (!done) 
+		 {
+		 
+			abort++;
+			if (abort >= 20)
+			{
+			//	   		if (abort == 10)
+			//		    	System.out.print("\n ALERT  force new probability from 0.5 to 1 step .01"); 
+			   linkprob = forced_probability;
+			   forced_probability += .01;
+			}
+		 
+			if (abort >= 700)
+			{
+			   System.out.print("\n SEVERE ERROR in genome random creation costructor : genome has not created");
+			   System.exit(12);
+			}
+		 
+		 
+		 //
+		 //creation of connections matrix
+		 //Step through the connection matrix, randomly assigning bits
+		 //
+		 
+			cmp = cm;
+			ccount = 0;
+			for (count = 0; count < matrixdim; count++) 
+			{
+			   if (NeatRoutine.randfloat() < linkprob) 
+			   {
+				  ccount++;
+				  cmp[count] = true;
+			   } 	
+			   else
+				  cmp[count] = false;
+			}
+		 
+		 
+		 
+		 //Connect the nodes 
+		 
+			innov_number = 1; //counter for labelling the innov_num  of genes
+			gene_number = 0;  //counter gene created
+		 
+		 //Step through the connection matrix, creating connection genes
+		 
+			cmp = cm;
+			for (col = 1; col <= totalnodes; col++) 
+			{
+			   for (row = 1; row <= totalnodes; row++) 
+			   {
+			   
+				  if ((cmp[innov_number] && (col > i))
+				  && ((col <= maxnode) || (col >= first_output))
+				  && ((row <= maxnode) || (row >= first_output))) 
+				  {
+				  //If it isn't recurrent, create the connection no matter what
+				  
+				  
+					 create_gene = true;
+					 if (col > row)
+						flag_recurrent = false;
+					 else 
+					 {
+						if (!r)
+						   create_gene = false;
+						flag_recurrent = true;
+					 }	
+				  
+				  
+					 if (create_gene) 
+					 {
+						itr_node = nodes.iterator(); //Retrieve the in_node , out_node
+						fnd = 0;
+						while (itr_node.hasNext() && (fnd < 2)) 
+						{
+						   NNode _node = ((NNode) itr_node.next());
+						   if (_node.node_id == row) 
+						   {
+							  fnd++;
+							  in_node = _node;
+						   }
+						   if (_node.node_id == col) 
+						   {
+							  fnd++;
+							  out_node = _node;
+						   }
+						}
+						boolean can_create = true;
+						if (between_layer_links)
+						{
+							can_create = true;
+						}
+						else
+						{
+							// Se non si vogliono connessioni tra nodi nello stesso strato (between_layers_links = false), se i due nodi da collegare sono nello
+							// stesso strato, allora non collegarli
+							 if ( (in_node.getGen_node_label() == out_node.getGen_node_label()) || 
+									 (!input_to_output_links && in_node.getGen_node_label() == NeatConstant.INPUT && out_node.getGen_node_label() == NeatConstant.OUTPUT) )
+							 {
+								 can_create = false;
+							 }
+						}
+							
+						if (can_create)
+						{
+						 //Create the gene + link
+							new_weight = NeatRoutine.randposneg() * NeatRoutine.randfloat();
+							newgene = new Gene(newtrait, new_weight, in_node, out_node, flag_recurrent, innov_number++, new_weight); 
+						 //Add the gene to the genome
+							genes.add(newgene);
+						}
+					 }
+				  } // end condition for a correct link in genome
+			   }
+			}
+		 
+			rc1 = verify();
+		 
+		 //		System.out.print("\n      -> +rc1 = "+rc1);
+		 
+			if (rc1)
+			{
+			   Network net = this.genesis(genome_id);
+			   rc2 =  net.is_minimal();
+			
+			//	 		System.out.print("\n         -> +rc2 = "+rc2);
+			
+			
+			   if (rc2)
+			   {
+				  int lx = net.max_depth();
+				  int dx = net.is_stabilized(lx);
+			   
+			   
+			   //				System.out.print("\n        lx = " + lx);
+			   //				System.out.print(", dx = " + dx);
+			   
+				  if (((dx == lx) && (!r)) || ((lx > 0) && (r) && (dx == 0))   )
+					 done = true;
+			   
+			   
+			   }
+			   net.genotype = null;
+			   this.phenotype = null;
+			}
+			if (!done)
+			   genes.clear();
+//			else
+//			   System.out.print("\n * CREATION Genome #"+genome_id+" okay");
+		 }
+	  
+	  }
 
-			public void setBiasNodesID(ArrayList<Integer> biasNodesID) {
-				this.biasNodesID = biasNodesID;
-			}
+		public void setBiasNodesID(ArrayList<Integer> biasNodesID) {
+			this.biasNodesID = biasNodesID;
+		}
+		
+		
 }

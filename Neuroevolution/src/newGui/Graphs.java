@@ -67,7 +67,7 @@ public class Graphs extends JPanel implements ActionListener
 //    	leftPanel.getOptionsPanel().getGridButton().addActionListener(this);
 //    	leftPanel.getForzaOptionsPanel().getAutodrawBtn().addActionListener(this);
     	
-		fitnessChart = new Chart(f, 500, 400000, "Generation", "Fitness", 10, 5);
+		fitnessChart = new Chart(f, 500, MyConstants.MAX_FITNESS, "Generation", "Fitness", 10, 5);
 		fitnessChart.addLine("Mean fitness", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA
 		fitnessChart.addLine("Mean cloned fitness", Color.GREEN);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS MEDIA DEI CLONATI
 		fitnessChart.addLine("Highest fitness", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE FITNESS PIU' ALTA

@@ -296,7 +296,7 @@ private boolean done;
 				int selectedThrow = Integer.parseInt(lancio)-1;
 				
 				fixedPool = Executors.newFixedThreadPool(1);	//// VERSIONE PARALLELA
-				
+				EnvConstant.TYPE_OF_SIMULATION = EnvConstant.SIMULATION_FROM_CLASS;
 				fixedPool.submit(new OrganismRunnableMovementLoaded(organism, MyConstants.LOADED_X, MyConstants.LOADED_Y, selectedThrow));
 				fixedPool.shutdown();							//// VERSIONE PARALLELA
 				
@@ -432,6 +432,11 @@ private boolean done;
 //				ArrayList<Double> bestThrow = evo_fit.computeMinVel(x_tgt, y_tgt);
 				ArrayList<Double> bestThrow = evo_fit.computeMinVel(prova_x, prova_y);
 //				System.out.println(bestThrow.get(1));
+				
+//				double x2 = prova_x + infoLancio.get(MyConstants.VEL_RET_X_INDEX)*(t_sim);
+//				double y2 = prova_y + infoLancio.get(MyConstants.VEL_RET_Y_INDEX)*(t_sim);
+				
+//				ArrayList<Double> bestThrow = evo_fit.computeMinVelTargetMov(prova_x, prova_y, x2, y2);
 				
 				simulation.getRightPanel().setA(bestThrow.get(0));
 				simulation.getRightPanel().setV(bestThrow.get(1));
@@ -922,7 +927,6 @@ private boolean done;
 		 String mask5 = "00000";
 		 DecimalFormat fmt5 = new DecimalFormat(mask5);
 	  
-	  
 		 Population u_pop = null;
 		 Genome u_genome = null;
 		 StringTokenizer st;
@@ -1028,7 +1032,7 @@ private boolean done;
 			EnvConstant.FIRST_ORGANISM_WINNER = null;
 		 
 			EnvConstant.RUNNING = true;
-	 
+			
 			for (expcount = 0; expcount < u_neat.p_num_runs; expcount++) 
 			{
 //			   if (!EnvConstant.FORCE_RESTART )
@@ -1070,8 +1074,8 @@ private boolean done;
 
 //		 // before exit save last population
 //			u_pop.print_to_file_by_species(EnvRoutine.getJneatFileData(EnvConstant.NAME_CURR_POPULATION));
-			String filename = "Population_" + u_pop.getFinal_gen();
-			u_pop.print_to_file_by_species(MyConstants.POPULATIONS_DIR + filename);
+//			String filename = "Population_" + u_pop.getFinal_gen();
+//			u_pop.print_to_file_by_species(MyConstants.POPULATIONS_DIR + filename);
 			
 			// salva il migliore organismo dell'ultima popolazione
 //			Organism bestPopOrg = u_pop.getCurrentPop_bestOrganism();
@@ -1192,6 +1196,8 @@ private boolean done;
 			   // Salva su file l'intera popolazione per poter ricominciare da lì (implementazione originale)
 //			   String name_of_specie = EnvRoutine.getJneatFileData(filename) + generation;
 //			   pop.print_to_file_by_species(name_of_specie);
+				String nome = "Population_" + pop.getFinal_gen();
+				pop.print_to_file_by_species(MyConstants.POPULATIONS_DIR + nome);
 			   
 			   // Salva su file il migliore della popolazione ogni print_every generazioni
 			   Organism bestPopOrg = pop.getCurrentPop_bestOrganism();
@@ -1201,7 +1207,14 @@ private boolean done;
 				   String name = MyConstants.RESULTS_DIR + "prova_" + bestPopOrg.getGeneration();
 				   simulation.serializeOnFile(name, bestPopOrg);
 			   }
+			}
 			
+			if (EnvConstant.STOP_EPOCH)
+			{
+//				 // before exit save last population
+//				u_pop.print_to_file_by_species(EnvRoutine.getJneatFileData(EnvConstant.NAME_CURR_POPULATION));
+				String nome = "Population_" + pop.getFinal_gen();
+				pop.print_to_file_by_species(MyConstants.POPULATIONS_DIR + nome);
 			}
 		 
 		 // if exist a winner write to file   /// WRITE TO FILE ///

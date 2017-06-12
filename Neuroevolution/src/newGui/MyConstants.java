@@ -3,6 +3,8 @@ package newGui;
 import java.util.ArrayList;
 import java.util.Random;
 
+import jNeatCommon.EnvConstant;
+
 public class MyConstants 
 {
 	public static String TITLE = "New NEAT GUI";
@@ -11,6 +13,11 @@ public class MyConstants
 	public static int OPTIONS_WIDTH = 220;
 	public static int LANCIO_WIDTH = 520;
 	
+	/////COSTANTI PER IL CALCOLO DELLA FITNESS
+	public static int NUMBER_OF_SAMPLES = 10;
+	public static int FITNESS_CONSTANT = 1000;
+	public static int MAX_FITNESS_PER_ORGANISM = (int) Math.pow(FITNESS_CONSTANT, 2);
+	public static int MAX_FITNESS = MAX_FITNESS_PER_ORGANISM*NUMBER_OF_SAMPLES;
 
 	/////INDICI DELLE INFORMAZIONI SUL LANCIO
 	public static int X_TARGET_INDEX = 0;

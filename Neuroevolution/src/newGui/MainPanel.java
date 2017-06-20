@@ -284,6 +284,8 @@ private boolean done;
 				gittata = 0;
 				targetPos = 0;
 				t_charge = 0;
+				simulation.getRightPanel().resetTail();
+				simulation.getRightPanel().resetTargetTail();
 				
 				Organism organism = winners.get(
 						simulation.getLeftPanel().getOptionsPanel().
@@ -389,6 +391,7 @@ private boolean done;
 					x_tgt = infoLancio.get(MyConstants.X_TARGET_INDEX);
 					y_tgt = infoLancio.get(MyConstants.Y_TARGET_INDEX);
 					simulation.getRightPanel().resetTail();
+					simulation.getRightPanel().resetTargetTail();
 					simulation.repaint();
 				}
 				
@@ -570,6 +573,17 @@ private boolean done;
     			{
     				simulation.getRightPanel().getTail().removeFirst();
     			}
+    			
+    			if (prova_x >= 0 && prova_y >= 0)
+    			{
+    				simulation.getRightPanel().getTargetTail().add(
+    						new Vector2d(MyConstants.BORDER_X+X_tgt, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt));
+    			}
+    			
+    			if (simulation.getRightPanel().getTargetTail().size() > MyConstants.TARGET_TAIL_LENGTH)
+    			{
+    				simulation.getRightPanel().getTargetTail().removeFirst();
+    			}
 				
 //				if (y_sim >= 0) System.out.println("X = " + x_sim + ", Y = " + y_sim);
 				
@@ -594,6 +608,7 @@ private boolean done;
 //						simulation.getRightPanel().resetTail();
 						targetPos = 0;
 						t_charge = 0;
+						simulation.getRightPanel().resetTargetTail();
 					}
 				}
 				
@@ -664,6 +679,7 @@ private boolean done;
 						h_max = 0;
 						v_rim_sim = 0;
 						simulation.getRightPanel().resetTail();
+						simulation.getRightPanel().resetTargetTail();
 						targetPos = 0;
 						t_charge = 0;
 					}
@@ -686,6 +702,7 @@ private boolean done;
 //						simulation.getRightPanel().resetTail();
 						targetPos = 0;
 						t_charge = 0;
+						simulation.getRightPanel().resetTargetTail();
 					}
 				}
 				// FINE SIMULAZIONE MOTO PARABOLICO DEL CORPO

@@ -316,6 +316,21 @@ public class OrganismRunnableMovementLoaded implements Runnable
 					   tgt[count][MyConstants.SIM_VEL_RET_X_INDEX] = v_ret_x;
 					   tgt[count][MyConstants.SIM_VEL_RET_Y_INDEX] = v_ret_y;
 					   
+					   
+					   double delta_x_tgt = v_ret_x*delta_t;
+					   double delta_y_tgt = v_ret_y*delta_t;
+					   
+					   double prev_x_tgt = x_tgt - delta_x_tgt;
+					   double prev_y_tgt = y_tgt - delta_y_tgt;
+					   double prev_prev_x_tgt = prev_x_tgt - delta_x_tgt;
+					   double prev_prev_y_tgt = prev_y_tgt - delta_y_tgt;
+							   
+					   in[5] = (prev_x_tgt - minX)/maxX;
+					   in[6] = (prev_y_tgt - minY)/maxY;
+					   in[7] = (prev_prev_x_tgt - minX)/maxX;
+					   in[8] = (prev_prev_y_tgt - minY)/maxY;
+					   
+					   
 					   Vector2d origine = new Vector2d(0.0, 0.0);
 					   
 					   bestTargetPreThrow.put(count, new Vector2d(x_tgt, y_tgt));
@@ -399,11 +414,24 @@ public class OrganismRunnableMovementLoaded implements Runnable
 						   double X_tgt = (x_tgt - minX)/maxX;
 						   double Y_tgt = (y_tgt - minY)/maxY;
 						   
+						   // AGGIORNAMENTO DELLE COORDINATE PRECEDENTI DEL TARGET
+						   prev_x_tgt = x_tgt - delta_x_tgt;
+						   prev_y_tgt = y_tgt - delta_y_tgt;
+						   prev_prev_x_tgt = prev_x_tgt - delta_x_tgt;
+						   prev_prev_y_tgt = prev_y_tgt - delta_y_tgt;
+
+						   
 						   in[0] = X_tgt;
 						   in[1] = Y_tgt;
 						   in[2] = V;
 						   in[3] = A;
 						   in[4] = Freal;
+						   in[5] = (prev_x_tgt - minX)/maxX;
+						   in[6] = (prev_y_tgt - minY)/maxY;
+						   in[7] = (prev_prev_x_tgt - minX)/maxX;
+						   in[8] = (prev_prev_y_tgt - minY)/maxY;
+						   
+						   
 						   tgt[count][MyConstants.SIM_VEL_INDEX] = v;
 						   tgt[count][MyConstants.SIM_ANGOLO_INDEX] = a;
 						   tgt[count][MyConstants.SIM_FORZA_INDEX] = F;
@@ -429,9 +457,7 @@ public class OrganismRunnableMovementLoaded implements Runnable
 						   }
 					   }
 					   
-					   double delta_x_tgt = v_ret_x*0.04;
-					   double delta_y_tgt = v_ret_y*0.04;
-					   double delta_x_sim = v*Math.cos(a)*0.04;
+					   double delta_x_sim = v*Math.cos(a)*delta_t;
 					   
 					   tgt[count][MyConstants.SIM_X0_TARGET_INDEX] = x_tgt;
 					   tgt[count][MyConstants.SIM_Y0_TARGET_INDEX] = y_tgt;

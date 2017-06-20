@@ -35,9 +35,10 @@ public class ThrowPanel extends JPanel
 	private Ellipse2D target;
 	private Ellipse2D peso;
 	private Line2D tailLine;
-	private double tailStart;
-	private double tailEnd;
+	private Line2D targetTailLine;
+
 	private LinkedList<Vector2d> tail;
+	private LinkedList<Vector2d> targetTail;
 	private LinkedList<Line2D> lines;
 	
 	private double a;
@@ -100,12 +101,13 @@ public class ThrowPanel extends JPanel
 		
 		tailLine = new Line2D.Double(0, 0, 0, 0);
 		
+		targetTailLine = new Line2D.Double(0, 0, 0, 0);
+		
 		tail = new LinkedList<Vector2d> ();
 		
-		lines = new LinkedList<Line2D> ();
+		targetTail = new LinkedList<Vector2d> ();
 		
-		tailStart = 0;
-		tailEnd = 0;
+		lines = new LinkedList<Line2D> ();
 		
 		draw = false;
 		
@@ -225,6 +227,8 @@ public class ThrowPanel extends JPanel
 			
 			drawTail(g2d);
 			
+			drawTargetTail(g2d);
+			
 			if(MyConstants.SETTINGS_VALUES[MyConstants.SIM_SHOW_BEST_INDEX]) 
 				drawBestThrow(g2d);
 			
@@ -303,6 +307,24 @@ public class ThrowPanel extends JPanel
 		}
 	}
 	
+	private void drawTargetTail(Graphics2D g2d)
+	{
+		g2d.setColor(Color.RED);
+		for (int i=0; i<targetTail.size(); i++)
+		{
+			try 
+			{
+				targetTailLine.setLine(targetTail.get(i).x, targetTail.get(i).y, targetTail.get(i).x, targetTail.get(i).y);
+				g2d.draw(targetTailLine);
+			} 
+			catch (Exception e) 
+			{
+				System.out.println("Errore nel disegnare la coda");
+			}
+
+		}
+	}
+	
 //	public void drawTail(Graphics2D g2d) 
 //	{
 //		g2d.setColor(Color.BLACK);
@@ -335,26 +357,6 @@ public class ThrowPanel extends JPanel
 		return tailLine;
 	}
 	
-	public double getTailStart() {
-		
-		return tailStart;
-	}
-
-	public void setTailStart(double tailStart) 
-	{
-		this.tailStart = tailStart;
-	}
-
-	public double getTailEnd() 
-	{
-		return tailEnd;
-	}
-
-	public void setTailEnd(double tailEnd) 
-	{
-		this.tailEnd = tailEnd;
-	}
-
 	public LinkedList<Vector2d> getTail() 
 	{
 		return tail;
@@ -378,5 +380,22 @@ public class ThrowPanel extends JPanel
 	public void setShowBest(boolean b) 
 	{
 		showBest = b;
+	}
+	
+	public Line2D getTargetTailLine()
+	{
+		return targetTailLine;
+	}
+
+
+	public LinkedList<Vector2d> getTargetTail()
+	{
+		return targetTail;
+	}
+
+
+	public void resetTargetTail()
+	{
+		targetTail.removeAll(targetTail);
 	}
 }

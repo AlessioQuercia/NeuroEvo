@@ -15,7 +15,7 @@ public class MyConstants
 	
 	/////COSTANTI PER IL CALCOLO DELLA FITNESS
 	public static int NUMBER_OF_SAMPLES = 10;
-	public static int FITNESS_CONSTANT = 1000;
+	public static int FITNESS_CONSTANT = 200;
 	public static int MAX_FITNESS_PER_ORGANISM = (int) Math.pow(FITNESS_CONSTANT, 2);
 	public static int MAX_FITNESS = MAX_FITNESS_PER_ORGANISM*NUMBER_OF_SAMPLES;
 
@@ -55,7 +55,7 @@ public class MyConstants
 	public static String RESULTS_DIR = "results\\";
 	public static String POPULATIONS_DIR = "populations\\";
 	public static String PARAMETRI_NOMEFILE = "parametri";
-	public static String GENOMA_NOMEFILE = DATA_DIR +"genome_5in_4hid_3out";
+	public static String GENOMA_NOMEFILE = DATA_DIR +"genome_prova";
 	public static String POP_NOMEFILE = DATA_DIR + "primitive";
 	public static String POPULATION_FILENAME = "population_0";
 	
@@ -70,6 +70,7 @@ public class MyConstants
 	public static int ASSE_X = 150;
 	public static int ASSE_Y = 150;	
 	public static int TAIL_LENGTH = 15;
+	public static int TARGET_TAIL_LENGTH = 50;
 	
 	////COSTANTI LOAD INPUT
 	public static double LOADED_X;

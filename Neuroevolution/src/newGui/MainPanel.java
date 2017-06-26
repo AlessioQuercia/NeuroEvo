@@ -687,7 +687,8 @@ private boolean done;
 						
 //						System.out.println(v_rim_sim + " vs " + v1);
 					}
-					if (x_rim_sim > MyConstants.ASSE_X || Double.isNaN(v_rim_sim) || (v_rim_sim < 0.5 && v_rim_sim >= 0))	// RESETTA IL LANCIO
+					if (x_rim_sim > MyConstants.ASSE_X || Double.isNaN(v_rim_sim) || (v_rim_sim < 0.5 && v_rim_sim >= 0)
+							|| prova_x < 0 || prova_y < 0)	// RESETTA IL LANCIO
 					{
 	//					System.out.println("Lancia ancora");
 						x_sim = 0;

@@ -121,4 +121,9 @@ public class MyConstants
 	//// RANDOM PER I COEFFICIENTI ANGOLARI DEL MOTO RETTILINEO DEL TARGET
 	public static Random RANDOM_VX = new Random((long) (Math.random()*900));
 	public static Random RANDOM_VY = new Random((long) (Math.random()*4000));
+	
+	//// COSTANTI CALCOLO URTI
+	public static double MASSA_TERRA = 5.972*Math.pow(10, 24);	// MASSA DELLA TERRA
+	public static double VELOCITA_TERRA = 465.11;	//VELOCITA' DI ROTAZIONE DELLA TERRA
+	public static double ATTRITO = 0.8;
 }

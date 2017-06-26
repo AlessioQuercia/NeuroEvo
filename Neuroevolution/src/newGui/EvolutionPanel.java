@@ -59,12 +59,12 @@ import jneat.Population;
 import jneat.Species;
 import myGui.myGuiConstants;
 
-public class SimulationPanel extends JPanel implements ActionListener, KeyListener
+public class EvolutionPanel extends JPanel implements ActionListener, KeyListener
 {
 	private JFrame frame;
 	
 	private MainPanel mainPanel;
-	private SimulationLeftPanel leftPanel;
+	private EvolutionLeftPanel leftPanel;
 	private ThrowPanel throwPanel;
 //	private SettingsPanel settingsPanel;
 	
@@ -81,7 +81,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 	
 	private GridBagConstraints gc;
 
-	public SimulationPanel(JFrame frame, MainPanel mainPanel) 
+	public EvolutionPanel(JFrame frame, MainPanel mainPanel) 
 	{
 		this.frame = frame;
 		this.mainPanel = mainPanel;
@@ -106,7 +106,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
     	
 //    	OptionsPanel options = new OptionsPanel();
     	
-    	leftPanel = new SimulationLeftPanel(frame);
+    	leftPanel = new EvolutionLeftPanel(frame);
     	leftPanel.getOptionsPanel().getStartBtn().addActionListener(this);
 //    	leftPanel.getOptionsPanel().getAutodrawBtn().addActionListener(this);
 //    	leftPanel.getOptionsPanel().getShowBestBtn().addActionListener(this);
@@ -193,7 +193,7 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 //    	frame.getContentPane().add(this);
     }
 
-    public SimulationLeftPanel getLeftPanel()
+    public EvolutionLeftPanel getLeftPanel()
     {
     	return leftPanel;
     }
@@ -359,10 +359,14 @@ public class SimulationPanel extends JPanel implements ActionListener, KeyListen
 
 						 load = true;
 						 loading = true;
-//						 start = temp1;
+						 start = temp1;
 					 }
 					 else
+					 {
 						 System.out.println("error reading file " + name);
+						 start = temp1;
+						 load = temp2;
+					 }
 				 }
 				 else
 				 {

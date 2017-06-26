@@ -35,10 +35,10 @@ public class OtherUpperPanel extends JPanel
 	private boolean[] values;
 	private String[] descriptions = 
 		{ 
-			"If enabled, Simulation Panel will be automatically updated when a better net is found.",
-			"If on, best throw's trajectory will be shown in the Simulation Panel. \n"
+			"If enabled, Evolution Panel will be automatically updated when a better net is found.",
+			"If on, best throw's trajectory will be shown in the simulation in the Evolution Panel. \n"
 			+ "The best throw is the one that has the angle which permits to use the minimum velocity.",
-			"If enabled, collisions with the x axis will be shown in the Simulation Panel.", 
+			"If enabled, collisions with the x axis will be shown in the simulation in the Evolution Panel.", 
 			"If enabled, force chart will be automatically updated when a better net is found.", 
 			"If on, charts' grid will be shown in the Graphs Panel.", 
 			"If enabled, Net Panel will be automatically updated when a better net is found."
@@ -62,13 +62,13 @@ public class OtherUpperPanel extends JPanel
 		GridBagConstraints gc = new GridBagConstraints();
 		
 		String[][] sim_opt = { {"Disabled", "Enabled"}, {"OFF", "ON"}, {"Disabled", "Enabled"} };
-		String[] sim_boxes = {"Auto-update net: ", "Draw best throw: ", "Advanced physics: "};
+		String[] sim_boxes = {"Auto-update net: ", "Draw best throw: ", "Collisions: "};
 		String[][] graphs_opt = { {"Disabled", "Enabled"}, {"OFF", "ON"} };
 		String[] graphs_boxes = {"Auto-update net: ", "Charts grid: "};
 		String[][] net_opt = { {"Disabled", "Enabled"} };
 		String[] net_boxes = {"Auto-update net"};
 		
-		simulation = new JLabel("Simulation settings");
+		simulation = new JLabel("Evolution settings");
 		graphs = new JLabel("Graphs settings");
 		net = new JLabel("Net settings");
 		

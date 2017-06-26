@@ -91,27 +91,27 @@ public class NetLeftPanel extends JPanel
 		int biasNodes = EnvConstant.NR_UNIT_BIAS;
 		int hiddenNodes = numNodes - inputNodes - outputNodes - biasNodes;
 		String info_rete =
-				"nodi totali:  " + numNodes + "\n" +
-				"nodi bias:  " + biasNodes + "\n" +
-				"nodi di input:  " + inputNodes + "\n" +
-				"nodi hidden:  " + hiddenNodes + "\n" +
-				"nodi di output:  " + outputNodes + "\n" + 
-				"\n" + "Lista input:  " + "\n";
+				"Total nodes:  " + numNodes + "\n" +
+				"Bias nodes:  " + biasNodes + "\n" +
+				"Input nodes:  " + inputNodes + "\n" +
+				"Hidden nodes:  " + hiddenNodes + "\n" +
+				"Output nodes:  " + outputNodes + "\n" + 
+				"\n" + "Input nodes list:  " + "\n";
 		
-		for (int i=0; i<MyConstants.INPUT_NODES_ID.size(); i++)
+		for (int i=0; i<o.getGenome().getInputNodesID().size(); i++)
 		{
-			info_rete += "- id_" + MyConstants.INPUT_NODES_ID.get(i) + " = " + evo_in.inputNames[i] + "\n";
+			info_rete += "- ID_" + o.getGenome().getInputNodesID().get(i) + " = " + evo_in.inputNames[i] + "\n";
 		}
 
 //				"- id_1 = " + evo_in.inputNames[0] + "\n" +
 //				"- id_2 = " + evo_in.inputNames[1] + "\n" +
 //				"- id_3 = " + evo_in.inputNames[2] + "\n" +
 		
-		info_rete += "\n" + "Lista output:  " + "\n";
+		info_rete += "\n" + "Output nodes list:  " + "\n";
 		
-		for (int i=0; i<MyConstants.OUTPUT_NODES_ID.size(); i++)
+		for (int i=0; i<o.getGenome().getOutputNodesID().size(); i++)
 		{
-			info_rete += "- id_" + MyConstants.OUTPUT_NODES_ID.get(i) + " = " + evo_out.outputNames[i] + "\n";
+			info_rete += "- ID_" + o.getGenome().getInputNodesID().get(i) + " = " + evo_out.outputNames[i] + "\n";
 		}
 		
 //				"- id_9 = " + evo_out.outputNames[0] + "\n" +

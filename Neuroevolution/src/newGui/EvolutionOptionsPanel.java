@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import jNeatCommon.EnvConstant;
 import myGui.myGuiConstants;
 
-public class SimulationOptionsPanel extends JPanel
+public class EvolutionOptionsPanel extends JPanel
 {
 	public JButton getStartFromBtn() {
 		return startFromBtn;
@@ -40,7 +40,7 @@ public class SimulationOptionsPanel extends JPanel
 
 	GridBagConstraints gc;
 
-	public SimulationOptionsPanel(JFrame frame) 
+	public EvolutionOptionsPanel(JFrame frame) 
 	{
 		this.frame = frame;
 		
@@ -56,10 +56,10 @@ public class SimulationOptionsPanel extends JPanel
 		
 		setLayout(new GridBagLayout());
 		
-		setBorder(BorderFactory.createTitledBorder("Selezione rete"));
+		setBorder(BorderFactory.createTitledBorder("Net selection"));
 		
-		JLabel genLabel = new JLabel("Generazione: ");
-		JLabel throwLabel = new JLabel("Lancio: ");
+		JLabel genLabel = new JLabel("Generation: ");
+		JLabel throwLabel = new JLabel("Sample: ");
 		
 //		JTextArea info = new JTextArea();
 //		info.setFont(getFont());

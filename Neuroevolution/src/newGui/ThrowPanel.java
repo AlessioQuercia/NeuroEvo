@@ -91,7 +91,7 @@ public class ThrowPanel extends JPanel
 	
 	private void init() 
 	{
-		setBorder(BorderFactory.createTitledBorder("Lancio"));
+		setBorder(BorderFactory.createTitledBorder("Simulation"));
 		
 		setLayout(new GridBagLayout());	
 		

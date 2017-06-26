@@ -257,8 +257,10 @@ public class OrganismRunnableMovement implements Runnable
 					   double minV = 0;
 					   double maxV = 516;
 					   
-					   double d_minA = -0.031416;
-					   double d_maxA = 0.062832;
+//					   double d_minA = -0.031416;	//-1.8 gradi
+//					   double d_maxA = 0.062832;	//1.8 gradi (per 50 passi fa esattamente 90 gradi)
+					   double d_minA = -0.1036728;	//-5.94 gradi
+					   double d_maxA = 0.2073456;	//5.94 gradi (per 50 passi fa circa 297 gradi, permette quindi di alzare e abbassare durante la simulazione)
 //					   double d_minA = 0;
 //					   double d_maxA = 0.031416;	   
 					   double d_minF = -20;
@@ -638,6 +640,7 @@ public class OrganismRunnableMovement implements Runnable
 				   {
 					  System.out.print("\n Error generic in Generation.input signal : err-code = \n" + e2); 
 					  System.out.print("\n re-run this application when the class is ready\n\t\t thank! "); 
+					  e2.printStackTrace();
 					  System.exit(8);
 				   
 				   }

@@ -66,7 +66,7 @@ public class MainPanel extends JPanel implements Runnable
 	private Thread mainThread;
 	private boolean isRunning;
 	
-	private SimulationPanel simulation;
+	private EvolutionPanel evolution;
 	private Graphs graphs;
 	private Net net;
 	private SettingsPanel settings;
@@ -120,9 +120,9 @@ private boolean done;
 		start();	// LANCIA IL THREAD CHE GESITSCE LA GRAFICA
 	}
 
-	public SimulationPanel getSimulationPanel()
+	public EvolutionPanel getSimulationPanel()
 	{
-		return simulation;
+		return evolution;
 	}
 	
 	public Graphs getGraphsPanel()
@@ -138,7 +138,7 @@ private boolean done;
         
         // Create Swing component
         
-        simulation = new SimulationPanel(frame, this);
+        evolution = new EvolutionPanel(frame, this);
         
         graphs = new Graphs(frame);
         
@@ -149,7 +149,7 @@ private boolean done;
         mappa = new chartXY();
         
 		tabbedPanel = new JTabbedPane();
-		tabbedPanel.addTab("Simulation", simulation);
+		tabbedPanel.addTab("Evolution", evolution);
 		tabbedPanel.addTab("Graphs", graphs);
 		tabbedPanel.addTab("Net", net);
 		tabbedPanel.addTab("Settings", settings);
@@ -254,7 +254,7 @@ private boolean done;
 		double x_rim_sim = 0;
 		double y_rim_sim = 0;
 		double t_rim_sim = 0;
-		double v_rim_sim = 0;
+		double v_rim_sim = -1;
 		double h_max = 0;
 		double gittata = 0;
 		double diametro = 0.05;	// Il diametro del corpo lanciato è di 50 mm (5 cm)
@@ -279,19 +279,19 @@ private boolean done;
 				x_rim_sim = 0;
 				y_rim_sim = 0;
 				t_rim_sim = 0;
-				v_rim_sim = 0;
+				v_rim_sim = -1;
 				h_max = 0;
 				gittata = 0;
 				targetPos = 0;
 				t_charge = 0;
-				simulation.getRightPanel().resetTail();
-				simulation.getRightPanel().resetTargetTail();
+				evolution.getRightPanel().resetTail();
+				evolution.getRightPanel().resetTargetTail();
 				
 				Organism organism = winners.get(
-						simulation.getLeftPanel().getOptionsPanel().
+						evolution.getLeftPanel().getOptionsPanel().
 						getGenerationList().getSelectedIndex());
 				
-				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
+				String lancio = evolution.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
 				if (lancio.equals("Best"))
 					lancio = ""+(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue()+1);
 				
@@ -310,53 +310,53 @@ private boolean done;
 					e.printStackTrace();
 				}	//// VERSIONE PARALLELA
 				
-				simulation.getLeftPanel().updateInfoRete(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
-				simulation.getLeftPanel().updateInfoLancio(organism.getMap().get(selectedThrow));
+				evolution.getLeftPanel().updateInfoRete(organism.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
+				evolution.getLeftPanel().updateInfoLancio(organism.getMap().get(selectedThrow));
 				
 				MyConstants.LOADED_INPUTS = false;
 			}
 			
-			if (simulation.getLoad() && !done)
+			if (evolution.getLoad() && !done)
 			{
-				simulation.getLeftPanel().getOptionsPanel().getThrowList().removeAllItems();
+				evolution.getLeftPanel().getOptionsPanel().getThrowList().removeAllItems();
 				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().removeAllItems();
 				
 				for (int i=1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
-					simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem(i);
-				simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
-				simulation.getLeftPanel().getOptionsPanel().getThrowList().setSelectedItem("Best");
+					evolution.getLeftPanel().getOptionsPanel().getThrowList().addItem(i);
+				evolution.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
+				evolution.getLeftPanel().getOptionsPanel().getThrowList().setSelectedItem("Best");
 				
 				for (int i=1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
 					graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem(i);
 				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().addItem("Best");
 				graphs.getLeftPanel().getForzaOptionsPanel().getThrowList().setSelectedItem("Best");
 				
-				simulation.getLeftPanel().setLoadLayout();
+				evolution.getLeftPanel().setLoadLayout();
 				
 				done = true;
 			}
 			
-			if (simulation.isLoading())
+			if (evolution.isLoading())
 			{
-				simulation.getRightPanel().setDraw(true);
+				evolution.getRightPanel().setDraw(true);
 				graphs.updateLoadedOrganismChart(winners.get(winners.size()-1));
 				net.updateNetPanel(winners.get(winners.size()-1));
 				
 				graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().addItem(winners.get(winners.size()-1).getGeneration());
 				graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().setSelectedItem(winners.get(winners.size()-1).getGeneration());
 				
-				simulation.setLoading(false);
+				evolution.setLoading(false);
 			}
 			
-			if ((simulation.getStart() || simulation.getLoad()) && simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
+			if ((evolution.getStart() || evolution.getLoad()) && evolution.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem() != null)
 			{
 //				String generazione = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedItem().toString();
 //				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
 //				
 //				ArrayList<Double> info = simulation.readNet(generazione, lancio);
 				
-				int gen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
-				String lancio = simulation.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
+				int gen = evolution.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
+				String lancio = evolution.getLeftPanel().getOptionsPanel().getThrowList().getSelectedItem().toString();
 
 				Organism selectedOrg = winners.get(gen);
 				
@@ -366,9 +366,9 @@ private boolean done;
 				int selectedThrow = Integer.parseInt(lancio)-1;
 				ArrayList<Double> infoLancio = selectedOrg.getMap().get(selectedThrow);
 				
-				if (simulation.getLoad())
+				if (evolution.getLoad())
 				{
-					graphs.updateLoadedOrganismChart(winners.get(simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex()));
+					graphs.updateLoadedOrganismChart(winners.get(evolution.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex()));
 				}
 				
 				if (x_tgt != infoLancio.get(MyConstants.X_TARGET_INDEX) || y_tgt != infoLancio.get(MyConstants.Y_TARGET_INDEX))
@@ -379,20 +379,20 @@ private boolean done;
 					x_rim_sim = 0;
 					y_rim_sim = 0;
 					t_rim_sim = 0;
-					v_rim_sim = 0;
+					v_rim_sim = -1;
 					h_max = 0;
 					gittata = 0;
 					targetPos = 0;
 					t_charge = 0;
 					
-					simulation.getLeftPanel().updateInfoRete(selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
-					simulation.getLeftPanel().updateInfoLancio(infoLancio);
+					evolution.getLeftPanel().updateInfoRete(selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
+					evolution.getLeftPanel().updateInfoLancio(infoLancio);
 					
 					x_tgt = infoLancio.get(MyConstants.X_TARGET_INDEX);
 					y_tgt = infoLancio.get(MyConstants.Y_TARGET_INDEX);
-					simulation.getRightPanel().resetTail();
-					simulation.getRightPanel().resetTargetTail();
-					simulation.repaint();
+					evolution.getRightPanel().resetTail();
+					evolution.getRightPanel().resetTargetTail();
+					evolution.repaint();
 				}
 				
 				if (targetPos >= selectedOrg.getTargetMap().get(selectedThrow).size())
@@ -403,33 +403,33 @@ private boolean done;
 				double prova_x = x_tgt + infoLancio.get(MyConstants.VEL_RET_X_INDEX)*(t_charge + t_sim);
 				double prova_y = y_tgt + infoLancio.get(MyConstants.VEL_RET_Y_INDEX)*(t_charge + t_sim);
 				
-	            double X_tgt = simulation.getRightPanel().proportionX(prova_x);
-	            double Y_tgt = simulation.getRightPanel().proportionY(prova_y);
+	            double X_tgt = evolution.getRightPanel().proportionX(prova_x);
+	            double Y_tgt = evolution.getRightPanel().proportionY(prova_y);
 				
 //	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
 //	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
 	            
-	            double bestTgt_x = simulation.getRightPanel().proportionX(infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
-	            double bestTgt_y = simulation.getRightPanel().proportionY(infoLancio.get(MyConstants.BEST_TARGET_Y_INDEX));
-	            double bestShot_x = simulation.getRightPanel().proportionX(infoLancio.get(MyConstants.X_MIGLIORE_INDEX));
-	            double bestShot_y = simulation.getRightPanel().proportionY(infoLancio.get(MyConstants.Y_MIGLIORE_INDEX));
+	            double bestTgt_x = evolution.getRightPanel().proportionX(infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
+	            double bestTgt_y = evolution.getRightPanel().proportionY(infoLancio.get(MyConstants.BEST_TARGET_Y_INDEX));
+	            double bestShot_x = evolution.getRightPanel().proportionX(infoLancio.get(MyConstants.X_MIGLIORE_INDEX));
+	            double bestShot_y = evolution.getRightPanel().proportionY(infoLancio.get(MyConstants.Y_MIGLIORE_INDEX));
 	            
 //	            System.out.println(targetPos);
 //	            System.out.println(selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).x + " vs " + infoLancio.get(MyConstants.X_TARGET_INDEX));
 //	            System.out.println(infoLancio.get(MyConstants.X_MIGLIORE_INDEX)+ " vs " + infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
 //	            System.out.println(infoLancio.get(MyConstants.Y_MIGLIORE_INDEX) + " vs " + infoLancio.get(MyConstants.BEST_TARGET_Y_INDEX));
 				
-				simulation.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
-						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt - 2.5, 5, 5);
+				evolution.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
+						(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt - 2.5, 5, 5);
 				
-				simulation.getRightPanel().getBestTarget().setFrame(MyConstants.BORDER_X + bestTgt_x - 2.5, 
-						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestTgt_y - 2.5, 5, 5);
+				evolution.getRightPanel().getBestTarget().setFrame(MyConstants.BORDER_X + bestTgt_x - 2.5, 
+						(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestTgt_y - 2.5, 5, 5);
 				
-				simulation.getRightPanel().getBestShot().setFrame(MyConstants.BORDER_X + bestShot_x - 1.5, 
-						(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestShot_y - 1.5, 3, 3);
+				evolution.getRightPanel().getBestShot().setFrame(MyConstants.BORDER_X + bestShot_x - 1.5, 
+						(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestShot_y - 1.5, 3, 3);
 				
 				
-				simGen = simulation.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
+				simGen = evolution.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
 				Organism o = winners.get(simGen);
 //				ArrayList<Double> bestThrow = o.getMap().get(EnvConstant.NUMBER_OF_SAMPLES+1);
 //				ArrayList<Double> bestThrow = evo_fit.computeMinVel(x_tgt, y_tgt);
@@ -441,8 +441,8 @@ private boolean done;
 				
 //				ArrayList<Double> bestThrow = evo_fit.computeMinVelTargetMov(prova_x, prova_y, x2, y2);
 				
-				simulation.getRightPanel().setA(bestThrow.get(0));
-				simulation.getRightPanel().setV(bestThrow.get(1));
+				evolution.getRightPanel().setA(bestThrow.get(0));
+				evolution.getRightPanel().setV(bestThrow.get(1));
 				
 				a = infoLancio.get(MyConstants.ANGOLO_INDEX);
 				v = infoLancio.get(MyConstants.VELOCITA_INDEX);
@@ -542,12 +542,12 @@ private boolean done;
 				y_sim = v*Math.sin(a)*t_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_sim, 2);
 				
 				// Calcola le proporzioni per la rappresentazione grafica
-				double X_sim = simulation.getRightPanel().proportionX(x_sim);
-				double Y_sim = simulation.getRightPanel().proportionY(y_sim);
+				double X_sim = evolution.getRightPanel().proportionX(x_sim);
+				double Y_sim = evolution.getRightPanel().proportionY(y_sim);
 
 				// Aggiorna le posizioni nella rappresentazione grafica (corpo + coda)
-    			simulation.getRightPanel().getPeso().setFrame(
-    					MyConstants.BORDER_X+X_sim -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_sim - 1.5, 3, 3);
+    			evolution.getRightPanel().getPeso().setFrame(
+    					MyConstants.BORDER_X+X_sim -1.5,(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_sim - 1.5, 3, 3);
     			
 //				System.out.println(new Vector2d(simulation.getRightPanel().getTarget().getCenterX(), 
 //												simulation.getRightPanel().getTarget().getCenterY()).distance(
@@ -566,23 +566,23 @@ private boolean done;
 				}
     			
     			if (y_sim >= 0) 
-    				simulation.getRightPanel().getTail().add(
-    						new Vector2d(MyConstants.BORDER_X+X_sim, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_sim));
+    				evolution.getRightPanel().getTail().add(
+    						new Vector2d(MyConstants.BORDER_X+X_sim, (evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_sim));
     			
-    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+    			if (evolution.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
     			{
-    				simulation.getRightPanel().getTail().removeFirst();
+    				evolution.getRightPanel().getTail().removeFirst();
     			}
     			
     			if (prova_x >= 0 && prova_y >= 0)
     			{
-    				simulation.getRightPanel().getTargetTail().add(
-    						new Vector2d(MyConstants.BORDER_X+X_tgt, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt));
+    				evolution.getRightPanel().getTargetTail().add(
+    						new Vector2d(MyConstants.BORDER_X+X_tgt, (evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt));
     			}
     			
-    			if (simulation.getRightPanel().getTargetTail().size() > MyConstants.TARGET_TAIL_LENGTH)
+    			if (evolution.getRightPanel().getTargetTail().size() > MyConstants.TARGET_TAIL_LENGTH)
     			{
-    				simulation.getRightPanel().getTargetTail().removeFirst();
+    				evolution.getRightPanel().getTargetTail().removeFirst();
     			}
 				
 //				if (y_sim >= 0) System.out.println("X = " + x_sim + ", Y = " + y_sim);
@@ -592,6 +592,18 @@ private boolean done;
 					gittata = 2*v*Math.cos(a)*v*Math.sin(a)/MyConstants.GRAVITY;	// gittata
 					h_max = ( Math.pow(v, 2)*Math.pow(Math.sin(a), 2) ) / (2*MyConstants.GRAVITY);	// altezza massima
 					v_rim_sim = Math.sqrt( (2*MyConstants.GRAVITY*(h_max-diametro/2)) );	// velocità di rimbalzo (nel caso in cui il corpo sia elastico, es: palla da tennis)
+					
+//					System.out.println(v_rim_sim);
+					
+					double m1 = infoLancio.get(MyConstants.MASSA_INDEX);	// massa del proiettile
+					double m2 = MyConstants.MASSA_TERRA;	// massa della terra
+					
+					double v1 = infoLancio.get(MyConstants.VELOCITA_INDEX);	// VELOCITA' INIZIALE DEL PROIETTILE
+					double v2 = 0;//MyConstants.VELOCITA_TERRA;	// VELOCITA' DI ROTAZIONE DELLA TERRA
+					
+					v_rim_sim = - ((((m1 - m2)*v1 + 2*m2*v2)/(m1 + m2)) * MyConstants.ATTRITO);
+					
+//					System.out.println(v_rim_sim + " vs " + v);
 					
 					if (x_sim > MyConstants.ASSE_X)	// RESETTA IL LANCIO
 					{
@@ -604,11 +616,11 @@ private boolean done;
 						t_rim_sim = 0;
 						gittata = 0;
 						h_max = 0;
-						v_rim_sim = 0;
+						v_rim_sim = -1;
 //						simulation.getRightPanel().resetTail();
 						targetPos = 0;
 						t_charge = 0;
-						simulation.getRightPanel().resetTargetTail();
+						evolution.getRightPanel().resetTargetTail();
 					}
 				}
 				
@@ -634,19 +646,19 @@ private boolean done;
 	//					System.out.println("VELOCITA_RIMBALZO = " + v_rim + " vs V_0 = " + v);
 						x_rim_sim = v_rim_sim*Math.cos(a)*t_rim_sim + gittata;
 						y_rim_sim = v_rim_sim*Math.sin(a)*t_rim_sim - 0.5*MyConstants.GRAVITY*Math.pow(t_rim_sim, 2);
-						double X_rim_sim = simulation.getRightPanel().proportionX(x_rim_sim);
-						double Y_rim_sim = simulation.getRightPanel().proportionY(y_rim_sim);
+						double X_rim_sim = evolution.getRightPanel().proportionX(x_rim_sim);
+						double Y_rim_sim = evolution.getRightPanel().proportionY(y_rim_sim);
 	
-		    			simulation.getRightPanel().getPeso().setFrame(
-		    					MyConstants.BORDER_X+X_rim_sim -1.5,(simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rim_sim - 1.5, 3, 3);
+		    			evolution.getRightPanel().getPeso().setFrame(
+		    					MyConstants.BORDER_X+X_rim_sim -1.5,(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rim_sim - 1.5, 3, 3);
 		    			
 		    			if (y_rim_sim >= 0)
-		    				simulation.getRightPanel().getTail().add(
-		    					new Vector2d(MyConstants.BORDER_X+X_rim_sim, (simulation.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rim_sim));
+		    				evolution.getRightPanel().getTail().add(
+		    					new Vector2d(MyConstants.BORDER_X+X_rim_sim, (evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_rim_sim));
 		    			
-		    			if (simulation.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
+		    			if (evolution.getRightPanel().getTail().size() > MyConstants.TAIL_LENGTH)
 		    			{
-		    				simulation.getRightPanel().getTail().removeFirst();
+		    				evolution.getRightPanel().getTail().removeFirst();
 		    			}
 		    			
 						// Aggiorna il tempo t della parabola di rimbalzo
@@ -663,9 +675,19 @@ private boolean done;
 						// aggiorna gittata, altezza massima e velocità di rimbalzo in base all'ultimo rimbalzo
 						gittata += 2*v_rim_sim*Math.cos(a)*v_rim_sim*Math.sin(a)/MyConstants.GRAVITY;	// nuova gittata
 						h_max = ( Math.pow(v_rim_sim, 2)*Math.pow(Math.sin(a), 2) ) / (2*MyConstants.GRAVITY);	// nuova altezza massima
-						v_rim_sim = Math.sqrt( (2*MyConstants.GRAVITY*(h_max-diametro/2)) );	// nuova velocità di rimbalzo
+//						v_rim_sim = Math.sqrt( (2*MyConstants.GRAVITY*(h_max-diametro/2)) );	// nuova velocità di rimbalzo
+						
+						double m1 = infoLancio.get(MyConstants.MASSA_INDEX);	// massa del proiettile
+						double m2 = MyConstants.MASSA_TERRA;	// massa della terra
+						
+						double v1 = v_rim_sim;	// VELOCITA' INIZIALE DEL PROIETTILE
+						double v2 = 0;//MyConstants.VELOCITA_TERRA;	// VELOCITA' DI ROTAZIONE DELLA TERRA
+						
+						v_rim_sim = - ((((m1 - m2)*v1 + 2*m2*v2)/(m1 + m2)) * MyConstants.ATTRITO);
+						
+//						System.out.println(v_rim_sim + " vs " + v1);
 					}
-					if (x_rim_sim > MyConstants.ASSE_X || Double.isNaN(v_rim_sim))	// RESETTA IL LANCIO
+					if (x_rim_sim > MyConstants.ASSE_X || Double.isNaN(v_rim_sim) || (v_rim_sim < 0.5 && v_rim_sim >= 0))	// RESETTA IL LANCIO
 					{
 	//					System.out.println("Lancia ancora");
 						x_sim = 0;
@@ -677,9 +699,9 @@ private boolean done;
 						t_rim_sim = 0;
 						gittata = 0;
 						h_max = 0;
-						v_rim_sim = 0;
-						simulation.getRightPanel().resetTail();
-						simulation.getRightPanel().resetTargetTail();
+						v_rim_sim = -1;
+						evolution.getRightPanel().resetTail();
+						evolution.getRightPanel().resetTargetTail();
 						targetPos = 0;
 						t_charge = 0;
 					}
@@ -698,16 +720,16 @@ private boolean done;
 						t_rim_sim = 0;
 						gittata = 0;
 						h_max = 0;
-						v_rim_sim = 0;
+						v_rim_sim = -1;
 //						simulation.getRightPanel().resetTail();
 						targetPos = 0;
 						t_charge = 0;
-						simulation.getRightPanel().resetTargetTail();
+						evolution.getRightPanel().resetTargetTail();
 					}
 				}
 				// FINE SIMULAZIONE MOTO PARABOLICO DEL CORPO
 				
-				simulation.getRightPanel().repaint();
+				evolution.getRightPanel().repaint();
 			}
 			
 			if (tabbedPanel.getSelectedIndex() == 1)
@@ -726,7 +748,7 @@ private boolean done;
 					graphs.getClonedChart().repaint();
 				}
 				
-				if ((simulation.getStart() || simulation.getLoad()) && winners.size()>0
+				if ((evolution.getStart() || evolution.getLoad()) && winners.size()>0
 						&& graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getItemCount()>0)
 				{
 					currForzaGen = graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().getSelectedIndex();
@@ -762,7 +784,7 @@ private boolean done;
 //				graphs.repaint();
 //			}
 			
-			if (tabbedPanel.getSelectedIndex() == 2 && (simulation.getStart() || simulation.getLoad()) && winners.size() > 0
+			if (tabbedPanel.getSelectedIndex() == 2 && (evolution.getStart() || evolution.getLoad()) && winners.size() > 0
 					&& net.getLeftPanel().getOptionsPanel().getGenerationList().getItemCount()>0)
 			{
 				currNetGen = net.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
@@ -874,8 +896,8 @@ private boolean done;
 				public void run() 
 				{		
 					
-					 simulation.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();
-					 simulation.getLeftPanel().getOptionsPanel().getThrowList().removeAllItems();
+					 evolution.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();
+					 evolution.getLeftPanel().getOptionsPanel().getThrowList().removeAllItems();
 					 graphs.getErrorChart().reset();
 					 graphs.getFitnessChart().reset();
 					 graphs.getForzaChart().reset();
@@ -888,7 +910,7 @@ private boolean done;
 					 net.getLeftPanel().getOptionsPanel().getGenerationList().removeAllItems();
 					 winners.clear();
 					 debug = false;
-					 simulation.setLoad(false);
+					 evolution.setLoad(false);
 					 done = false;
 					
 					 if (EnvConstant.TYPE_OF_START == EnvConstant.START_FROM_EXISTING_POPULATION)
@@ -909,18 +931,18 @@ private boolean done;
 //		   lookupThread.interrupt();
 		   EnvConstant.STOP_EPOCH = true;
 		   
-			 simulation.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_END;
-			 simulation.getLeftPanel().getOptionsPanel().getGC().gridx = 1;
-			 simulation.getLeftPanel().getOptionsPanel().getGC().gridy = 2;
-			 simulation.getLeftPanel().getOptionsPanel().add(simulation.getLeftPanel().getOptionsPanel().getLoadBtn(), simulation.getLeftPanel().getOptionsPanel().getGC());
+			 evolution.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_END;
+			 evolution.getLeftPanel().getOptionsPanel().getGC().gridx = 1;
+			 evolution.getLeftPanel().getOptionsPanel().getGC().gridy = 2;
+			 evolution.getLeftPanel().getOptionsPanel().add(evolution.getLeftPanel().getOptionsPanel().getLoadBtn(), evolution.getLeftPanel().getOptionsPanel().getGC());
 			 
-			 simulation.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
-			 simulation.getLeftPanel().getOptionsPanel().getGC().fill = GridBagConstraints.HORIZONTAL;
-			 simulation.getLeftPanel().getOptionsPanel().getGC().gridx = 0;
-			 simulation.getLeftPanel().getOptionsPanel().getGC().gridy = 3;
-			 simulation.getLeftPanel().getOptionsPanel().add(simulation.getLeftPanel().getOptionsPanel().getStartFromBtn(), simulation.getLeftPanel().getOptionsPanel().getGC());
+			 evolution.getLeftPanel().getOptionsPanel().getGC().anchor = GridBagConstraints.LINE_START;
+			 evolution.getLeftPanel().getOptionsPanel().getGC().fill = GridBagConstraints.HORIZONTAL;
+			 evolution.getLeftPanel().getOptionsPanel().getGC().gridx = 0;
+			 evolution.getLeftPanel().getOptionsPanel().getGC().gridy = 3;
+			 evolution.getLeftPanel().getOptionsPanel().add(evolution.getLeftPanel().getOptionsPanel().getStartFromBtn(), evolution.getLeftPanel().getOptionsPanel().getGC());
 			 
-			 simulation.getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
+			 evolution.getLeftPanel().getOptionsPanel().getStartBtn().setText("Start");
 	  } 
 	   
 	   public void startProcess() 
@@ -984,9 +1006,9 @@ private boolean done;
 			   
 			   ///RIEMPE LISTA LANCI IN SIMULATION
 				for (int i = 1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
-					simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem(i);
-				simulation.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
-				simulation.getLeftPanel().getOptionsPanel().getThrowList().setSelectedItem("Best");
+					evolution.getLeftPanel().getOptionsPanel().getThrowList().addItem(i);
+				evolution.getLeftPanel().getOptionsPanel().getThrowList().addItem("Best");
+				evolution.getLeftPanel().getOptionsPanel().getThrowList().setSelectedItem("Best");
 				
 			   ///RIEMPE LISTA LANCI NEL GRAFICO DELLA FORZA
 				for (int i = 1; i<=EnvConstant.NUMBER_OF_SAMPLES; i++)
@@ -1074,7 +1096,7 @@ private boolean done;
 				  curr_name_pop_specie =  EnvConstant.PREFIX_SPECIES_FILE;
 				  EnvConstant.SUPER_WINNER_ = false;
 				  boolean esito = epoch(u_neat, u_pop, gen, curr_name_pop_specie);
-				  simulation.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
+				  evolution.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
 				  graphs.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
 				  net.getLeftPanel().getGenerationLabel().setText("Running generation -> " + gen);
 //				  System.out.println(" running generation ->"+gen);
@@ -1220,9 +1242,9 @@ private boolean done;
 			   Organism bestPopOrg = pop.getCurrentPop_bestOrganism();
 			   if (bestPopOrg != null)
 			   {
-				   simulation.storeBestNet(bestPopOrg);
+				   evolution.storeBestNet(bestPopOrg);
 				   String name = MyConstants.RESULTS_DIR + "prova_" + bestPopOrg.getGeneration();
-				   simulation.serializeOnFile(name, bestPopOrg);
+				   evolution.serializeOnFile(name, bestPopOrg);
 			   }
 			}
 			
@@ -1315,10 +1337,10 @@ private boolean done;
 				   }
 				   
 				   winners.add(o);
-				   simulation.storeBestNet(o);
+				   evolution.storeBestNet(o);
 				   String nomefile = MyConstants.RESULTS_DIR + "prova_" + o.getGeneration();
-				   simulation.serializeOnFile(nomefile, o);
-				   simulation.updateSimulationPanel(o);
+				   evolution.serializeOnFile(nomefile, o);
+				   evolution.updateSimulationPanel(o);
 				   graphs.updateForzaOptionsPanel(o);
 				   net.updateNetPanel(o);
 //				   net.drawGraph(o, mappa);

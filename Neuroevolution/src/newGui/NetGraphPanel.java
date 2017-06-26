@@ -21,6 +21,6 @@ public class NetGraphPanel extends JPanel
 	{
 		setLayout(new GridBagLayout());
 		
-		setBorder(BorderFactory.createTitledBorder("Current net"));
+		setBorder(BorderFactory.createTitledBorder("Selected net"));
 	}
 }

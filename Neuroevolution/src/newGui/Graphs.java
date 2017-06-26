@@ -81,17 +81,17 @@ public class Graphs extends JPanel implements ActionListener
 		errorChart.setBorder(BorderFactory.createTitledBorder("Error chart"));
 		errorChart.startFromFirst();
 		
-		forzaChart = new Chart(f, 50, 300, "Step", "Forza", 10, 6);
+		forzaChart = new Chart(f, 50, 300, "Step", "Force", 10, 6);
 //		forzaChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
-		forzaChart.addLine("Forza", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
+		forzaChart.addLine("Force", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		forzaChart.setGrid(true);
-		forzaChart.setBorder(BorderFactory.createTitledBorder("Forza chart"));
+		forzaChart.setBorder(BorderFactory.createTitledBorder("Force chart"));
 		forzaChart.setNegativeMinY();
 //		forzaChart.startFromFirst();
 		
 		clonedChart = new Chart(f, 500, 1000, "Generation", "Cloned Organisms", 10, 5);
 //		clonedChart.addLine("Mean error", Color.BLUE);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE MEDIO
-		clonedChart.addLine("Organismi clonati", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
+		clonedChart.addLine("Cloned organisms", Color.RED);	// AGGIUNTA LINEA PER RAPPRESENTARE ERRORE PIU' BASSO
 		clonedChart.setGrid(true);
 		clonedChart.setBorder(BorderFactory.createTitledBorder("Cloned organisms chart"));
 //		clonedChart.startFromFirst();
@@ -99,8 +99,8 @@ public class Graphs extends JPanel implements ActionListener
 		leftPanel.getLegendPanel().setLegend(fitnessChart.getNames(), fitnessChart.getColors());
 		leftPanel.getOptionsPanel().getChartList().addItem("Fitness");
 		leftPanel.getOptionsPanel().getChartList().addItem("Error");
-		leftPanel.getOptionsPanel().getChartList().addItem("Forza");
-		leftPanel.getOptionsPanel().getChartList().addItem("Cloned Organisms");
+		leftPanel.getOptionsPanel().getChartList().addItem("Force");
+		leftPanel.getOptionsPanel().getChartList().addItem("Cloned organisms");
 		
 		
     	
@@ -332,7 +332,7 @@ public class Graphs extends JPanel implements ActionListener
 			 cloned = false;
 		 }
 		 
-		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Forza") && !forza)
+		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Force") && !forza)
 		 {
 			 leftPanel.getLegendPanel().setLegend(forzaChart.getNames(), forzaChart.getColors());
 			 gc.fill = GridBagConstraints.BOTH;
@@ -356,7 +356,7 @@ public class Graphs extends JPanel implements ActionListener
 			 forza = true;
 		 }
 		 
-		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Cloned Organisms") && !cloned)
+		 else if (leftPanel.getOptionsPanel().getChartList().getSelectedItem().equals("Cloned organisms") && !cloned)
 		 {
 			 if (leftPanel.getForzaPanel())
 			 {

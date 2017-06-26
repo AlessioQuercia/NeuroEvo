@@ -29,9 +29,9 @@ public class NetOptionsPanel extends JPanel
 	{
 		setLayout(new GridBagLayout());
 		
-		setBorder(BorderFactory.createTitledBorder("Selezione rete"));
+		setBorder(BorderFactory.createTitledBorder("Net selection"));
 		
-		JLabel genLabel = new JLabel("Generazione: ");
+		JLabel genLabel = new JLabel("Generation: ");
 		
 		generationList = new JComboBox();
 		Dimension size = generationList.getSize();

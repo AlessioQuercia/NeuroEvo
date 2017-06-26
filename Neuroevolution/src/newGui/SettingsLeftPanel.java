@@ -27,7 +27,7 @@ public class SettingsLeftPanel extends JPanel
 	
 	public void init()
 	{
-		setBorder(BorderFactory.createTitledBorder("Select settings section"));
+		setBorder(BorderFactory.createTitledBorder("Settings selection"));
 		
 		setLayout(new GridBagLayout());	
 		

@@ -36,10 +36,10 @@ public class ForzaOptionsPanel extends JPanel
 		
 		setLayout(new GridBagLayout());
 		
-		setBorder(BorderFactory.createTitledBorder("Selezione rete"));
+		setBorder(BorderFactory.createTitledBorder("Net selection"));
 		
-		JLabel genLabel = new JLabel("Generazione: ");
-		JLabel throwLabel = new JLabel("Lancio: ");
+		JLabel genLabel = new JLabel("Generation: ");
+		JLabel throwLabel = new JLabel("Sample: ");
 		
 //		JTextArea info = new JTextArea();
 //		info.setFont(getFont());

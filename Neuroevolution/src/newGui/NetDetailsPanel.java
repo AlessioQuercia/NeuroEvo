@@ -28,7 +28,7 @@ public class NetDetailsPanel extends JPanel
     	
     	GridBagConstraints gc = new GridBagConstraints();
     	
-		setBorder(BorderFactory.createTitledBorder("Dettagli rete"));
+		setBorder(BorderFactory.createTitledBorder("Net details"));
 		infoRete = new JTextPane();
 		infoRete.setFont(getFont());
 		infoRete.setEditable(false);

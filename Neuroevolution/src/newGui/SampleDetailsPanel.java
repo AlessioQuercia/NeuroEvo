@@ -8,14 +8,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
-public class ThrowDetailsPanel extends JPanel
+public class SampleDetailsPanel extends JPanel
 {
 	private JFrame frame;
 	
 	private JTextPane infoLancio;
 	
 
-	public ThrowDetailsPanel(JFrame frame) 
+	public SampleDetailsPanel(JFrame frame) 
 	{
 		this.frame = frame;
 		
@@ -28,7 +28,7 @@ public class ThrowDetailsPanel extends JPanel
     	
     	GridBagConstraints gc = new GridBagConstraints();
     	
-		setBorder(BorderFactory.createTitledBorder("Dettagli lancio"));
+		setBorder(BorderFactory.createTitledBorder("Sample details"));
 		infoLancio = new JTextPane();
 		infoLancio.setFont(getFont());
 		infoLancio.setEditable(false);

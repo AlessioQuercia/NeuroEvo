@@ -43,12 +43,12 @@ public class InputPanel extends JPanel
 	{
 		setLayout(new GridBagLayout());
 		
-		setBorder(BorderFactory.createTitledBorder("Input rete"));
+		setBorder(BorderFactory.createTitledBorder("Net inputs"));
     	
     	GridBagConstraints gc = new GridBagConstraints();
     	
-    	xLabel = new JLabel("x_target:");
-    	yLabel = new JLabel("y_target:");
+    	xLabel = new JLabel("Target_x:");
+    	yLabel = new JLabel("Target_y:");
     	
 //        NumberFormat format = NumberFormat.getInstance();
 //        format.setGroupingUsed(false);

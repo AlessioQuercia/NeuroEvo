@@ -24,14 +24,14 @@ import jNeatCommon.EnvConstant;
 import jneat.Organism;
 import myGui.myGuiConstants;
 
-public class SimulationLeftPanel extends JPanel
+public class EvolutionLeftPanel extends JPanel
 {		
 	JFrame frame;
 	
-	private SimulationOptionsPanel optionsPanel;
+	private EvolutionOptionsPanel optionsPanel;
 	private InputPanel inputPanel;
 	private NetDetailsPanel netPanel;
-	private ThrowDetailsPanel throwPanel;
+	private SampleDetailsPanel throwPanel;
 	private JLabel generationLabel;
 
 	//	JTextPane infoRete;
@@ -47,7 +47,7 @@ public class SimulationLeftPanel extends JPanel
 	
 	private GridBagConstraints gc;
     
-	public SimulationLeftPanel(JFrame frame) 
+	public EvolutionLeftPanel(JFrame frame) 
 	{
 		this.frame = frame;
 		
@@ -55,7 +55,7 @@ public class SimulationLeftPanel extends JPanel
 		
 	}
 	
-	public SimulationOptionsPanel getOptionsPanel()
+	public EvolutionOptionsPanel getOptionsPanel()
 	{
 		return optionsPanel;
 	}
@@ -155,8 +155,8 @@ public class SimulationLeftPanel extends JPanel
 //				"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX),
 //			};
 		String info_rete =
-			"errore totale:  " + fmt6d.format(array.get(MyConstants.ERRORE_TOTALE_INDEX)) + " m" + "\n" +
-			"fitness totale:  " + fmt6d.format(array.get(MyConstants.FITNESS_TOTALE_INDEX));
+			"Total error:  " + fmt6d.format(array.get(MyConstants.ERRORE_TOTALE_INDEX)) + " m" + "\n" +
+			"Fitness:  " + fmt6d.format(array.get(MyConstants.FITNESS_TOTALE_INDEX));
 //			"fitness vecchia:  " + array.get(MyConstants.FITNESS_VECCHIA_INDEX);
 		
 		netPanel.getInfoRete().setText(info_rete);
@@ -200,18 +200,18 @@ public class SimulationLeftPanel extends JPanel
 		
 		
 		String info_lancio = 
-				"x_target:  " + fmt6d.format(array.get(MyConstants.BEST_TARGET_X_INDEX)) + " m" + "\n" +
-				"y_target:  " + fmt6d.format(array.get(MyConstants.BEST_TARGET_Y_INDEX)) + " m" + "\n" +
-				"x_migliore:  " + fmt6d.format(array.get(MyConstants.X_MIGLIORE_INDEX)) + " m" + "\n" +
-				"y_migliore:  " + fmt6d.format(array.get(MyConstants.Y_MIGLIORE_INDEX)) + " m" + "\n" +
-				"y_lancio:  " + fmt6d.format(array.get(MyConstants.Y_LANCIO_INDEX)) + " m" + "\n" +
-				"angolo:  " + fmt6d.format(Math.toDegrees(array.get(MyConstants.ANGOLO_INDEX))) + "°" + "\n" +
-				"velocità:  " + fmt6d.format(array.get(MyConstants.VELOCITA_INDEX)) + " m/s" + "\n" +
+				"Target_x:  " + fmt6d.format(array.get(MyConstants.BEST_TARGET_X_INDEX)) + " m" + "\n" +
+				"Target_y:  " + fmt6d.format(array.get(MyConstants.BEST_TARGET_Y_INDEX)) + " m" + "\n" +
+				"Projectile_x:  " + fmt6d.format(array.get(MyConstants.X_MIGLIORE_INDEX)) + " m" + "\n" +
+				"Projectile_y:  " + fmt6d.format(array.get(MyConstants.Y_MIGLIORE_INDEX)) + " m" + "\n" +
+//				"y(Target_x):  " + fmt6d.format(array.get(MyConstants.Y_LANCIO_INDEX)) + " m" + "\n" +
+				"Angle:  " + fmt6d.format(Math.toDegrees(array.get(MyConstants.ANGOLO_INDEX))) + "°" + "\n" +
+				"Velocity:  " + fmt6d.format(array.get(MyConstants.VELOCITA_INDEX)) + " m/s" + "\n" +
 //				"forza:  " + array.get(MyConstants.FORZA_INDEX) + " N" + "\n" +
-				"tempo:  " + fmt6d.format(array.get(MyConstants.TEMPO_INDEX)) + " s" + "\n" +	
+				"Time:  " + fmt6d.format(array.get(MyConstants.TEMPO_INDEX)) + " s" + "\n" +	
 //				"accelerazione:  " + array.get(MyConstants.ACCELERAZIONE_INDEX) + "\n" +
-				"massa:  " + fmt6d.format(array.get(MyConstants.MASSA_INDEX)) + " kg" + "\n" +
-				"errore:  " + fmt6d.format(array.get(MyConstants.ERRORE_INDEX)) + " m";
+				"Mass:  " + fmt6d.format(array.get(MyConstants.MASSA_INDEX)) + " kg" + "\n" +
+				"Error:  " + fmt6d.format(array.get(MyConstants.ERRORE_INDEX)) + " m";
 		
 		throwPanel.getInfoLancio().setText(info_lancio);
 		
@@ -272,10 +272,10 @@ public class SimulationLeftPanel extends JPanel
     	
     	gc = new GridBagConstraints();
 		
-		optionsPanel = new SimulationOptionsPanel(frame);
+		optionsPanel = new EvolutionOptionsPanel(frame);
 		inputPanel = new InputPanel(frame);
 		netPanel = new NetDetailsPanel(frame);
-		throwPanel = new ThrowDetailsPanel(frame);
+		throwPanel = new SampleDetailsPanel(frame);
 		generationLabel = new JLabel();
 		
 		///  STILE SCRITTURA
@@ -383,7 +383,7 @@ public class SimulationLeftPanel extends JPanel
 		return gc;
 	}
 
-	public ThrowDetailsPanel getThrowPanel()
+	public SampleDetailsPanel getThrowPanel()
 	{
 		return throwPanel;
 	}

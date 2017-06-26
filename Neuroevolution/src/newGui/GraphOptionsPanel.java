@@ -33,7 +33,7 @@ public class GraphOptionsPanel extends JPanel
 		
 		setBorder(BorderFactory.createTitledBorder("Chart selection"));
 		
-		chartLabel = new JLabel("Grafico: ");
+		chartLabel = new JLabel("Chart: ");
 		chartList = new JComboBox();
 		Dimension size = chartList.getSize();
 		size.width = 120;

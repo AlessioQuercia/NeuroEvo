@@ -265,6 +265,8 @@ private boolean done;
 		// Mappa rappresentante il vettore velocità: ad ogni istante t è associata una coppia di valori ( v_x(t) = v0x , v_y(t) )
 		Map<Double, Vector2d> vel_vector = new HashMap<Double, Vector2d> ();
 		
+		double prevSelectedOrgIndex = -1;
+		
 		while (isRunning)
 		{
 			long startTime = System.currentTimeMillis();
@@ -360,6 +362,8 @@ private boolean done;
 
 				Organism selectedOrg = winners.get(gen);
 				
+				int selectedOrgIndex = winners.indexOf(selectedOrg);
+				
 				if (lancio.equals("Best"))
 					lancio = ""+ (selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES).get(MyConstants.LANCIO_MIGLIORE_INDEX).intValue()+1);
 				
@@ -371,8 +375,11 @@ private boolean done;
 					graphs.updateLoadedOrganismChart(winners.get(evolution.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex()));
 				}
 				
-				if (x_tgt != infoLancio.get(MyConstants.X_TARGET_INDEX) || y_tgt != infoLancio.get(MyConstants.Y_TARGET_INDEX))
+//				if (x_tgt != infoLancio.get(MyConstants.X_TARGET_INDEX) || y_tgt != infoLancio.get(MyConstants.Y_TARGET_INDEX))
+				if (prevSelectedOrgIndex != selectedOrgIndex)
 				{
+					prevSelectedOrgIndex = selectedOrgIndex;
+					
 					t_sim = 0;
 					x_sim = 0;
 					y_sim = 0;

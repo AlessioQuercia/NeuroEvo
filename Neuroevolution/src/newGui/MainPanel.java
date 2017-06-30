@@ -418,11 +418,6 @@ private boolean done;
 //	            double X_tgt = simulation.getRightPanel().proportionX(x_tgt);
 //	            double Y_tgt = simulation.getRightPanel().proportionY(y_tgt);
 	            
-	            double bestTgt_x = evolution.getRightPanel().proportionX(infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
-	            double bestTgt_y = evolution.getRightPanel().proportionY(infoLancio.get(MyConstants.BEST_TARGET_Y_INDEX));
-	            double bestShot_x = evolution.getRightPanel().proportionX(infoLancio.get(MyConstants.X_MIGLIORE_INDEX));
-	            double bestShot_y = evolution.getRightPanel().proportionY(infoLancio.get(MyConstants.Y_MIGLIORE_INDEX));
-	            
 //	            System.out.println(targetPos);
 //	            System.out.println(selectedOrg.getTargetMap().get(selectedThrow).get(targetPos).x + " vs " + infoLancio.get(MyConstants.X_TARGET_INDEX));
 //	            System.out.println(infoLancio.get(MyConstants.X_MIGLIORE_INDEX)+ " vs " + infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
@@ -431,11 +426,20 @@ private boolean done;
 				evolution.getRightPanel().getTarget().setFrame(MyConstants.BORDER_X + X_tgt - 2.5, 
 						(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - Y_tgt - 2.5, 5, 5);
 				
-				evolution.getRightPanel().getBestTarget().setFrame(MyConstants.BORDER_X + bestTgt_x - 2.5, 
-						(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestTgt_y - 2.5, 5, 5);
+				if (MyConstants.SETTINGS_VALUES[MyConstants.SIM_SHOW_BEST_INDEX])
+				{
+		            double bestTgt_x = evolution.getRightPanel().proportionX(infoLancio.get(MyConstants.BEST_TARGET_X_INDEX));
+		            double bestTgt_y = evolution.getRightPanel().proportionY(infoLancio.get(MyConstants.BEST_TARGET_Y_INDEX));
+		            double bestShot_x = evolution.getRightPanel().proportionX(infoLancio.get(MyConstants.X_MIGLIORE_INDEX));
+		            double bestShot_y = evolution.getRightPanel().proportionY(infoLancio.get(MyConstants.Y_MIGLIORE_INDEX));
+					
+					evolution.getRightPanel().getBestTarget().setFrame(MyConstants.BORDER_X + bestTgt_x - 2.5, 
+							(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestTgt_y - 2.5, 5, 5);
+					
+					evolution.getRightPanel().getBestShot().setFrame(MyConstants.BORDER_X + bestShot_x - 1.5, 
+							(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestShot_y - 1.5, 3, 3);
 				
-				evolution.getRightPanel().getBestShot().setFrame(MyConstants.BORDER_X + bestShot_x - 1.5, 
-						(evolution.getRightPanel().getHeight()-MyConstants.BORDER_Y) - bestShot_y - 1.5, 3, 3);
+				}
 				
 				
 				simGen = evolution.getLeftPanel().getOptionsPanel().getGenerationList().getSelectedIndex();
@@ -567,12 +571,12 @@ private boolean done;
 //				System.out.println(new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim))
 //								   <= infoLancio.get(MyConstants.ERRORE_INDEX));
     			
-				if(new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim)) < infoLancio.get(MyConstants.ERRORE_INDEX))
-				{
-					System.out.println("ERR: " + new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim)) + " vs " + infoLancio.get(MyConstants.ERRORE_INDEX));
-					System.out.println("ANG: " + infoLancio.get(MyConstants.ANGOLO_INDEX));
-					System.out.println("VEL: " + infoLancio.get(MyConstants.VELOCITA_INDEX));
-				}
+//				if(new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim)) < infoLancio.get(MyConstants.ERRORE_INDEX))
+//				{
+//					System.out.println("ERR: " + new Vector2d(prova_x, prova_y).distance(new Vector2d(x_sim, y_sim)) + " vs " + infoLancio.get(MyConstants.ERRORE_INDEX));
+//					System.out.println("ANG: " + infoLancio.get(MyConstants.ANGOLO_INDEX));
+//					System.out.println("VEL: " + infoLancio.get(MyConstants.VELOCITA_INDEX));
+//				}
     			
     			if (y_sim >= 0) 
     				evolution.getRightPanel().getTail().add(

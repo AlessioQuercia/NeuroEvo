@@ -230,9 +230,11 @@ public class ThrowPanel extends JPanel
 			drawTargetTail(g2d);
 			
 			if(MyConstants.SETTINGS_VALUES[MyConstants.SIM_SHOW_BEST_INDEX]) 
+			{
 				drawBestThrow(g2d);
-			
-			drawDebug(g2d);
+				drawDebug(g2d);
+			}
+
 			
 //			drawParabola(g2d, a, v);
 		}

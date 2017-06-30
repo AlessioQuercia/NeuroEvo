@@ -376,9 +376,11 @@ private boolean done;
 				}
 				
 //				if (x_tgt != infoLancio.get(MyConstants.X_TARGET_INDEX) || y_tgt != infoLancio.get(MyConstants.Y_TARGET_INDEX))
-				if (prevSelectedOrgIndex != selectedOrgIndex)
+//				if (prevSelectedOrgIndex != selectedOrgIndex)
+				if (prevSelectedThrow != selectedThrow)
 				{
-					prevSelectedOrgIndex = selectedOrgIndex;
+//					prevSelectedOrgIndex = selectedOrgIndex;
+					prevSelectedThrow = selectedThrow;
 					
 					t_sim = 0;
 					x_sim = 0;

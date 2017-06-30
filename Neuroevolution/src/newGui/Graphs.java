@@ -198,6 +198,21 @@ public class Graphs extends JPanel implements ActionListener
 //		errorChart.addVector(0, new Vector2d(generation, mean_error));	//TROPPO ALTO
 		errorChart.addVector(0, new Vector2d(generation, lowest_error));
 		
+		if (lowest_error > errorChart.getMaxY())
+		{
+			String val = ""+lowest_error;
+			int first = Integer.parseInt(""+val.charAt(0));
+			first++;
+			String newVal = ""+first;
+			String interi = val.substring(0, val.indexOf('.'));
+			for (int i = 1; i<interi.length(); i++)
+			{
+				newVal+= 0;
+			}
+			int newMaxError = Integer.parseInt(newVal);
+			errorChart.setMaxY(newMaxError);
+		}
+		
 		clonedChart.addVector(0, new Vector2d(generation, cloned));
 		
 		o.setFitnessLinesChart(fitnessChart.getLines());

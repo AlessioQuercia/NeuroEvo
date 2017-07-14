@@ -347,6 +347,26 @@ private boolean done;
 				graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().addItem(winners.get(winners.size()-1).getGeneration());
 				graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().setSelectedItem(winners.get(winners.size()-1).getGeneration());
 				
+				int size = graphs.getFitnessChart().getLines().get(0).size();
+				
+				double lastGen = graphs.getFitnessChart().getLines().get(0).get(size-1).x;
+				
+				String val = ""+lastGen;
+				int first = Integer.parseInt(""+val.charAt(0));
+				first++;
+				String newVal = ""+first;
+				String interi = val.substring(0, val.indexOf('.'));
+				for (int i = 1; i<interi.length(); i++)
+				{
+					newVal+= 0;
+				}
+				int gen = Integer.parseInt(newVal);
+				
+				graphs.getFitnessChart().setMaxX(gen);
+				 graphs.getFitnessChart().setMaxY(MyConstants.MAX_FITNESS);
+				graphs.getErrorChart().setMaxX(gen);
+				graphs.getClonedChart().setMaxX(gen);
+				
 				evolution.setLoading(false);
 			}
 			
@@ -377,14 +397,15 @@ private boolean done;
 				
 //				if (x_tgt != infoLancio.get(MyConstants.X_TARGET_INDEX) || y_tgt != infoLancio.get(MyConstants.Y_TARGET_INDEX))
 //				if (prevSelectedOrgIndex != selectedOrgIndex)
-				if (prevSelectedThrow != selectedThrow)
+				if (prevSelectedThrow != selectedThrow || prevSelectedOrgIndex != selectedOrgIndex)
 				{
-//					prevSelectedOrgIndex = selectedOrgIndex;
+					prevSelectedOrgIndex = selectedOrgIndex;
 					prevSelectedThrow = selectedThrow;
 					
 					t_sim = 0;
 					x_sim = 0;
 					y_sim = 0;
+					vel_vector.clear();
 					x_rim_sim = 0;
 					y_rim_sim = 0;
 					t_rim_sim = 0;
@@ -393,14 +414,15 @@ private boolean done;
 					gittata = 0;
 					targetPos = 0;
 					t_charge = 0;
+					evolution.getRightPanel().resetTail();
+					evolution.getRightPanel().resetTargetTail();
 					
 					evolution.getLeftPanel().updateInfoRete(selectedOrg.getMap().get(EnvConstant.NUMBER_OF_SAMPLES));
 					evolution.getLeftPanel().updateInfoLancio(infoLancio);
 					
 					x_tgt = infoLancio.get(MyConstants.X_TARGET_INDEX);
 					y_tgt = infoLancio.get(MyConstants.Y_TARGET_INDEX);
-					evolution.getRightPanel().resetTail();
-					evolution.getRightPanel().resetTargetTail();
+
 					evolution.repaint();
 				}
 				
@@ -917,6 +939,7 @@ private boolean done;
 					 graphs.getForzaChart().reset();
 					 graphs.getClonedChart().reset();
 					 graphs.getFitnessChart().setMaxX(Neat.p_epoch_number);
+					 graphs.getFitnessChart().setMaxY(MyConstants.MAX_FITNESS);
 					 graphs.getErrorChart().setMaxX(Neat.p_epoch_number);
 					 graphs.getClonedChart().setMaxX(Neat.p_epoch_number);
 					 graphs.getLeftPanel().getForzaOptionsPanel().getGenerationList().removeAllItems();

@@ -235,6 +235,32 @@ public class Graphs extends JPanel implements ActionListener
 	{
 		fitnessChart.setLines(o.getFitnessLinesChart());
 		errorChart.setLines(o.getErrorLinesChart());
+		
+		double maxError = errorChart.getLines().get(0).get(0).y;
+		
+		for (int i = 0; i<errorChart.getLines().get(0).size(); i++)
+		{
+			if (errorChart.getLines().get(0).get(i).y > maxError)
+			{
+				maxError = errorChart.getLines().get(0).get(i).y;
+			}
+		}
+		
+		if (maxError> errorChart.getMaxY())
+		{
+			String val = ""+maxError;
+			int first = Integer.parseInt(""+val.charAt(0));
+			first++;
+			String newVal = ""+first;
+			String interi = val.substring(0, val.indexOf('.'));
+			for (int i = 1; i<interi.length(); i++)
+			{
+				newVal+= 0;
+			}
+			int newMaxError = Integer.parseInt(newVal);
+			errorChart.setMaxY(newMaxError);
+		}
+		
 //		forzaChart.setLines(o.getForzaLinesChart());
 		//TODO Mettere la riga qui sotto
 		clonedChart.setLines(o.getClonedLinesChart());	// DA METTERE

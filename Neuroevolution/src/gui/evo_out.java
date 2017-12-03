@@ -2,7 +2,7 @@ package gui;
 
 public class evo_out 
 {
-	public static String[] outputNames = {"angolo", "forza", "booleano lascia"};
+	public static String[] outputNames = {"angle", "force", "leave-boolean"};
 	
 	   public static int getNumUnit() { return 3; } 
 	   

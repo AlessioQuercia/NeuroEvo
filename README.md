@@ -25,7 +25,6 @@ To develop the GUI showing neural networks' simulations, info and graphs I used 
 ![Neural network](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio3.PNG?token=ARwhxEKnb638SWqyCaWJLfhLNztfHT_wks5bOLCqwA%3D%3D)
 
 
-
 ## Development steps
 
 The main goal was to train a neural network to be able to hit a moving target with a linear motion.
@@ -47,13 +46,17 @@ Neural networks outputs:
 - velocity
 
 Error function:
-$$
-error_i = | y_{target_i} - y_{throw_i}(y_{target_i}) |
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?error_i&space;=&space;|&space;y_{target_i}&space;-&space;y_{throw_i}(y_{target_i})&space;|">
+</p>
+
 Fitness function:
-$$
-fitness = 1/\sum_{i=1}^{n}error_i
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;1/\sum_{i=1}^{n}error_i">
+</p>
+
 where n is the samples number for each neural network.
 
 ### Step II
@@ -71,13 +74,17 @@ Neural networks outputs:
 - velocity
 
 Error function:
-$$
-error_i = | y_{target_i} - y_{throw_i}(y_{target_i}) |
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?error_i&space;=&space;|&space;y_{target_i}&space;-&space;y_{throw_i}(y_{target_i})&space;|">
+</p>
+
 Fitness function:
-$$
-fitness = \sum_{i=1}^{n}\frac{1}{error_i + k}
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;\sum_{i=1}^{n}\frac{1}{error_i&space;&plus;&space;k}">
+</p>
+
 where n is the samples number for each neural network and k is a constant (k = 0.01) which allows to compute the fitness even when the error is zero and gives an upper bound to the fitness, which in this case may be at most 100 per sample and 1000 in total.
 
 ### Step III
@@ -96,17 +103,20 @@ Neural networks outputs:
 - throw time
 
 Error function:
-$$
-error_i = | y_{target_i} - y_{throw_i}(y_{target_i}) |
-$$
-Fitness functions:
-$$
-fitness = K - (\sum_{i=1}^{n}error_i)^2
-$$
 
-$$
-fitness = K - \sum_{i=1}^{n}(error_i)^2
-$$
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?error_i&space;=&space;|&space;y_{target_i}&space;-&space;y_{throw_i}(y_{target_i})&space;|">
+</p>
+
+Fitness functions:
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;K&space;-&space;(\sum_{i=1}^{n}error_i)^2">
+</p>
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;K&space;-&space;\sum_{i=1}^{n}(error_i)^2">
+</p>
 
 where n is the samples number for each neural network and K is a constant (K = 1000000) representing the maximum fitness.
 
@@ -128,17 +138,20 @@ Neural networks outputs:
 - 'stop' boolean
 
 Error function:
-$$
-error_i = | y_{target_i} - y_{throw_i}(y_{target_i}) |
-$$
-Fitness functions:
-$$
-fitness = K - (\sum_{i=1}^{n}error_i)^2
-$$
 
-$$
-fitness = K - \sum_{i=1}^{n}(error_i)^2
-$$
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?error_i&space;=&space;|&space;y_{target_i}&space;-&space;y_{throw_i}(y_{target_i})&space;|">
+</p>
+
+Fitness functions:
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;K&space;-&space;(\sum_{i=1}^{n}error_i)^2">
+</p>
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;K&space;-&space;\sum_{i=1}^{n}(error_i)^2">
+</p>
 
 where n is the samples number for each neural network and K is a constant (K = 1000000) representing the maximum fitness.
 
@@ -160,48 +173,64 @@ Neural networks outputs:
 - throw time
 
 Error function:
-$$
-error_i = \min {d(x_i)}
-$$
-where d(x) is the minimum distance between a point and a parabola.
-$$
-d(x_i) = | P_i - T_i |
-$$
-and
-$$
-P = (x_i, f(x_i))
-$$
 
-$$
-T = (x_{target_i}, y_{target_i})
-$$
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?error_i&space;=&space;\min&space;{d(x_i)}">
+</p>
+
+where d(x) is the minimum distance between a point and a parabola.
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?d(x_i)&space;=&space;|&space;P_i&space;-&space;T_i&space;|">
+</p>
+
+and
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?P&space;=&space;(x_i,&space;f(x_i))">
+</p>
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?T&space;=&space;(x_{target_i},&space;y_{target_i})">
+</p>
 
 with
-$$
-f(x_i) = y(x_i) = -\frac{g}{2v_{0_i}^2\cos\alpha^2_{0_i}}x_i^2 + \tan \alpha_{0_i}x_i
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?f(x_i)&space;=&space;y(x_i)&space;=&space;-\frac{g}{2v_{0_i}^2\cos\alpha^2_{0_i}}x_i^2&space;&plus;&space;\tan&space;\alpha_{0_i}x_i">
+</p>
+
 the parabola equation.
 
 Fitness functions:
-$$
-fitness = \sum_{i=1}^{n}[(k - error_i)(k - vel\_distance_i)
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;\sum_{i=1}^{n}[(k&space;-&space;error_i)(k&space;-&space;vel\_distance_i)">
+</p>
+
 where n is the samples number for each neural network, k is a constant and
-$$
-vel\_distance_i = | v_i - v\_min_i |
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?vel\_distance_i&space;=&space;|&space;v_i&space;-&space;v\_min_i&space;|">
+</p>
+
 where
-$$
-v\_min_i = x_i\cos\alpha_{eff_i}\sqrt{\frac{g}{2x_i\tan\alpha_{eff_i} - y_i} }
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?v\_min_i&space;=&space;x_i\cos\alpha_{eff_i}\sqrt{\frac{g}{2x_i\tan\alpha_{eff_i}&space;-&space;y_i}&space;}">
+</p>
+
 with
-$$
-\alpha_{eff_i} = 45° + \frac{\beta_i}{2}
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?\alpha_{eff_i}&space;=&space;45°&space;&plus;&space;\frac{\beta_i}{2}">
+</p>
+
 and
-$$
-\beta_i = \arctan{\frac{y_i}{x_i}}
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?\beta_i&space;=&space;\arctan{\frac{y_i}{x_i}}">
+</p>
 
 
 ### Step VI
@@ -222,15 +251,18 @@ Neural networks outputs:
 - throw time
 
 Error function:
-$$
-error_i = \min {d(x_i)}
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?error_i&space;=&space;\min&space;{d(x_i)}">
+</p>
+
 where d(x) is the minimum distance between a body moving with projectile motion and one moving with linear motion.
 
 Fitness functions:
-$$
-fitness = \sum_{i=1}^{n}[(k - error_i)(k - vel\_distance_i)
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;\sum_{i=1}^{n}[(k&space;-&space;error_i)(k&space;-&space;vel\_distance_i)">
+</p>
 
 ### Step VII
 Moving target with random x and random y and random velocity (and direction).
@@ -254,15 +286,19 @@ Neural networks outputs:
 - throw time
 
 Error function:
-$$
-error_i = \min {d(x_i)}
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?error_i&space;=&space;\min&space;{d(x_i)}">
+</p>
+
 where d(x) is the minimum distance between a body moving with projectile motion and one moving with linear motion.
 
 Fitness functions:
-$$
-fitness = \sum_{i=1}^{n}[(k - error_i)(k - vel\_distance_i)
-$$
+
+<p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?fitness&space;=&space;\sum_{i=1}^{n}[(k&space;-&space;error_i)(k&space;-&space;vel\_distance_i)">
+</p>
+
 
 ## Possible future work
 - Improve error and fitness computation.

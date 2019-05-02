@@ -1,12 +1,12 @@
-# Apprendimento di un lanciatore a bersaglio mobile controllato da reti neurali - Università degli Studi di Roma, La Sapienza - Tesi di Laurea - Triennale Informatica
+# Learning of a mobile-targets projectile-thrower through neural networks - Università degli Studi di Roma, La Sapienza - Bachelor Thesis - Computer Science
 
 **Supervisor:** [Prof. Andrea Sterbini](http://twiki.di.uniroma1.it/twiki/view/Users/AndreaSterbini)  
 **Student:** Alessio Quercia  
 
 ## Overview
-The current repository has been created to keep trace over my graduation thesis' project on Neuroevolution. The project's main goal was to evolve the skills of launcher (controlled by neural networks) to hit a target, throwing projectiles of variable weight. More in detail the goal was to train the neural network associated to a launcher to hit a given target, where the throws are evaluated as good as closer to its target, and to show the results in a simulation. A genetic algorithm (NEAT) has been used to train the neural networks and Java Swing has been used to create an interface and to show the simulations obtained by the networks during the training phase and also after that, by loading already trained neural networks (with the possibility to change their inputs).
+The current repository has been created to keep track of my graduation thesis' project on Neuroevolution. The project's main goal was to evolve the skills of launcher (controlled by neural networks) to hit a target, throwing projectiles of variable weight. More in detail the goal was to train the neural network associated to a launcher to hit a given target, where the throws are evaluated as good as closer to its target, and to show the results in a simulation. A genetic algorithm (NEAT) has been used to train the neural networks and Java Swing has been used to create an interface and to show the simulations obtained by the networks during the training phase and also after that, by loading already trained neural networks (with the possibility to change their inputs).
 
-**N.B.:** This README is intended to show in broad terms the project and it's not the thesis itself. If you are interested in the whole thesis you can contact me at the following address: <alessioquercia4@gmail.com>.
+**N.B.:** This README is intended to show in broad terms the project and it's not the thesis itself.
 
 ## Libraries
 To achieve the project goal, I decided to use a peculiar genetic algorithm, called NEAT, which allows not only to train neural networks' weights, but also their structures during the evolution process. I chose Java as programming language, thus I used the Java version of the NEAT (NeuroEvolution of Augmenting Topologies) method, [JNEAT](http://nn.cs.utexas.edu/?jneat), written by Ugo Vierucci and based on the [original C++ package](http://nn.cs.utexas.edu/?neat_original) by [Kenneth Stanley](http://www.cs.ucf.edu/~kstanley/).
@@ -14,15 +14,15 @@ To develop the GUI showing neural networks' simulations, info and graphs I used 
 
 **Loaded trained neural network.**
 
-![Loaded trained neural network](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio1.PNG?token=ARwhxKuAOzXnULLp1Gu5lbUUVsmP1SFwks5bOLBpwA%3D%3D)
+![Loaded trained neural network](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio1.PNG?token=AEOCDRGWL7I3TKG6FHBXKA242SKAA)
 
 **The fitness chart related to that evolution process.**
 
-![Fitness chart](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio2.PNG?token=ARwhxG6W4_ladyMhE4uNYDFqjIHPtfrLks5bOLCSwA%3D%3D)
+![Fitness chart](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio2.PNG?token=AEOCDRBLG23NYGBKJQGETYK42SKDQ)
 
 **The neural network producing that result**
 
-![Neural network](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio3.PNG?token=ARwhxEKnb638SWqyCaWJLfhLNztfHT_wks5bOLCqwA%3D%3D)
+![Neural network](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio3.PNG?token=AEOCDRDEKGJ3GDHUEJ5IMQK42SKES)
 
 
 ## Development steps

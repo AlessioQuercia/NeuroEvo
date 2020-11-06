@@ -34,6 +34,8 @@ The project code is a little bit messy. Follow these (tested) instructions to ru
 To achieve the project goal, I decided to use a peculiar genetic algorithm, called NEAT, which allows not only to train neural networks' weights, but also their structures during the evolution process. I chose Java as programming language, thus I used the Java version of the NEAT (NeuroEvolution of Augmenting Topologies) method, [JNEAT](http://nn.cs.utexas.edu/?jneat), written by Ugo Vierucci and based on the [original C++ package](http://nn.cs.utexas.edu/?neat_original) by [Kenneth Stanley](http://www.cs.ucf.edu/~kstanley/).
 To develop the GUI showing neural networks' simulations, info and graphs I used Java Swing. Some GUI screenshots are showed below.
 
+## GUI screenshots
+
 **Loaded trained neural network.**
 
 ![Loaded trained neural network](https://raw.githubusercontent.com/AlessioQuercia/NeuroEvo/master/Screenshots/Esempio1.PNG?token=AEOCDRGWL7I3TKG6FHBXKA242SKAA)

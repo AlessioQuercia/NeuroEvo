@@ -6,7 +6,29 @@
 ## Overview
 The current repository has been created to keep track of my graduation thesis' project on Neuroevolution. The project's main goal was to evolve the skills of launcher (controlled by neural networks) to hit a target, throwing projectiles of variable weight. More in detail the goal was to train the neural network associated to a launcher to hit a given target, where the throws are evaluated as good as closer to its target, and to show the results in a simulation. A genetic algorithm (NEAT) has been used to train the neural networks and Java Swing has been used to create an interface and to show the simulations obtained by the networks during the training phase and also after that, by loading already trained neural networks (with the possibility to change their inputs).
 
-**N.B.:** This README is intended to show in broad terms the project and it's not the thesis itself.
+**Note:** This README is intended to show in broad terms the project and it's not the thesis itself.
+
+## Execution instructions
+
+The project code is a little bit messy. Follow these (tested) instructions to run the code:
+
+1. Open the project with IntelliJ IDEA or Eclipse.
+2. Set Java 1.8 as JDK.
+3. Add tools.jar as external library.
+4. Set *NeuroEvo\Neuroevolution\src\gui* as working directory.
+5. Run *NeuroEvo\Neuroevolution\src\newGui\NewMainGui.java*.
+
+## Demo
+
+![](gifs/1.gif)
+
+![](gifs/2.gif)
+
+![](gifs/3.gif)
+
+![](gifs/4.gif)
+
+![](gifs/5.gif)
 
 ## Libraries
 To achieve the project goal, I decided to use a peculiar genetic algorithm, called NEAT, which allows not only to train neural networks' weights, but also their structures during the evolution process. I chose Java as programming language, thus I used the Java version of the NEAT (NeuroEvolution of Augmenting Topologies) method, [JNEAT](http://nn.cs.utexas.edu/?jneat), written by Ugo Vierucci and based on the [original C++ package](http://nn.cs.utexas.edu/?neat_original) by [Kenneth Stanley](http://www.cs.ucf.edu/~kstanley/).
@@ -312,19 +334,19 @@ Fitness functions:
  1. Kenneth O. Stanley, Risto Mikkulainen - Evolving Neural Networks through Augmenting Topologies, MIT Press Journals, 2002.
 2. Risto Mikkulainen - Neuroevolution, In Encyclopedia of Machine Learning, New York: Springer, 2010.
 3. Kenneth O. Stanley - NEAT Software Doc File, 2001.
-  http://nn.cs.utexas.edu/?neat_original
+    http://nn.cs.utexas.edu/?neat_original
 4. NeuroEvolution of Augmenting Topologies (NEAT) Users Page.
-  https://www.cs.ucf.edu/~kstanley/neat.html
+    https://www.cs.ucf.edu/~kstanley/neat.html
 5. Ugo Vierucci, NEAT Java (JNEAT), 2002.
-  http://nn.cs.utexas.edu/?jneat
+    http://nn.cs.utexas.edu/?jneat
 6. Java Foundation Classes (JFC) – Swing documentation.
-  https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html
+    https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html
 7. Java OpenGL Math Library (JOML).
-  https://github.com/JOML-CI
+    https://github.com/JOML-CI
 8. Michele Impedovo – Colpire il bersaglio, in IPOTESI, 1998.
 9. Antimo Palano – La nuova fisica: Meccanica.
-  http://www.ba.infn.it/~palano/chimica/book/it/Fisica.html
+    http://www.ba.infn.it/~palano/chimica/book/it/Fisica.html
 10. Rosario Cantelli – Lezioni di fisica. Meccanica e termodinamica, Roma: Scione editore, 2007.
 11. Genetic Science Learning Center, Learn.Genetics, Basic genetics.
-   http://learn.genetics.utah.edu/content/basics
+      http://learn.genetics.utah.edu/content/basics
 

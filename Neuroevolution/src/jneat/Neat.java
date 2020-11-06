@@ -300,8 +300,8 @@ import java.lang.reflect.*;
 		 String s1;
 		 String s2;
 		 Object m1;
-	  
-	  
+
+
 	  
 		 xFile = new IOseq(xNomeFile);
 		 ret = xFile.IOseqOpenR();

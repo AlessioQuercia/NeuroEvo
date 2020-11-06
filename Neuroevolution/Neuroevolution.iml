@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="file://C:/Program Files (x86)/Java/jdk1.8.0_121/lib/tools.jar" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp-natives-linux.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp-natives-macos.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp-natives-windows.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw-natives-linux.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw-natives-macos.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw-natives-windows.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-natives-linux.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-natives-macos.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-natives-windows.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl-natives-linux.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl-natives-macos.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl-natives-windows.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb-natives-linux.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb-natives-macos.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb-natives-windows.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl/lwjgl.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/nifty/dependencies/xpp3-1.1.4c.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/nifty/nifty-1.4.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/nifty/nifty-default-controls-1.4.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/nifty/nifty-lwjgl-renderer-1.4.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/nifty/nifty-style-black-1.4.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/joml/joml.jar!/" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
+    </src_description>
+  </component>
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/bin" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="module-library" exported="">
+      <library name="tools.jar">
+        <CLASSES>
+          <root url="file://C:/Program Files (x86)/Java/jdk1.8.0_121/lib/tools.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-assimp-natives-linux.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp-natives-linux.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-assimp-natives-macos.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp-natives-macos.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-assimp-natives-windows.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp-natives-windows.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-assimp.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-assimp.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-glfw-natives-linux.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw-natives-linux.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-glfw-natives-macos.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw-natives-macos.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-glfw-natives-windows.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw-natives-windows.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-glfw.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-glfw.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-natives-linux.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-natives-linux.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-natives-macos.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-natives-macos.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-natives-windows.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-natives-windows.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-opengl-natives-linux.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl-natives-linux.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-opengl-natives-macos.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl-natives-macos.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-opengl-natives-windows.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl-natives-windows.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-opengl.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-opengl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-stb-natives-linux.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb-natives-linux.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-stb-natives-macos.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb-natives-macos.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-stb-natives-windows.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb-natives-windows.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl-stb.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl-stb.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl/lwjgl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="xpp3-1.1.4c.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/nifty/dependencies/xpp3-1.1.4c.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="nifty-1.4.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/nifty/nifty-1.4.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="nifty-default-controls-1.4.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/nifty/nifty-default-controls-1.4.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="nifty-lwjgl-renderer-1.4.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/nifty/nifty-lwjgl-renderer-1.4.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="nifty-style-black-1.4.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/nifty/nifty-style-black-1.4.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="joml.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/joml/joml.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../Università/Triennale - La Sapienza/TesiTriennale/tools.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../../Università/Triennale - La Sapienza/TesiTriennale/tools.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>

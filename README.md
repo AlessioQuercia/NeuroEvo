@@ -15,8 +15,8 @@ The project code is a little bit messy. Follow these (tested) instructions to ru
 1. Open the project with IntelliJ IDEA or Eclipse.
 2. Set Java 1.8 as JDK.
 3. Add tools.jar as external library.
-4. Set *NeuroEvo\Neuroevolution\src\gui* as working directory.
-5. Run *NeuroEvo\Neuroevolution\src\newGui\NewMainGui.java*.
+4. Set *\NeuroEvo\Neuroevolution\src\gui* as working directory.
+5. Run *\NeuroEvo\Neuroevolution\src\newGui\NewMainGui.java*.
 
 ## Demo
 
